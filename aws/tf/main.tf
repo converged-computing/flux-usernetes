@@ -7,18 +7,21 @@ locals {
   region = "us-east-1"
 
   # This is the AMI that was built in this repository
-  ami           = "ami-023a3bf52034d3faa"
-  instance_type = "m4.large"
+  ami = "ami-023a3bf52034d3faa"
+  # instance_type = "m4.xlarge"
+
+  # these are 0.4 an hour, so just under $3 an hour for the size 7
+  instance_type = "m4.2xlarge"
   vpc_cidr      = "10.0.0.0/16"
   key_name      = "<your-key-name>"
 
-  # Must be larger than ami (oops I made it 100, can rebuild smaller if needed)
-  volume_size = 50
+  # Must be larger than ami (30)
+  volume_size = 100
 
   # Set autoscaling to consistent size so we don't scale for now
-  min_size     = 2
-  max_size     = 2
-  desired_size = 2
+  min_size     = 7
+  max_size     = 7
+  desired_size = 7
 
   cidr_block_a = "10.0.1.0/24"
   cidr_block_b = "10.0.2.0/24"
@@ -319,7 +322,11 @@ resource "aws_autoscaling_group" "autoscaling_group" {
   desired_capacity          = local.desired_size
   target_group_arns         = [aws_lb_target_group.target_group.arn]
 
-  vpc_zone_identifier = [aws_subnet.public_a.id, aws_subnet.public_b.id, aws_subnet.public_c.id]
+  # IMPORTANT: usernetes won't be able to talk to the internet addresses in different subnets
+  # but we are required to create them otherwise cloudformation gets angry 
+  # We do not want to make cloud formation angry :)
+  vpc_zone_identifier = [aws_subnet.public_a.id]
+  # vpc_zone_identifier = [aws_subnet.public_a.id, aws_subnet.public_b.id, aws_subnet.public_c.id]
   # default_cooldown is unset
 
   # These could also be selected based on the asg, e.g.,

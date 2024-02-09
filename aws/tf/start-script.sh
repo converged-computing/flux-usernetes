@@ -178,18 +178,11 @@ cd /home/ubuntu
 # this needs to be run interactively.
 sudo chown -R $USER /home/ubuntu
 cd /home/ubuntu/usernetes
-rm -rf start-control-plane.sh start-worker.sh
 
 # Recreate the start scripts
+# I'm only leaving these here in case they need to be updated
 cat <<EOF | tee ./start-control-plane.sh
 #!/bin/bash
-
-# This needs to be run by the user again
-/usr/bin/dockerd-rootless-setuptool.sh uninstall -f 
-/usr/bin/rootlesskit rm -rf /home/ubuntu/.local/share/docker
-sudo chown -R $USER /home/ubuntu
-dockerd-rootless-setuptool.sh install
-docker run hello-world
 
 # Go to usernetes home
 cd ~/usernetes
@@ -202,21 +195,19 @@ make kubeadm-init
 sleep 5
 make install-flannel
 make kubeconfig
-export KUBECONFIG=$HOME/usernetes/kubeconfig
+export KUBECONFIG=/home/ubuntu/usernetes/kubeconfig
 make join-command
-echo "export KUBECONFIG=$HOME/usernetes/kubeconfig" >> ~/.bashrc
+echo "export KUBECONFIG=/home/ubuntu/usernetes/kubeconfig" >> ~/.bashrc
 EOF
 chmod +x ./start-control-plane.sh
 
+# TODO - this command could be used to refresh docker and run each
+# of the scripts below depending on the hostname and an indicator file
+# (when the join command is ready). Right now I'm bringing up manually.
+# sudo machinectl shell --uid=ubuntu ubuntu@ /bin/bash <script>
+
 cat <<EOF | tee ./start-worker.sh
 #!/bin/bash
-
-# This needs to be run by the user again
-/usr/bin/dockerd-rootless-setuptool.sh uninstall -f 
-/usr/bin/rootlesskit rm -rf /home/ubuntu/.local/share/docker
-sudo chown -R $USER /home/ubuntu
-dockerd-rootless-setuptool.sh install
-docker run hello-world
 
 # Go to usernetes home
 cd ~/usernetes

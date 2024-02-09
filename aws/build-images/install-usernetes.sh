@@ -72,7 +72,11 @@ echo "done installing docker"
 sudo mkdir -p /etc/flux/system
 echo "Creating flux resources"
 
-# TODO STOPPED HERE
+# IMPORTANT: we need to run this when installing docker
+# https://github.com/docker/docs/issues/14491
+sudo apt install -y systemd-container
+
+sudo chown -R ubuntu /home/ubuntu
 echo "Setting up usernetes"
 
 echo "export PATH=/usr/bin:$PATH" >> ~/.bashrc
@@ -155,4 +159,5 @@ fi
 
 echo "Done installing docker user"
 sudo chown ubuntu /etc/flux/system/curve.cert
+sudo chown -R ubuntu /home/ubuntu
 

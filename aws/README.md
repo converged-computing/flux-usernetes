@@ -22,7 +22,6 @@ And this generated:
 
 - flux-ubuntu-usernetes: `ami-023a3bf52034d3faa` has flux, usernetes, lammps, and singularity
 
-
 ### Deploy with Terraform
 
 Once you have images, choose a directory under [examples](examples) to deploy from:
@@ -78,7 +77,8 @@ $ cat /var/log/cloud-init-output.log
 
 #### Start Usernetes
 
-This is currently manual, and we need a better approach to automate it.
+This is currently manual, and we need a better approach to automate it. I think we can use `machinectl` with a uid,
+but haven't tried this yet.
 
 ##### Control Plane
 
@@ -108,6 +108,9 @@ flux exec -x 0 -r all flux filemap get -C /home/ubuntu/usernetes
 
 ##### Worker Nodes
 
+**Important** your nodes need to be on the same subnet to see one another. The VPC and load balancer will require you
+to create 2+, but you don't have to use them all.
+
 ```bash
 cd ~/usernetes
 
@@ -122,7 +125,6 @@ docker run hello-world
 ./start-worker.sh
 ```
 
-Note that once when I ran the above, it never joined.
 Check (from the first node) that usernetes is running:
 
 ```bash
@@ -136,6 +138,15 @@ u7s-i-04ad9c3a65683079e   Ready    <none>          37s     v1.29.1
 u7s-i-0960589d5a41db8fd   Ready    control-plane   3m58s   v1.29.1
 ```
 
-Note - for the above to work (automated) I think we need the container environment tool
-I used for the Qvirt setup (that I didn't install here). It allows running these headlessly,
-but not sure, I'm out of steam for this tonight.
+## Debugging
+
+Here are some debugging tips for network. Ultimately the fix was requesting one subnet
+to be used by the autoscaling group (and I didn't need these) but I want to preserve
+them from our conversation.
+
+- Look at routing between subnets (e.g., create two instances and try curl/ping)
+- Look at launch template configs for launch template - figure out if something looks wrong and trace back to terraform
+- Try the [Reachability analyzer](https://console.aws.amazon.com/networkinsights/home#ReachabilityAnalyzer)
+  - Create an analyze path, sources and destinations 
+- eips - elastic ips? (default is 5, but can request quota higher)
+- have the node groups across AZs but have it launch everything in one AZ by specifying the subset we want for the actual instances to launch in (this was it!)

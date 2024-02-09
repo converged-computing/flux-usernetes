@@ -52,7 +52,7 @@ git clone https://github.com/flux-framework/flux-sched /opt/flux-sched && \
     git fetch && \
     ./autogen.sh && \
     PYTHON=/opt/conda/bin/python ./configure --prefix=/usr --sysconfdir=/etc && \
-    make && sudo make install && ldconfig && \
+    make && sudo make install && sudo ldconfig && \
     echo "DONE flux build"
 
 # Flux curve.cert

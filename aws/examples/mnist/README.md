@@ -125,6 +125,7 @@ And now we can do a test run to get a time:
 
 ```bash
 flux run -N 1 /home/ubuntu/mnist/mnist-single-node.sh
+```
 
 # And test saving to an output file
 

@@ -31,9 +31,10 @@ sudo apt-get install -y \
    zlib1g-dev
 
 # install go
-wget https://go.dev/dl/go1.21.0.linux-amd64.tar.gz
-tar -xvf go1.21.0.linux-amd64.tar.gz
-sudo mv go /usr/local && rm go1.21.0.linux-amd64.tar.gz
+wget https://go.dev/dl/go1.21.0.linux-arm64.tar.gz
+# wget https://go.dev/dl/go1.21.0.linux-amd64.tar.gz
+tar -xvf go1.21.0.linux-arm64.tar.gz
+sudo mv go /usr/local && rm go1.21.0.linux-arm64.tar.gz
 export PATH=/usr/local/go/bin:$PATH
 
 # Install singularity
@@ -48,4 +49,6 @@ export VERSION=4.0.1 && \
 
 # Pull singularity down and put in home
 cd /home/ubuntu
-singularity pull docker://ghcr.io/rse-ops/lammps-mpich:tag-latest
+# singularity pull docker://ghcr.io/rse-ops/lammps-mpich:tag-latest
+singularity pull docker://ghcr.io/rse-ops/lammps-matrix:mpich-ubuntu-22.04-arm64
+singularity cache clean -f

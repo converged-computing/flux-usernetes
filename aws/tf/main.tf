@@ -5,23 +5,22 @@ locals {
   name   = "flux"
   pwd    = basename(path.cwd)
   region = "us-east-1"
+  ami    = "ami-088dc4371888c26cb"
 
-  # This is the AMI that was built in this repository
-  ami = "ami-023a3bf52034d3faa"
-  # instance_type = "m4.xlarge"
-
-  # these are 0.4 an hour, so just under $3 an hour for the size 7
-  instance_type = "m4.2xlarge"
+  instance_type = "hpc7g.4xlarge"
   vpc_cidr      = "10.0.0.0/16"
   key_name      = "<your-key-name>"
+
+  # Also important - the m4.xlarge has ens3 and m2.4xlarge has eth0, hpc7g has ens5
+  ethernet_device = "ens5"
 
   # Must be larger than ami (30)
   volume_size = 100
 
   # Set autoscaling to consistent size so we don't scale for now
-  min_size     = 7
-  max_size     = 7
-  desired_size = 7
+  min_size     = 2
+  max_size     = 2
+  desired_size = 2
 
   cidr_block_a = "10.0.1.0/24"
   cidr_block_b = "10.0.2.0/24"
@@ -48,8 +47,9 @@ terraform {
 # Read in a shared script to init / finalize the flux setup
 data "template_file" "startup_script" {
   template = templatefile("start-script.sh", {
-    selector_name = local.name,
-    desired_size  = local.desired_size
+    selector_name   = local.name,
+    desired_size    = local.desired_size
+    ethernet_device = local.ethernet_device
   })
 }
 
@@ -304,9 +304,14 @@ resource "aws_launch_template" "launch_template" {
     }
   }
 
+  # https://github.com/terraform-aws-modules/terraform-aws-autoscaling/blob/master/examples/complete/main.tf
   network_interfaces {
     associate_public_ip_address = true
     security_groups             = [aws_security_group.security_group.id]
+    description                 = "Elastic Fiber Adapted (EFA)"
+    delete_on_termination       = true
+    device_index                = 0
+    interface_type              = "efa"
   }
 }
 
@@ -326,7 +331,6 @@ resource "aws_autoscaling_group" "autoscaling_group" {
   # but we are required to create them otherwise cloudformation gets angry 
   # We do not want to make cloud formation angry :)
   vpc_zone_identifier = [aws_subnet.public_a.id]
-  # vpc_zone_identifier = [aws_subnet.public_a.id, aws_subnet.public_b.id, aws_subnet.public_c.id]
   # default_cooldown is unset
 
   # These could also be selected based on the asg, e.g.,

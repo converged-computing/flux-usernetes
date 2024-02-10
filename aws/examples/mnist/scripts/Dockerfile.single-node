@@ -1,0 +1,8 @@
+FROM kubeflowkatib/pytorch-mnist-cpu:latest
+
+# docker build -t vanessa/pytorch-mnist-cpu:usernetes-single-node-arm
+
+RUN apt-get update && apt-get install -y wget
+COPY ./launch-single-node.sh /launch.sh
+RUN wget -O /main.py https://raw.githubusercontent.com/pytorch/examples/main/mnist/main.py && \
+    chmod +x /main.py

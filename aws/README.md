@@ -16,15 +16,18 @@ of the scripts in [build-images](build-images). For example, for the top AMI bel
 - install-flux.sh
 - install-usernetes.sh
 - install-singularity.sh
-- install-lammps.sh
+- install-lammps.sh 
 
-And this generated:
+The scripts have been modified for ARM, since AMD64 doesn't really work with the limited network options (we need the HPC instances). And this generated:
 
+- flux-ubuntu-usernetes-lammps-singularity-arm-efa: `ami-088dc4371888c26cb` the same but with those things!
 - flux-ubuntu-usernetes: `ami-023a3bf52034d3faa` has flux, usernetes, lammps, and singularity
+
+Nothing really works on AWS without EFA so probably we will use the first (top).
 
 ### Deploy with Terraform
 
-Once you have images, choose a directory under [examples](examples) to deploy from:
+Once you have images, we deploy!
 
 ```bash
 $ cd tf
@@ -128,14 +131,28 @@ docker run hello-world
 Check (from the first node) that usernetes is running:
 
 ```bash
-export KUBECONFIG=/home/ubuntu/usernetes/kubeconfig 
 kubectl get nodes
 ```
+
+You should have a full set of usernetes node and flux alongside.
+
 ```console
-$ kubectl  get nodes
+ubuntu@i-059c0b325f91e5503:~$ kubectl  get nodes
 NAME                      STATUS   ROLES           AGE     VERSION
-u7s-i-04ad9c3a65683079e   Ready    <none>          37s     v1.29.1
-u7s-i-0960589d5a41db8fd   Ready    control-plane   3m58s   v1.29.1
+u7s-i-011e558c998efa7c9   Ready    <none>          67s     v1.29.1
+u7s-i-049a938f182420a7b   Ready    <none>          36s     v1.29.1
+u7s-i-059c0b325f91e5503   Ready    control-plane   7m35s   v1.29.1
+u7s-i-0a5b50dbcf4754bb1   Ready    <none>          3m8s    v1.29.1
+u7s-i-0cb613bda0f908a84   Ready    <none>          5m17s   v1.29.1
+u7s-i-0cdc86ed08f06dd11   Ready    <none>          2m34s   v1.29.1
+u7s-i-0d58764791da6b74e   Ready    <none>          4m25s   v1.29.1
+```
+```console
+ubuntu@i-059c0b325f91e5503:~$ flux resource list
+     STATE NNODES   NCORES    NGPUS NODELIST
+      free      7       56        0 i-059c0b325f91e5503,i-0cb613bda0f908a84,i-0d58764791da6b74e,i-0a5b50dbcf4754bb1,i-0cdc86ed08f06dd11,i-011e558c998efa7c9,i-049a938f182420a7b
+ allocated      0        0        0 
+      down      0        0        0 
 ```
 
 ## Debugging

@@ -9,11 +9,13 @@ sudo apt-get update && \
     sudo apt-get install -y apt-transport-https ca-certificates curl clang llvm jq apt-utils wget \
          libelf-dev libpcap-dev libbfd-dev binutils-dev build-essential make \
          linux-tools-common linux-tools-$(uname -r)  \
-         bpfcc-tools python3-pip git net-tools
+         bpfcc-tools python3-pip git net-tools \
+         libfabric-dev libfabric-bin
 
 # cmake is needed for flux now!
 export CMAKE=3.23.1
-curl -s -L https://github.com/Kitware/CMake/releases/download/v$CMAKE/cmake-$CMAKE-linux-x86_64.sh > cmake.sh && \
+# curl -s -L https://github.com/Kitware/CMake/releases/download/v$CMAKE/cmake-$CMAKE-linux-x86_64.sh > cmake.sh && \
+curl -s -L https://github.com/Kitware/CMake/releases/download/v3.23.3/cmake-3.23.3-linux-aarch64.sh > cmake.sh && \
     sudo sh cmake.sh --prefix=/usr/local --skip-license && \
     sudo apt-get install -y man flex ssh sudo vim luarocks munge lcov ccache lua5.2 mpich \
          valgrind build-essential pkg-config autotools-dev libtool \
@@ -27,7 +29,8 @@ curl -s -L https://github.com/Kitware/CMake/releases/download/v$CMAKE/cmake-$CMA
 
 # Let's use mamba python and do away with system annoyances
 export PATH=/opt/conda/bin:$PATH
-curl -L https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-Linux-x86_64.sh > mambaforge.sh && \
+# curl -L https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-Linux-x86_64.sh > mambaforge.sh && \
+curl -L https://github.com/conda-forge/miniforge/releases/download/23.11.0-0/Mambaforge-23.11.0-0-Linux-aarch64.sh > mambaforge.sh && \
     sudo bash mambaforge.sh -b -p /opt/conda && \
     sudo chown $USER -R /opt/conda && \
     pip install --upgrade --ignore-installed markupsafe coverage cffi ply six pyyaml jsonschema && \
@@ -38,3 +41,22 @@ sudo apt-get install -y faketime libfaketime pylint cppcheck aspell aspell-en &&
     sudo locale-gen en_US.UTF-8 && \
     sudo luarocks install luaposix
 
+# This is needed if you intend to use EFA (HPC instance type)
+# Install EFA alone without AWS OPEN_MPI
+export EFA_VERSION=1.21.0
+mkdir /tmp/efa 
+cd /tmp/efa
+curl -O https://s3-us-west-2.amazonaws.com/aws-efa-installer/aws-efa-installer-${EFA_VERSION}.tar.gz
+tar -xf aws-efa-installer-${EFA_VERSION}.tar.gz
+cd aws-efa-installer
+sudo ./efa_installer.sh -y
+
+# EFA installation complete.
+# - Please logout/login to complete the installation.
+# - Libfabric was installed in /opt/amazon/efa
+# - Open MPI was installed in /opt/amazon/openmpi
+
+# Might need
+# fi_info -p efa -t FI_EP_RDM
+# Disable ptrace
+# sysctl -w kernel.yama.ptrace_scope=0

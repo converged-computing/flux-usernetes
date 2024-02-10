@@ -1,0 +1,24 @@
+apiVersion: flux-framework.org/v1alpha2
+kind: MiniCluster
+metadata:
+  name: flux-sample
+spec:
+  size: 2
+  # We set tasks explicitly to 0 to get -N <size> for the submit command
+  tasks: 0
+  flux:
+    container:
+      image: ghcr.io/converged-computing/flux-view-ubuntu:arm-jammy
+
+  containers:
+    # This is built from the container here
+    # docker build -t vanessa/pytorch-mnist-cpu:usernetes-arm .
+  - image: vanessa/pytorch-mnist-cpu:usernetes-arm
+
+    # This should be the size (number of nodes)
+    command: /bin/bash /launch.sh 2
+    resources:
+      limits:
+        cpu: "12"
+      requests:
+        cpu: "12"

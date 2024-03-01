@@ -55,11 +55,6 @@ tar -xf aws-efa-installer-${EFA_VERSION}.tar.gz
 cd aws-efa-installer
 sudo ./efa_installer.sh -y
 
-# TODO delete me
-# Ensure we don't put AWS MPI on the path
-# echo "export LD_LIBRARY_PATH=/opt/amazon/efa/lib" >> /home/ubuntu/.bashrc
-# echo "export PATH=/usr/bin:/usr/local/go/bin:/opt/amazon/efa/bin:/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin" >> /home/ubuntu/.bashrc
-
 # EFA installation complete.
 # - Please logout/login to complete the installation.
 # - Libfabric was installed in /opt/amazon/efa

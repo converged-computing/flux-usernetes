@@ -159,10 +159,7 @@ echo "export DOCKER_HOST=unix:///home/ubuntu/.docker/run/docker.sock" >> /home/u
 echo "export XDG_RUNTIME_DIR=/home/ubuntu/.docker/run" >> /home/ubuntu/.bashrc
 echo "export FI_EFA_USE_DEVICE_RDMA=1" >> /home/ubuntu/.bashrc
 echo "export RDMAV_FORK_SAFE=1" >> /home/ubuntu/.bashrc
-
-# Note that I've explicitly removed the aws MPI because it breaks things
 echo "export LD_LIBRARY_PATH=/opt/amazon/efa/lib" >> /home/ubuntu/.bashrc
-echo "export PATH=/usr/bin:/usr/local/go/bin:/opt/amazon/efa/bin:/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin" >> /home/ubuntu/.bashrc
 
 # Not sure why it's not taking my URI request above!
 export FLUX_URI=local:///home/ubuntu/run/flux/local

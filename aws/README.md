@@ -18,8 +18,11 @@ of the scripts in [build-images](build-images). For example, for the top AMI bel
 - install-singularity.sh
 - install-lammps.sh 
 
-The scripts have been modified for ARM, since AMD64 doesn't really work with the limited network options (we need the HPC instances). And this generated:
+The scripts have been modified for ARM, since AMD64 doesn't really work with the limited network options (we need the HPC instances). And this generated the following (not all of these may exist anymore, we did a cleanup):
 
+- flux-ubuntu-usernetes-efa `ami-03bf34a7d8b789694` openmpi and efa provided by the efa install, and version 1.30.0
+- flux-ubuntu-usernetes-lammps-openmpi-singularity `ami-070478bc8c3200e41` using openmpi instead of mpich
+- flux-usernetes-lammps-singularity-libfabricc: `ami-099e87e49f153b2b3` the same, but building MPI with system (not AWS)
 - flux-ubuntu-usernetes-lammps-singularity-arm-efa: `ami-088dc4371888c26cb` the same but with those things!
 - flux-ubuntu-usernetes: `ami-023a3bf52034d3faa` has flux, usernetes, lammps, and singularity
 
@@ -154,6 +157,8 @@ ubuntu@i-059c0b325f91e5503:~$ flux resource list
  allocated      0        0        0 
       down      0        0        0 
 ```
+
+At this point you can try running an experiment example.
 
 ## Debugging
 

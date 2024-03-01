@@ -87,9 +87,6 @@ echo "export DOCKER_HOST=unix:///home/ubuntu/.docker/run/docker.sock" >> ~/.bash
 echo "Installing docker user"
 sudo loginctl enable-linger ubuntu
 
-# https://github.com/docker/docs/issues/14491
-# sudo apt install -y systemd-container
-
 ls /var/lib/systemd/linger
 
 # ensure these are set
@@ -162,5 +159,6 @@ sudo chown ubuntu /etc/flux/system/curve.cert
 sudo chown -R ubuntu /home/ubuntu
 
 # Note that I had to change the Dockerfile base image to be an arm variant
+# Update: this was not necessary
 # docker.io/kindest/node:v1.29.1@sha256:a0cc28af37cf39b019e2b448c54d1a3f789de32536cb5a5db61a49623e527144
 # cp Dockerfile Dockerfile.amd64

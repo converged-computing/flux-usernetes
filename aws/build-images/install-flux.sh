@@ -15,6 +15,8 @@ sudo chown -R $USER /opt && \
     ./configure --prefix=/usr --disable-static && sudo make -j 4 install && \
     sudo ldconfig
 
+set +x
+
 # prrte you are sure looking perrrty today
 cd /opt/prrte/prrte && \
     git checkout 477894f4720d822b15cab56eee7665107832921c && \
@@ -46,6 +48,14 @@ git clone https://github.com/flux-framework/flux-core /opt/flux-core && \
     make clean && \
     make && sudo make install
 
+# Flux pmix (must be installed after flux core)
+git clone https://github.com/flux-framework/flux-pmix /opt/flux-pmix && \
+  cd /opt/flux-pmix && \
+  ./autogen.sh && \
+  ./configure --prefix=/usr && \
+  make && \
+  sudo make install
+
 # Flux sched
 git clone https://github.com/flux-framework/flux-sched /opt/flux-sched && \
     cd /opt/flux-sched && \
@@ -68,7 +78,7 @@ flux keygen /tmp/curve.cert && \
     sudo chmod 4755 /usr/libexec/flux/flux-imp && \
     # /var/lib/flux needs to be owned by the instance owner
     sudo mkdir -p /var/lib/flux && \
-    sudo chown -R /var/lib/flux && \
+    sudo chown $USER -R /var/lib/flux && \
     # clean up
     cd /
     sudo rm -rf /opt/flux-core /opt/flux-sched /opt/prrte /opt/flux-security

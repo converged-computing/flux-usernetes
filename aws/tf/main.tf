@@ -5,11 +5,11 @@ locals {
   name   = "flux"
   pwd    = basename(path.cwd)
   region = "us-east-1"
-  ami    = "ami-088dc4371888c26cb"
+  ami    = "ami-03bf34a7d8b789694"
 
   instance_type = "hpc7g.4xlarge"
   vpc_cidr      = "10.0.0.0/16"
-  key_name      = "<your-key-name>"
+  key_name      = "<your-key>"
 
   # Also important - the m4.xlarge has ens3 and m2.4xlarge has eth0, hpc7g has ens5
   ethernet_device = "ens5"
@@ -152,6 +152,20 @@ resource "aws_security_group" "security_group" {
     to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # This is essential for efa!
+  ingress {
+    from_port = 0
+    to_port   = 0
+    protocol  = -1
+    self      = true
+  }
+  egress {
+    from_port = 0
+    to_port   = 0
+    protocol  = -1
+    self      = true
   }
 
   # temporariliy allowing all protocols for internal communication
@@ -316,18 +330,18 @@ resource "aws_launch_template" "launch_template" {
 }
 
 resource "aws_autoscaling_group" "autoscaling_group" {
-  name               = "${local.name}-autoscaling-group"
-  max_size           = local.min_size
-  min_size           = local.max_size
-  health_check_type  = "EC2"
+  name              = "${local.name}-autoscaling-group"
+  max_size          = local.min_size
+  min_size          = local.max_size
+  health_check_type = "EC2"
 
   # This is 25 hours
   health_check_grace_period = 90000
-  capacity_rebalance = false
+  capacity_rebalance        = false
 
   # Make this really large so we don't check soon :)
-  desired_capacity          = local.desired_size
-  target_group_arns         = [aws_lb_target_group.target_group.arn]
+  desired_capacity  = local.desired_size
+  target_group_arns = [aws_lb_target_group.target_group.arn]
 
   # IMPORTANT: usernetes won't be able to talk to the internet addresses in different subnets
   # but we are required to create them otherwise cloudformation gets angry 

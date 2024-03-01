@@ -47,8 +47,9 @@ export VERSION=4.0.1 && \
  make -C builddir && \
  sudo make -C builddir install
 
-# Pull singularity down and put in home
-cd /home/ubuntu
+# Pull singularity down and put in home -> lammps
+cd /home/ubuntu/lammps
+
 # singularity pull docker://ghcr.io/rse-ops/lammps-mpich:tag-latest
-singularity pull docker://ghcr.io/rse-ops/lammps-matrix:mpich-ubuntu-22.04-arm64
+singularity pull docker://ghcr.io/rse-ops/lammps-matrix:openmpi-ubuntu-22.04-arm64
 singularity cache clean -f

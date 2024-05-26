@@ -86,17 +86,70 @@ def plot_results(dfs, img):
     """
     # Save each completed data frame to file and plot!
     for slug, df in dfs.items():
-        print(df.groupby(['experiment','nodes']).mean())
-        print(df.groupby(['experiment','nodes']).std())
-
-    return 
+        print(slug)
+        if slug == "latency":
+            combined = df.groupby(['experiment', 'size']).mean()
+            combined.to_csv(os.path.join(img, "osu-latency-only.csv"))
+        if "size" in df.columns:
+            print(df.groupby(['experiment','nodes', 'size']).mean())
+            print(df.groupby(['experiment','nodes', 'size']).std())
+        else:
+            print(df.groupby(['experiment','nodes']).mean())
+            print(df.groupby(['experiment','nodes']).std())
+    return
 
     # Save each completed data frame to file and plot!
     for slug, df in dfs.items():
+
+        # Barrier we can show across nodes
+        if slug == "barrier":
+
+            # Remove usernetes from the set
+            without_usernetes = df[df.experiment != "usernetes"]
+
+            # Separate x and y - latency (y) is a function of size (x)        
+            x = "ranks"
+            y = "average_latency_us"
+
+            # for sty in plt.style.available:
+            ax = sns.lineplot(
+                data=df, x=x, y=y, markers=True, dashes=True, errorbar=("ci", 95), hue="experiment", palette="Set1"
+            )
+            plt.title(f"{slug} (y) as a function of size (x) across nodes")
+            ax.set_xlabel("size (logscale)", fontsize=16)
+            ax.set_ylabel("Average latency (logscale)", fontsize=16)
+            ax.set_xticklabels(ax.get_xmajorticklabels(), fontsize=14)
+            ax.set_yticklabels(ax.get_yticks(), fontsize=14)
+            plt.subplots_adjust(left=0.2, bottom=0.2)
+            plt.xscale("log")
+            plt.yscale("log")
+            plt.savefig(os.path.join(img, f"osu-{slug}-across-nodes.png"))
+            plt.clf()
+            plt.close()
+
+            ax = sns.lineplot(
+                data=without_usernetes, x=x, y=y, markers=True, dashes=True, errorbar=("ci", 95), hue="experiment", palette="Set1"
+            )
+            plt.title(f"{slug} (y) as a function of size (x) across nodes")
+            ax.set_xlabel("size (logscale)", fontsize=16)
+            ax.set_ylabel("Average latency (logscale)", fontsize=16)
+            ax.set_xticklabels(ax.get_xmajorticklabels(), fontsize=14)
+            ax.set_yticklabels(ax.get_yticks(), fontsize=14)
+            plt.xscale("log")
+            plt.yscale("log")
+            plt.subplots_adjust(left=0.2, bottom=0.2)
+            plt.savefig(os.path.join(img, f"osu-{slug}-across-nodes-without-usernetes.png"))
+            plt.clf()
+            plt.close()
+            continue
+
         for nodes in df.nodes.unique():
             print(f"Preparing plot for {slug}")
 
             subset = df[df.nodes == nodes]
+
+            # Remove usernetes from the set
+            without_usernetes = df[df.experiment != "usernetes"]
 
             # Separate x and y - latency (y) is a function of size (x)        
             x = "size"
@@ -113,12 +166,28 @@ def plot_results(dfs, img):
             ax.set_ylabel("Average latency (logscale)", fontsize=16)
             ax.set_xticklabels(ax.get_xmajorticklabels(), fontsize=14)
             ax.set_yticklabels(ax.get_yticks(), fontsize=14)
+            plt.subplots_adjust(left=0.2, bottom=0.2)
             plt.xscale("log")
             plt.yscale("log")
-            plt.tight_layout()
             plt.savefig(os.path.join(img, f"osu-{slug}-{nodes}-nodes.png"))
             plt.clf()
             plt.close()
+
+            ax = sns.lineplot(
+                data=without_usernetes, x=x, y=y, markers=True, dashes=True, errorbar=("ci", 95), hue="experiment", palette="Set1"
+            )
+            plt.title(f"{slug} (y) as a function of {x} (x) on {nodes} nodes")
+            ax.set_xlabel(x + " (logscale)", fontsize=16)
+            ax.set_ylabel("Average latency (logscale)", fontsize=16)
+            ax.set_xticklabels(ax.get_xmajorticklabels(), fontsize=14)
+            ax.set_yticklabels(ax.get_yticks(), fontsize=14)
+            plt.xscale("log")
+            plt.yscale("log")
+            plt.subplots_adjust(left=0.2, bottom=0.2)
+            plt.savefig(os.path.join(img, f"osu-{slug}-{nodes}-nodes-without-usernetes.png"))
+            plt.clf()
+            plt.close()
+
 
 def parse_data(files):
     """

@@ -2,11 +2,11 @@
 # VARIABLES # for you to edit!
 
 locals {
-  name      = "flux"
+  name      = "flux-usernetes"
   pwd       = basename(path.cwd)
   region    = "us-east-1"
   ami       = "ami-03bf34a7d8b789694"
-  placement = "eks-efa-testing"
+  placement = "flux-usernetes"
 
   instance_type = "hpc7g.4xlarge"
   vpc_cidr      = "10.0.0.0/16"
@@ -20,9 +20,9 @@ locals {
 
   # Set autoscaling to consistent size so we don't scale for now
   # We need one extra for the control plane, etc for a size 32 cluster
-  min_size     = 33
-  max_size     = 33
-  desired_size = 33
+  min_size     = 3
+  max_size     = 3
+  desired_size = 3
 
   cidr_block_a = "10.0.1.0/24"
   cidr_block_b = "10.0.2.0/24"
@@ -300,7 +300,7 @@ resource "aws_iam_instance_profile" "ec2_profile" {
 
 resource "aws_launch_template" "launch_template" {
 
-  name = "launch_template"
+  name = "${local.name}-launch_template"
 
   image_id      = local.ami
   instance_type = local.instance_type

@@ -6,7 +6,7 @@ Note that we re-did the osu all reduce on 2 nodes in [final/osu-followup](final/
 
 - Start time: 6:51am
 - Done creation time: 6:54am
-- End time:   
+- End time:~6:00pm
 - hpc7g.4xlarge x 33
 - Estimated compute cost: $56 per hour.
 
@@ -205,7 +205,8 @@ source <(kubectl completion bash)
 Clone the repository with configs, etc.
 
 ```bash
-git clone -b experiment-june-1 https://github.com/converged-computing/flux-usernetes /home/ubuntu/lammps/flux-usernetes
+# Note that at the time of running, this was the experiment-june-1 branch, now is in main
+git clone https://github.com/converged-computing/flux-usernetes /home/ubuntu/lammps/flux-usernetes
 
 # This is run from /home/ubuntu/lammps
 kubectl apply -f ./flux-usernetes/aws/examples/lammps/crd/efa-device-plugin.yaml 

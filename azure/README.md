@@ -116,16 +116,5 @@ At this point you can try running an experiment example.
 
 ### 4. Install Infiniband
 
-At this point we need to expose infiniband on the host to the pods. This took a few steps.
-
-1. A custom build of the driver install image, which I have on the [branch here](https://github.com/researchapps/aks-rdma-infiniband/tree/update-ubuntu-22.04). The changes are updating the base image (ubuntu 22.04) to match the Ubuntu HPC/AI image on Azure, and then retrieving the updated Mellanox drivers (an .iso that you have to download and copy in).
-2. Pushing the image to our registry [ghcr.io/converged-computing/rdma-infiniband:ubuntu-22.04](https://github.com/converged-computing/performance-study/pkgs/container/rdma-infiniband)
-3. Updating configs in [infiniband/install](infiniband/install) to reflect these changes.
-
-Then you'll need to clone this repository onto your Microsoft VMs to get these configs, and:
-
-```bash
-git clone -b add-azure https://github.com/converged-computing/flux-usernetes /home/azureuser/flux-usernetes
-cd /home/azureuser/flux-usernetes/azure/infiniband
-kubectl apply -k ./infiniband/install
-```
+At this point we need to expose infiniband on the host to the pods. This took a few steps,
+and what I learned (and the instructions are in [the repository here](https://github.com/converged-computing/aks-infiniband-install).

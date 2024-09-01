@@ -3,7 +3,7 @@
 These are different means to deploy usernetes and Flux on the cloud. If you are looking for a local, virtual-machine based solution, see [flux-lima](https://github.com/converged-computing/flux-lima/tree/main/usernetes)
 
  - [aws](aws): Deployed on AWS via terraform and a custom AMI.
-
+ - [azure](azure): Deployed on Azure with Infiniband (further work coming in next few months)
 
 ## License
 

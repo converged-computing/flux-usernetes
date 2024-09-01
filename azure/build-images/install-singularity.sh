@@ -32,25 +32,22 @@ sudo apt-get install -y \
 
 # install go
 # wget https://go.dev/dl/go1.21.0.linux-arm64.tar.gz
-wget https://go.dev/dl/go1.21.0.linux-amd64.tar.gz
-tar -xvf go1.21.0.linux-amd64.tar.gz
-sudo mv go /usr/local && rm go1.21.0.linux-amd64.tar.gz
+sudo wget https://go.dev/dl/go1.21.0.linux-amd64.tar.gz
+sudo tar -xvf go1.21.0.linux-amd64.tar.gz
+sudo mv go /usr/local && sudo rm go1.21.0.linux-amd64.tar.gz
 export PATH=/usr/local/go/bin:$PATH
 
 # Install singularity
 export VERSION=4.0.1 && \
-    wget https://github.com/sylabs/singularity/releases/download/v${VERSION}/singularity-ce-${VERSION}.tar.gz && \
-    tar -xzf singularity-ce-${VERSION}.tar.gz && \
+    sudo wget https://github.com/sylabs/singularity/releases/download/v${VERSION}/singularity-ce-${VERSION}.tar.gz && \
+    sudo tar -xzf singularity-ce-${VERSION}.tar.gz && \
+    sudo chown -R $USER singularity-ce-${VERSION} && \
     cd singularity-ce-${VERSION}
 
 ./mconfig && \
  make -C builddir && \
  sudo make -C builddir install
 
-# note that I am not pulling either of these, can be done for experiment.
-# Pull singularity down and put in home -> lammps
-# cd /home/azureuser/lammps
 
-# singularity pull docker://ghcr.io/rse-ops/lammps-mpich:tag-latest
-# singularity pull docker://ghcr.io/rse-ops/lammps-matrix:openmpi-ubuntu-22.04-arm64
-# singularity cache clean -f
+cd /opt
+sudo rm -rf singularity-ce-4.0.1

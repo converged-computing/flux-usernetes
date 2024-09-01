@@ -102,6 +102,9 @@ StateDirectoryMode=0700
 PermissionsStartOnly=true
 DefaultLimitMEMLOCK=infinity
 LimitMEMLOCK=infinity
+DefaultLimitMEMLOCK=infinity
+TasksMax=infinity
+LimitNPROC=infinity
 # ExecStartPre=/usr/bin/loginctl enable-linger flux
 # ExecStartPre=bash -c 'systemctl start user@$(id -u flux).service'
 

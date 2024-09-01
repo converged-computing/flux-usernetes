@@ -6,7 +6,11 @@ We don't have Terraform yet, so this is a "GUI" experience at the moment.
 
 ### 1. Build Images
 
-Since I'm new to Azure, I'm starting by creating a VM and then saving the image, which I did through the console (and saved the template) and all of the associated scripts are in [build-images](build-images). I chose:
+Since I'm new to Azure, I'm starting by creating a VM and then saving the image, which I did through the console (and saved the template) and all of the associated scripts are in [build-images](build-images). 
+
+**CPU** 
+
+I chose:
 
 - ubuntu server 22.04
 - South Central US
@@ -15,6 +19,12 @@ Since I'm new to Azure, I'm starting by creating a VM and then saving the image,
 - username: azureuser
 - select your ssh key
 - defaults to 30GB disk, but you should make it bigger - I skipped installing Singularity the first time because I ran out of room.
+
+**GPU** 
+
+ - US West 2
+ - Zone (No infrastructure redundancy required)
+ - ND40rs (~$22/hour)
 
 And interactively I ran each of:
 
@@ -25,8 +35,7 @@ And interactively I ran each of:
 - install-lammps.sh 
 
 And then you can actually click to create the instance group in the user interface, and it's quite easy.
-You MUST call it `flux-usernetes` to derive the machine names as flux-userxxxxx OR change that prefix in the startup-script.sh
-In addition, you will need to:
+You MUST call it `flux-usernetes` to derive the machine names as flux-userxxxxx OR change that prefix in the startup-script.sh. In addition, you will need to:
 
 - Add the `startup-script.sh` to the user data section (ensure the hostname is going to be correct)
 - Ensure you click on the network setup and enable the public ip address so you can ssh in
@@ -51,6 +60,20 @@ cd /home/azureuser/lammps
 flux run -N 2 --ntasks 96 -c 1 -o cpu-affinity=per-task /usr/bin/lmp -v x 2 -v y 2 -v z 2 -in ./in.reaxff.hns -nocite
 ```
 
+How to sanity check Infiniband:
+
+```bash
+ip link
+# should show ib0 UP
+
+ibv_devices 
+# (should show two)
+ibv_devinfo
+# for a device
+
+/etc/init.d/openibd status
+```
+
 If you need to check memory that is seen by flux:
 
 ```bash
@@ -60,8 +83,74 @@ $ flux run sh -c 'ulimit -l' --rlimit=memlock
 
 ### 3. Start Usernetes
 
-This is currently manual, and we need a better approach to automate it. I think we can use `machinectl` with a uid,
-but haven't tried this yet.
+Kubernetes autocomplete:
+
+```bash
+source <(kubectl completion bash) 
+```
+
+This is currently manual, and we need a better approach to automate it.  The first issue is the docker-compose.yaml needs
+an added volume - kernel build (headers) are linked to from here:
+
+```yaml
+    volumes:
+      - .:/usernetes:ro
+      - /boot:/boot:ro
+      - /lib/modules:/lib/modules:ro
+      # This line is added
+      - /usr/src:/usr/src
+```
+
+You need to first build a custom kind image base with the [Dockerfile.kind](Dockerfile.kind) to replace the Dockerfile in the "images/base" directory that you can clone from:
+
+```bash
+git clone https://github.com/kubernetes-sigs/kind
+cd kind
+```
+
+Then you need to change the default base image in the kind source code:
+
+```go
+// DefaultBaseImage is the default base image used
+// TODO: come up with a reasonable solution to digest pinning
+// https://github.com/moby/moby/issues/43188
+const DefaultBaseImage = "ghcr.io/converged-computing/kind-ubuntu:latest"
+```
+
+Build kind first:
+
+```bash
+make
+```
+
+Then clone kubernetes and use your build of kind to add the binaries to it.
+
+```bash
+git clone https://github.com/kubernetes/kubernetes
+cd kubernetes
+git checkout 20b216738a5e9671ddf4081ed97b5565e0b1ee01
+../bin/kind build node-image
+```
+
+When that is done, tag and push to where you can control it.
+
+```bash
+docker tag kindest/node:latest ghcr.io/converged-computing/kind-ubuntu:node
+docker push ghcr.io/converged-computing/kind-ubuntu:node
+```
+
+Then you need to change the FROM of the usernetes Dockerfile to use:
+
+```dockerfile
+ARG BASE_IMAGE=ghcr.io/converged-computing/kind-ubuntu:node
+```
+Note that I also added seccomp - I'm not sure why it was removed:
+
+```dockerfile
+RUN apt-get install -y seccomp libseccomp-dev
+```
+
+And that image build is included here with [Dockerfile.kind](Dockerfile.kind).
 
 #### Control Plane
 

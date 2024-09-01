@@ -94,7 +94,7 @@ mkdir -p /home/azureuser/.docker/run
 
 # This might show failure because it creates the docker.sock in /run/user/UID/docker.sock
 # but then we link to the expected path below
-dockerd-rootless-setuptool.sh install || true
+dockerd-rootless-setuptool.sh install
 sleep 10
 systemctl --user enable docker.service
 systemctl --user start docker.service

@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: &name install-mlx-driver
+  labels:
+    app: *name
+spec:
+  selector:
+    matchLabels:
+      app: *name
+  template:
+    metadata:
+      labels:
+        app: *name
+    spec:
+      hostNetwork: true
+      hostPID: true
+      containers:
+      - image: ghcr.io/converged-computing/rdma-infiniband:ubuntu-22.04
+        imagePullPolicy: Always
+        name: *name
+        command: ["/entrypoint.sh"] 
+        args: ["installonly"]
+        resources:
+          requests:
+            {}
+          limits:
+            {}
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: actions
+          mountPath: "/opt/actions"
+        - name: hostmount
+          mountPath: "/mnt/actions"
+        - name: debs
+          mountPath: "/mnt/debs"
+      volumes:
+      - name: debs
+        hostPath:
+          path: /opt/debs
+          type: DirectoryOrCreate
+      - name: hostmount
+        hostPath:
+          path: /opt/actions
+          type: DirectoryOrCreate
+      - name: actions
+        configMap:
+          name: install-driver-actions
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: install-driver-actions
+  labels:
+    app: install-mlx-driver
+data:
+  installonly: |
+    #!/usr/bin/env bash
+    set -eo pipefail
+
+    SECONDS=0
+    umount /mnt || true
+    cd /opt/debs
+    mount -o ro,loop ./MLNX_OFED_LINUX-24.04-0.7.0.0-ubuntu22.04-x86_64.iso /mnt
+    # mount -o ro,loop MLNX_OFED_LINUX-5.6-2.0.9.0-ubuntu18.04-x86_64.iso /mnt
+    /mnt/mlnxofedinstall --force
+    # /mnt/mlnxofedinstall --without-dkms --add-kernel-support --kernel 5.15.0-1068-azure --without-fw-update --force
+    /etc/init.d/openibd restart
+    ip link
+    check_ib="$(ip link | grep ib0)"
+    if [ -z "$check_ib" ];
+    then
+      echo "driver installation failed"
+      exit 1
+    else
+      echo "driver installation successful"
+    fi
+    echo "installation completed in $SECONDS seconds"
+---

@@ -237,6 +237,29 @@ def plot_results(df, outdir):
         ylabel="Time (seconds)",
     )
 
+    # Now JUST usernetes vs bare metal (for paper)
+    subset = df[df.experiment.isin(["usernetes", "bare-metal"])]
+
+    palette = OrderedDict()
+    palette["bare-metal"] = "#e48522"
+    palette["usernetes"] = "#2480ec"
+
+    make_plot(
+        subset,
+        title="LAMMPS Times (16 x 16 x 8) Bare-Metal vs Usernetes Across Sizes",
+        tag="bare-metal-vs-usernetes",
+        ydimension="time_seconds",
+        xdimension="nodes",
+        palette=palette,
+        outdir=outdir,
+        ext="png",
+        plotname="lammps-by-nodes",
+        hue="experiment",
+        plot_type="box",
+        xlabel="Nodes",
+        ylabel="Time (seconds)",
+    )
+
     import IPython
 
     IPython.embed()

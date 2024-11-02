@@ -4,6 +4,7 @@ These are different means to deploy usernetes and Flux on the cloud. If you are 
 
  - [aws](aws): Deployed on AWS via terraform and a custom AMI.
  - [azure](azure): Deployed on Azure with Infiniband (further work coming in next few months)
+ - [google](google): Deployed on Google Cloud with ethernet.
 
 ## License
 

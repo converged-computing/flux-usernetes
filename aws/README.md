@@ -7,28 +7,26 @@ This used to use packer, but it stopped working so now the build is a bit manual
 
 ### 1. Build Images
 
-Note that we previously built with packer. That no longer seems to work ([maybe this issue](https://github.com/hashicorp/packer/issues/8180))
-Instead we are going to run the commands there manually and save the AMI. The previous instruction was to export AWS credentials, cd into build-images,
-and `make`. For the manual build, you'll need to create an m5.large instance in the web UI, ubuntu 22.04, and manually run the contents of each
-of the scripts in [build-images](build-images). For example, for the top AMI below I ran each of:
+Our builds are again working with [packer](https://developer.hashicorp.com/packer/install)! You need to install it first. You can export your AWS credentials to the environment, but I prefer to use long term credentials, as [described here](https://docs.aws.amazon.com/cli/v1/userguide/cli-configure-files.html). To build:
 
-- install-deps.sh
-- install-flux.sh
-- install-usernetes.sh
-- install-singularity.sh
-- install-lammps.sh 
+```bash
+cd build-images
+make
+```
 
-The scripts have been modified for ARM, since AMD64 doesn't really work with the limited network options (we need the HPC instances). And this generated the following (not all of these may exist anymore, we did a cleanup):
+You can also look in the Makefile to see the respective commands
 
-- flux-ubuntu-usernetes-efa `ami-03bf34a7d8b789694` openmpi and efa provided by the efa install, and version 1.30.0
-- flux-ubuntu-usernetes-lammps-openmpi-singularity `ami-070478bc8c3200e41` using openmpi instead of mpich
-- flux-usernetes-lammps-singularity-libfabricc: `ami-099e87e49f153b2b3` the same, but building MPI with system (not AWS)
-- flux-ubuntu-usernetes-lammps-singularity-arm-efa: `ami-088dc4371888c26cb` the same but with those things!
-- flux-ubuntu-usernetes: `ami-023a3bf52034d3faa` has flux, usernetes, lammps, and singularity
+```bash
+packer init .
+packer fmt .
+packer validate .
+packer build flux-usernetes-build.pkr.hcl
+```
 
-Nothing really works on AWS without EFA so probably we will use the first (top).
+The build logic is in the corresponding `build.sh` script, so if you want to add additional stuff (adding an application or other library install) write to the end of that file! Note that during the build you will see blocks of red and green. Red does *not* necessarily indicate an error. But if you do run into one that stops the build, please [open an issue](https://github.com/converged-computing/flux-usernetes/issues) to ask for help. When the build is complete it will generate what is called an AMI, an "Amazon 
+Machine Image" that you can use in the next step. It should go into the `main.tf` in [tf](tf).
 
-### Deploy with Terraform
+### 2. Deploy with Terraform
 
 Once you have images, we deploy!
 

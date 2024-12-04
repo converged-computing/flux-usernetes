@@ -73,9 +73,9 @@ cd /opt/prrte/prrte && \
     ./configure --prefix=/usr && sudo make -j install
 
 # flux security
-wget https://github.com/flux-framework/flux-security/releases/download/v0.11.0/flux-security-0.11.0.tar.gz && \
-    tar -xzvf flux-security-0.11.0.tar.gz && \
-    mv flux-security-0.11.0 /opt/flux-security && \
+wget https://github.com/flux-framework/flux-security/releases/download/v0.13.0/flux-security-0.13.0.tar.gz && \
+    tar -xzvf flux-security-0.13.0.tar.gz && \
+    mv flux-security-0.13.0 /opt/flux-security && \
     cd /opt/flux-security && \
     ./configure --prefix=/usr --sysconfdir=/etc && \
     make -j && sudo make install
@@ -91,9 +91,9 @@ sudo mkdir -p /var/run/munge && \
 mkdir -p /home/ubuntu/run/flux
 
 # Flux core
-wget https://github.com/flux-framework/flux-core/releases/download/v0.66.0/flux-core-0.66.0.tar.gz && \
-    tar -xzvf flux-core-0.66.0.tar.gz && \
-    mv flux-core-0.66.0 /opt/flux-core && \
+wget https://github.com/flux-framework/flux-core/releases/download/v0.68.0/flux-core-0.68.0.tar.gz && \
+    tar -xzvf flux-core-0.68.0.tar.gz && \
+    mv flux-core-0.68.0 /opt/flux-core && \
     cd /opt/flux-core && \
     ./configure --prefix=/usr --sysconfdir=/etc --runstatedir=/home/flux/run --with-flux-security && \
     make clean && \
@@ -108,14 +108,14 @@ wget https://github.com/flux-framework/flux-pmix/releases/download/v0.5.0/flux-p
     make -j && \
     sudo make install
 
-# Flux sched
+# Flux sched (not updated because require higher version of gcc (12x) and clang (15)
 wget https://github.com/flux-framework/flux-sched/releases/download/v0.37.0/flux-sched-0.37.0.tar.gz && \
     tar -xzvf flux-sched-0.37.0.tar.gz && \
     mv flux-sched-0.37.0 /opt/flux-sched && \
     cd /opt/flux-sched && \
-    mkdir build && \
-    cd build && \
-    cmake ../ && make -j && sudo make install && sudo ldconfig && \
+    ./configure --prefix=/usr && \
+    make -j && \
+    sudo make install && sudo ldconfig && \
     echo "DONE flux build"
 
 # Flux curve.cert

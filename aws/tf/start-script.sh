@@ -62,6 +62,19 @@ allow-root-owner = true
 [resource]
 path = "/etc/flux/system/R"
 
+[job-manager]
+plugins = [
+  { load = "perilog.so" }
+]
+
+[job-manager.prolog]
+per-rank = true
+# timeout = "10m"
+
+[job-manager.epilog]
+per-rank = true
+# timeout = "5m"
+
 # Point to shared network certificate generated flux-keygen(1).
 # Define the network endpoints for Flux's tree based overlay network
 # and inform Flux of the hostnames that will start flux-broker(1).
@@ -122,6 +135,8 @@ ExecStart=/bin/bash -c '\
 SyslogIdentifier=flux
 ExecReload=/usr/bin/flux config reload
 LimitMEMLOCK=infinity
+TasksMax=infinity
+LimitNPROC=infinity
 Restart=always
 RestartSec=5s
 RestartPreventExitStatus=42
@@ -146,6 +161,27 @@ Delegate=yes
 WantedBy=multi-user.target
 EOF
 sudo mv /tmp/flux.service /lib/systemd/system/flux.service
+
+# Write the imp config
+sudo mkdir -p /etc/flux/imp/conf.d
+
+# Write new service file
+cat <<EOF | tee /tmp/imp.toml
+[exec]
+allowed-users = [ "flux", "ubuntu", "root" ]
+allowed-shells = [ "/usr/libexec/flux/flux-shell" ]
+
+[run.prolog]
+allowed-environment = [ "FLUX_*" ]
+allowed-users = [ "flux", "ubuntu", "root" ]
+path = "/etc/flux/system/prolog"
+
+[run.epilog]
+allowed-environment = [ "FLUX_*" ]
+allowed-users = [ "flux", "ubuntu", "root" ]
+path = "/etc/flux/system/epilog"
+EOF
+sudo mv /tmp/imp.toml /etc/flux/imp/conf.d/imp.toml
 
 # See the README.md for commands how to set this manually without systemd
 sudo systemctl daemon-reload
@@ -190,10 +226,31 @@ echo "export PATH=$PATH:/usr/local/libexec/osu-micro-benchmarks/mpi/startup" >> 
 mkdir -p /home/ubuntu/.docker/run
 cd /home/ubuntu
 
+# Temporary to update usernetes python
+sudo rm -rf /home/ubuntu/usernetes-python
+git clone -b install-prolog-epilog https://github.com/converged-computing/usernetes-python
+cd /home/ubuntu/usernetes-python
+sudo pip install -e .
+
+# Important! The path for the prolog runner is /usr/sbin:/usr/bin:/sbin:/bin
+sudo cp /usr/local/bin/usernetes /usr/bin/usernetes
+
+# Setup prolog/epilog
+mkdir -p /etc/flux/system/prolog.d /etc/flux/system/epilog.d
+sudo cp /home/ubuntu/usernetes-python/scripts/shared/prolog.sh /etc/flux/system/prolog
+sudo cp /home/ubuntu/usernetes-python/scripts/shared/epilog.sh /etc/flux/system/epilog
+sudo cp /home/ubuntu/usernetes-python/scripts/aws/start-usernetes.sh /etc/flux/system/prolog.d/start-usernetes.sh
+sudo cp /home/ubuntu/usernetes-python/scripts/aws/stop-usernetes.sh /etc/flux/system/epilog.d/stop-usernetes.sh
+
+# These are for the control plane and others
+sudo chmod +x /etc/flux/system/epilog /etc/flux/system/prolog /etc/flux/system/*/*.sh
+
 # In case we need to start fresh (this likely is not needed)
 # dockerd-rootless-setuptool.sh uninstall
 # /usr/bin/dockerd-rootless-setuptool.sh uninstall -f
 # /usr/bin/rootlesskit rm -rf /home/ubuntu/.local/share/docker
+
+cd /home/ubuntu
 
 # install rootless docker and start usernetes 
 # this needs to be run interactively.

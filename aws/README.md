@@ -61,8 +61,8 @@ $ flux resource list
 ```
 ```bash
 $ flux run -N 2 hostname
-i-012fe4a110e14da1b.ec2.internal
-i-0354d878a3fd6b017.ec2.internal
+i-0831eed34c13e747e
+i-0ac10f9b787d6a349
 ```
 
 Lammps should also run.
@@ -75,10 +75,36 @@ flux run -N 2 --ntasks 32 -c 1 -o cpu-affinity=per-task /usr/bin/lmp -v x 2 -v y
 You can look at the startup script logs like this if you need to debug.
 
 ```bash
-$ cat /var/log/cloud-init-output.log
+cat /var/log/cloud-init-output.log
 ```
 
-#### Start Usernetes
+### 2. Usernetes
+
+There are two ways to deploy usernetes in this system
+
+ - Directly with the system instance (ideal for long running experiments)
+ - As a batch job (ideal for emulating how it is used on an HPC cluster)
+
+Both will be demonstrated here. Both use the wrapper to usernetes, Usernetes Python, which should be installed:
+
+```bash
+which usernetes
+/usr/local/bin/usernetes
+```
+
+If you need to update, it's installed with `-e` as a development install, so you just need to pull (or otherwise update the GitHub repository there).
+
+```bash
+cd ~/usernetes-python
+git pull
+```
+
+#### Usernetes System Instance
+
+We assume you have ssh'd into the top level instance, which is where the control plane will run. You can sanity check by comparing the hostname against the first instance in `flux resource list` (they should be the same). To deploy the control plane:
+
+```
+```
 
 This is currently manual, and we need a better approach to automate it. I think we can use `machinectl` with a uid,
 but haven't tried this yet.

@@ -48,6 +48,15 @@ name via "Connect" in the portal, but you could likely use the AWS client for th
 $ ssh -o 'IdentitiesOnly yes' -i "mykey.pem" ubuntu@ec2-xx-xxx-xx-xxx.compute-1.amazonaws.com
 ```
 
+More recently I use a little script and target the zone where my instances are. 
+This takes the region as an argument (defaulting to us-east-1) and assumes they are the only ones running. If not, you should add a name filter.
+
+```bash
+#!/bin/bash
+region=${1:-us-east-1}
+aws ec2 describe-instances --region ${region} --filters Name=instance-state-name,Values=running | jq .Reservations[].Instances[].NetworkInterfaces[].PrivateIpAddresses[].Association.PublicDnsName
+```
+
 #### Check Flux
 
 Check the cluster status, the overlay status, and try running a job:
@@ -92,83 +101,7 @@ which usernetes
 /usr/local/bin/usernetes
 ```
 
-If you need to update, it's installed with `-e` as a development install, so you just need to pull (or otherwise update the GitHub repository there).
-
-```bash
-cd ~/usernetes-python
-git pull
-```
-
-#### Usernetes System Instance
-
-We assume you have ssh'd into the top level instance, which is where the control plane will run. You can sanity check by comparing the hostname against the first instance in `flux resource list` (they should be the same). To deploy the control plane:
-
-```
-```
-
-This is currently manual, and we need a better approach to automate it. I think we can use `machinectl` with a uid,
-but haven't tried this yet.
-
-##### Control Plane
-
-Let's first bring up the control plane, and we will copy the `join-command` to each node.
-In the index 0 broker (the first in the broker.toml that you shelled into):
-
-```bash
-cd ~/usernetes
-./start-control-plane.sh
-```
-
-Then with flux running, send to the other nodes.
-
-```bash
-# use these commands for newer flux
-flux archive create --name=join-command --mmap -C /home/ubuntu/usernetes join-command
-flux exec -x 0 -r all flux archive extract --name=join-command -C /home/ubuntu/usernetes
-```
-
-Note that I'm going to try a command that will be able to start the workers without needing to shell in.
-
-```bash
-cd /home/ubuntu/usernetes
-flux exec -x 0 -r all --dir /home/ubuntu/usernetes /bin/bash ./start-worker.sh
-```
-
-It works! You shouldn't need to do the below.
-
-##### Worker Nodes
-
-**Important** This is how you'd start each manually, but you should not need to do this now with the final command about to run the same script across workers from the control plane. This is what I did before I figured that out. Also note that your nodes need to be on the same subnet to see one another. The VPC and load balancer will require you to create 2+, but you don't have to use them all. That information is embedded in the terraform config now.
-
-```bash
-cd ~/usernetes
-
-# start the worker (to hopefully join)
-./start-worker.sh
-```
-
-Check (from the first node) that usernetes is running (your KUBECONFIG should be exported):
-
-```bash
-. ~/.bashrc
-kubectl get nodes
-```
-
-You should have a full set of usernetes node and flux alongside.
-
-```console
-$ kubectl get nodes
-NAME                      STATUS   ROLES           AGE   VERSION
-u7s-i-0a7c8e4a2ddaffbe9   Ready    <none>          33s   v1.29.1
-u7s-i-0be1a2884b2873c22   Ready    control-plane   11m   v1.29.1
-```
-```console
-$ flux resource list
-     STATE NNODES   NCORES    NGPUS NODELIST
-      free      2       32        0 i-0be1a2884b2873c22,i-0a7c8e4a2ddaffbe9
- allocated      0        0        0 
-      down      0        0        0 
-```
+Full instructions for setup (for either level) can be found in the [usernetes-python](https://github.com/converged-computing/usernetes-python/tree/main/scripts/aws) repository, in the AWS scripts directory.
 
 ### Topology
 

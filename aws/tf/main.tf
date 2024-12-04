@@ -5,7 +5,7 @@ locals {
   name      = "flux"
   pwd       = basename(path.cwd)
   region    = "us-east-1"
-  ami       = "ami-03bf34a7d8b789694"
+  ami       = "ami-0bdd44467bb07c3ac"
   placement = "eks-efa-testing"
 
   instance_type = "hpc7g.4xlarge"
@@ -20,9 +20,9 @@ locals {
 
   # Set autoscaling to consistent size so we don't scale for now
   # We need one extra for the control plane, etc for a size 32 cluster
-  min_size     = 33
-  max_size     = 33
-  desired_size = 33
+  min_size     = 2
+  max_size     = 2
+  desired_size = 2
 
   cidr_block_a = "10.0.1.0/24"
   cidr_block_b = "10.0.2.0/24"

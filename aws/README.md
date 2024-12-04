@@ -7,28 +7,26 @@ This used to use packer, but it stopped working so now the build is a bit manual
 
 ### 1. Build Images
 
-Note that we previously built with packer. That no longer seems to work ([maybe this issue](https://github.com/hashicorp/packer/issues/8180))
-Instead we are going to run the commands there manually and save the AMI. The previous instruction was to export AWS credentials, cd into build-images,
-and `make`. For the manual build, you'll need to create an m5.large instance in the web UI, ubuntu 22.04, and manually run the contents of each
-of the scripts in [build-images](build-images). For example, for the top AMI below I ran each of:
+Our builds are again working with [packer](https://developer.hashicorp.com/packer/install)! You need to install it first. You can export your AWS credentials to the environment, but I prefer to use long term credentials, as [described here](https://docs.aws.amazon.com/cli/v1/userguide/cli-configure-files.html). To build:
 
-- install-deps.sh
-- install-flux.sh
-- install-usernetes.sh
-- install-singularity.sh
-- install-lammps.sh 
+```bash
+cd build-images
+make
+```
 
-The scripts have been modified for ARM, since AMD64 doesn't really work with the limited network options (we need the HPC instances). And this generated the following (not all of these may exist anymore, we did a cleanup):
+You can also look in the Makefile to see the respective commands
 
-- flux-ubuntu-usernetes-efa `ami-03bf34a7d8b789694` openmpi and efa provided by the efa install, and version 1.30.0
-- flux-ubuntu-usernetes-lammps-openmpi-singularity `ami-070478bc8c3200e41` using openmpi instead of mpich
-- flux-usernetes-lammps-singularity-libfabricc: `ami-099e87e49f153b2b3` the same, but building MPI with system (not AWS)
-- flux-ubuntu-usernetes-lammps-singularity-arm-efa: `ami-088dc4371888c26cb` the same but with those things!
-- flux-ubuntu-usernetes: `ami-023a3bf52034d3faa` has flux, usernetes, lammps, and singularity
+```bash
+packer init .
+packer fmt .
+packer validate .
+packer build flux-usernetes-build.pkr.hcl
+```
 
-Nothing really works on AWS without EFA so probably we will use the first (top).
+The build logic is in the corresponding `build.sh` script, so if you want to add additional stuff (adding an application or other library install) write to the end of that file! Note that during the build you will see blocks of red and green. Red does *not* necessarily indicate an error. But if you do run into one that stops the build, please [open an issue](https://github.com/converged-computing/flux-usernetes/issues) to ask for help. When the build is complete it will generate what is called an AMI, an "Amazon 
+Machine Image" that you can use in the next step. It should go into the `main.tf` in [tf](tf).
 
-### Deploy with Terraform
+### 2. Deploy with Terraform
 
 Once you have images, we deploy!
 
@@ -50,6 +48,15 @@ name via "Connect" in the portal, but you could likely use the AWS client for th
 $ ssh -o 'IdentitiesOnly yes' -i "mykey.pem" ubuntu@ec2-xx-xxx-xx-xxx.compute-1.amazonaws.com
 ```
 
+More recently I use a little script and target the zone where my instances are. 
+This takes the region as an argument (defaulting to us-east-1) and assumes they are the only ones running. If not, you should add a name filter.
+
+```bash
+#!/bin/bash
+region=${1:-us-east-1}
+aws ec2 describe-instances --region ${region} --filters Name=instance-state-name,Values=running | jq .Reservations[].Instances[].NetworkInterfaces[].PrivateIpAddresses[].Association.PublicDnsName
+```
+
 #### Check Flux
 
 Check the cluster status, the overlay status, and try running a job:
@@ -63,8 +70,8 @@ $ flux resource list
 ```
 ```bash
 $ flux run -N 2 hostname
-i-012fe4a110e14da1b.ec2.internal
-i-0354d878a3fd6b017.ec2.internal
+i-0831eed34c13e747e
+i-0ac10f9b787d6a349
 ```
 
 Lammps should also run.
@@ -77,74 +84,24 @@ flux run -N 2 --ntasks 32 -c 1 -o cpu-affinity=per-task /usr/bin/lmp -v x 2 -v y
 You can look at the startup script logs like this if you need to debug.
 
 ```bash
-$ cat /var/log/cloud-init-output.log
+cat /var/log/cloud-init-output.log
 ```
 
-#### Start Usernetes
+### 2. Usernetes
 
-This is currently manual, and we need a better approach to automate it. I think we can use `machinectl` with a uid,
-but haven't tried this yet.
+There are two ways to deploy usernetes in this system
 
-##### Control Plane
+ - Directly with the system instance (ideal for long running experiments)
+ - As a batch job (ideal for emulating how it is used on an HPC cluster)
 
-Let's first bring up the control plane, and we will copy the `join-command` to each node.
-In the index 0 broker (the first in the broker.toml that you shelled into):
+Both will be demonstrated here. Both use the wrapper to usernetes, Usernetes Python, which should be installed:
 
 ```bash
-cd ~/usernetes
-./start-control-plane.sh
+which usernetes
+/usr/local/bin/usernetes
 ```
 
-Then with flux running, send to the other nodes.
-
-```bash
-# use these commands for newer flux
-flux archive create --name=join-command --mmap -C /home/ubuntu/usernetes join-command
-flux exec -x 0 -r all flux archive extract --name=join-command -C /home/ubuntu/usernetes
-```
-
-Note that I'm going to try a command that will be able to start the workers without needing to shell in.
-
-```bash
-cd /home/ubuntu/usernetes
-flux exec -x 0 -r all --dir /home/ubuntu/usernetes /bin/bash ./start-worker.sh
-```
-
-It works! You shouldn't need to do the below.
-
-##### Worker Nodes
-
-**Important** This is how you'd start each manually, but you should not need to do this now with the final command about to run the same script across workers from the control plane. This is what I did before I figured that out. Also note that your nodes need to be on the same subnet to see one another. The VPC and load balancer will require you to create 2+, but you don't have to use them all. That information is embedded in the terraform config now.
-
-```bash
-cd ~/usernetes
-
-# start the worker (to hopefully join)
-./start-worker.sh
-```
-
-Check (from the first node) that usernetes is running (your KUBECONFIG should be exported):
-
-```bash
-. ~/.bashrc
-kubectl get nodes
-```
-
-You should have a full set of usernetes node and flux alongside.
-
-```console
-$ kubectl get nodes
-NAME                      STATUS   ROLES           AGE   VERSION
-u7s-i-0a7c8e4a2ddaffbe9   Ready    <none>          33s   v1.29.1
-u7s-i-0be1a2884b2873c22   Ready    control-plane   11m   v1.29.1
-```
-```console
-$ flux resource list
-     STATE NNODES   NCORES    NGPUS NODELIST
-      free      2       32        0 i-0be1a2884b2873c22,i-0a7c8e4a2ddaffbe9
- allocated      0        0        0 
-      down      0        0        0 
-```
+Full instructions for setup (for either level) can be found in the [usernetes-python](https://github.com/converged-computing/usernetes-python/tree/main/scripts/aws) repository, in the AWS scripts directory.
 
 ### Topology
 

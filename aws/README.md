@@ -5,6 +5,13 @@ This used to use packer, but it stopped working so now the build is a bit manual
 
 ## Usage
 
+Choose a base image:
+
+- [hpc7g](hpc7g) (arm)
+- [hpc6a](hpc6a) (x86)
+
+And follow the instructions below for each.
+
 ### 1. Build Images
 
 Our builds are again working with [packer](https://developer.hashicorp.com/packer/install)! You need to install it first. You can export your AWS credentials to the environment, but I prefer to use long term credentials, as [described here](https://docs.aws.amazon.com/cli/v1/userguide/cli-configure-files.html). To build:

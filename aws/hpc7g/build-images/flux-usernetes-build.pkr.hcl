@@ -8,7 +8,7 @@ packer {
 }
 
 source "amazon-ebs" "ubuntu" {
-  ami_name      = "flux-0.68.0-usernetes-singularity-hpc7g"
+  ami_name      = "flux-0.68.0-usernetes-python-singularity-hpc7g"
   instance_type = "hpc7g.16xlarge"
   region        = "us-east-1"
   source_ami_filter {

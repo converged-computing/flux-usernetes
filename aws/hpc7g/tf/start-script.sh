@@ -4,16 +4,16 @@
 python3 -m pip install awscli
 
 # Wait for the count to be up
-while [[ $(aws ec2 describe-instances --region us-east-1 --filters "Name=tag:selector,Values=${selector_name}-selector" | jq .Reservations[].Instances[].NetworkInterfaces[].PrivateIpAddresses[].PrivateDnsName | wc -l) -ne ${desired_size} ]]
+while [[ $(aws ec2 describe-instances --region ${region} --filters "Name=tag:selector,Values=${selector_name}-selector" | jq .Reservations[].Instances[].NetworkInterfaces[].PrivateIpAddresses[].PrivateDnsName | wc -l) -ne ${desired_size} ]]
 do
    echo "Desired count not reached, sleeping."
    sleep 10
 done
-found_count=$(aws ec2 describe-instances --region us-east-1 --filters "Name=tag:selector,Values=${selector_name}-selector" | jq .Reservations[].Instances[].NetworkInterfaces[].PrivateIpAddress | wc -l)
+found_count=$(aws ec2 describe-instances --region ${region} --filters "Name=tag:selector,Values=${selector_name}-selector" | jq .Reservations[].Instances[].NetworkInterfaces[].PrivateIpAddress | wc -l)
 echo "Desired count $found_count is reached"
 
 # Update the flux config files with our hosts - we need the ones from hostname
-hosts=$(aws ec2 describe-instances --region us-east-1 --filters "Name=tag:selector,Values=${selector_name}-selector" | jq -r .Reservations[].Instances[].NetworkInterfaces[].PrivateIpAddresses[].PrivateDnsName)
+hosts=$(aws ec2 describe-instances --region ${region} --filters "Name=tag:selector,Values=${selector_name}-selector" | jq -r .Reservations[].Instances[].NetworkInterfaces[].PrivateIpAddresses[].PrivateDnsName)
 
 # Hack them together into comma separated list, also get the lead broker
 NODELIST=""
@@ -226,24 +226,17 @@ echo "export PATH=$PATH:/usr/local/libexec/osu-micro-benchmarks/mpi/startup" >> 
 mkdir -p /home/ubuntu/.docker/run
 cd /home/ubuntu
 
-# Temporary to update usernetes python
+# Update usernetes python and install to flux system location
 sudo rm -rf /home/ubuntu/usernetes-python
-git clone -b install-prolog-epilog https://github.com/converged-computing/usernetes-python
+git clone https://github.com/converged-computing/usernetes-python
 cd /home/ubuntu/usernetes-python
 sudo pip install -e .
+/bin/bash ./scripts/install-scripts.sh /etc/flux/system
 
-# Important! The path for the prolog runner is /usr/sbin:/usr/bin:/sbin:/bin
-sudo cp /usr/local/bin/usernetes /usr/bin/usernetes
-
-# Setup prolog/epilog
-mkdir -p /etc/flux/system/prolog.d /etc/flux/system/epilog.d
-sudo cp /home/ubuntu/usernetes-python/scripts/shared/prolog.sh /etc/flux/system/prolog
-sudo cp /home/ubuntu/usernetes-python/scripts/shared/epilog.sh /etc/flux/system/epilog
-sudo cp /home/ubuntu/usernetes-python/scripts/aws/start-usernetes.sh /etc/flux/system/prolog.d/start-usernetes.sh
-sudo cp /home/ubuntu/usernetes-python/scripts/aws/stop-usernetes.sh /etc/flux/system/epilog.d/stop-usernetes.sh
-
-# These are for the control plane and others
-sudo chmod +x /etc/flux/system/epilog /etc/flux/system/prolog /etc/flux/system/*/*.sh
+# Update usernetes
+sudo rm -rf /home/ubuntu/usernetes
+git clone https://github.com/rootless-containers/usernetes /home/ubuntu/usernetes
+sudo chown -R ubuntu /home/ubuntu/usernetes
 
 # In case we need to start fresh (this likely is not needed)
 # dockerd-rootless-setuptool.sh uninstall
@@ -254,5 +247,5 @@ cd /home/ubuntu
 
 # install rootless docker and start usernetes 
 # this needs to be run interactively.
-sudo chown -R $USER /home/ubuntu
+sudo chown -R ubuntu /home/ubuntu
 cd /home/ubuntu/usernetes

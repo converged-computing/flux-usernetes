@@ -5,14 +5,14 @@ locals {
   name      = "flux"
   pwd       = basename(path.cwd)
   region    = "us-east-1"
-  ami       = "ami-0bdd44467bb07c3ac"
+  ami       = "ami-05206ad3e1f591078"
   placement = "eks-efa-testing"
 
   instance_type = "hpc7g.4xlarge"
   vpc_cidr      = "10.0.0.0/16"
   key_name      = "<your-key>"
 
-  # Also important - the m4.xlarge has ens3 and m2.4xlarge has eth0, hpc7g has ens5
+  # Also important - the m4.xlarge has ens3 and m2.4xlarge has eth0, hpc7g/hpc6a have ens5
   ethernet_device = "ens5"
 
   # Must be larger than ami (30)
@@ -20,9 +20,9 @@ locals {
 
   # Set autoscaling to consistent size so we don't scale for now
   # We need one extra for the control plane, etc for a size 32 cluster
-  min_size     = 2
-  max_size     = 2
-  desired_size = 2
+  min_size     = 32
+  max_size     = 32
+  desired_size = 32
 
   cidr_block_a = "10.0.1.0/24"
   cidr_block_b = "10.0.2.0/24"
@@ -59,6 +59,7 @@ data "template_file" "startup_script" {
     selector_name   = local.name,
     desired_size    = local.desired_size
     ethernet_device = local.ethernet_device
+    region          = local.region
   })
 }
 
@@ -204,6 +205,14 @@ resource "aws_security_group" "security_group" {
   }
 
   ingress {
+    description = "Allow http, etc. from deployer computer"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "tcp"
+    cidr_blocks = ["${chomp(data.http.address.response_body)}/32"]
+  }
+
+  ingress {
     cidr_blocks = ["0.0.0.0/0"]
     protocol    = "icmp"
     from_port   = 8
@@ -229,7 +238,7 @@ resource "aws_lb" "load_balancer" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.security_group.id]
-  subnets            = [aws_subnet.public_a.id, aws_subnet.public_b.id, aws_subnet.public_c.id]
+  subnets            = [aws_subnet.public_b.id, aws_subnet.public_c.id]
 }
 
 resource "aws_lb_listener" "load_balance_listener" {

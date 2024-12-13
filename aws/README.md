@@ -8,7 +8,6 @@ This used to use packer, but it stopped working so now the build is a bit manual
 Choose a base image:
 
 - [hpc7g](hpc7g) (arm)
-- [hpc6a](hpc6a) (x86)
 
 And follow the instructions below for each.
 

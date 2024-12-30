@@ -1,66 +1,129 @@
 # Flux Usernetes on Azure
 
-We don't have Terraform yet, so this is a "GUI" experience at the moment.
-
 ## Usage
 
 ### 1. Build Images
 
-Since I'm new to Azure, I'm starting by creating a VM and then saving the image, which I did through the console (and saved the template) and all of the associated scripts are in [build-images](build-images). 
+You can find the instructions for building your bases [here](https://github.com/converged-computing/flux-tutorials/tree/main/tutorial/azure/build) in the flux-tutorials repository. You'll need to create a resource group with your packer image (e.g., packer-testing) and an image (e.g., flux-framework) before continuing here. 
 
-**CPU** 
+### 2. Deploy Terraform
 
-I chose:
-
-- ubuntu server 22.04
-- South Central US
-- Zone (allow auto select)
-- HB120-16rs_v3 (about $4/hour)
-- username: azureuser
-- select your ssh key
-- defaults to 30GB disk, but you should make it bigger - I skipped installing Singularity the first time because I ran out of room.
-
-**GPU** 
-
- - US West 2
- - Zone (No infrastructure redundancy required)
- - ND40rs (~$22/hour)
-
-And interactively I ran each of:
-
-- install-deps.sh
-- install-flux.sh
-- install-usernetes.sh
-- install-singularity.sh (skipped)
-- install-lammps.sh 
-
-And then you can actually click to create the instance group in the user interface, and it's quite easy.
-You MUST call it `flux-usernetes` to derive the machine names as flux-userxxxxx OR change that prefix in the startup-script.sh. In addition, you will need to:
-
-- Add the `startup-script.sh` to the user data section (ensure the hostname is going to be correct)
-- Ensure you click on the network setup and enable the public ip address so you can ssh in
-- use a pem key over a password
-- Open up ports 22 for ssh, and 8050 for the flux brokers
-
-### 2. Check Flux
-
-Check the cluster status, the overlay status, and try running a job:
+The repository has these instructions in more detail, and we can repeat them here:
+Export your image build identifier to the environment:
 
 ```bash
-$ flux resource list
-```
-```bash
-$ flux run -N 2 hostname
+export TF_VAR_vm_image_storage_reference=/subscriptions/xxxxxxx/resourceGroups/xxxxx/providers/Microsoft.Compute/images/flux-framework
 ```
 
-And lammps?
+Note that I needed to clone this and do from the cloud shell in the Azure portal.
 
 ```bash
-cd /home/azureuser/lammps
-flux run -N 2 --ntasks 96 -c 1 -o cpu-affinity=per-task /usr/bin/lmp -v x 2 -v y 2 -v z 2 -in ./in.reaxff.hns -nocite
+git clone https://github.com/converged-computing/flux-tutorials
+cd flux-tutorials/tutorial/azure
 ```
 
-How to sanity check Infiniband:
+After tweaking the main.tf and startup-script.sh scripts to your liking:
+
+```bash
+make apply-approved
+```
+
+It only takes a little over a minute! When it's done, save the public and private key to local files:
+
+```bash
+terraform output -json public_key | jq -r > id_azure.pub
+terraform output -json private_key | jq -r > id_azure
+chmod 600 id_azure*
+```
+
+### 3. Check Lead Broker
+
+Azure VM Scale sets unfortunately don't give you reliable instance ids. So we need to check if we got a lead broker with all zeros. Run this:
+
+```bash
+lead_broker=$(az vmss list-instances -g terraform-testing -n flux | jq -r .[0].osProfile.computerName)
+echo "The lead broker is ${lead_broker}"
+```
+If you get this, you are good!
+
+```bash
+The lead broker is flux000000
+```
+
+Any other number you need to update the brokers, and the repository has a script for that. To run in parallel, let's write a list of hosts, and then issue the command. You'll want to write this hosts file for running any command (bash script) in parallel across nodes with ssh.
+
+```bash
+for address in $(az vmss list-instance-public-ips -g terraform-testing -n flux | jq -r .[].ipAddress)
+  do
+    echo "azureuser@$address" >> hosts.txt
+done
+```
+
+Install parallel ssh:
+
+```bash
+git clone https://github.com/lilydjwg/pssh /tmp/pssh
+export PATH=/tmp/pssh/bin:$PATH
+```
+
+And here is how you can fix all your brokers (if you need to, if you have all zeros you are good).
+Note that you need to accept the ssh - we might need to add `ssh -o StrictHostKeyChecking=no` or the same to `/etc/ssh/ssh_config` (I can't do this from the cloud shell):
+
+```bash
+for address in $(az vmss list-instance-public-ips -g terraform-testing -n flux | jq -r .[].ipAddress)
+ do
+   echo "Updating $address"
+   scp -i ./id_azure update_brokers.sh azureuser@${address}:/tmp/update_brokers.sh
+   # This is what the command would look like in serial
+   # ssh -i ./id_azure azureuser@$address "/bin/bash /tmp/update_brokers.sh flux $lead_broker"
+done
+
+# This is done in parallel
+pssh -h hosts.txt -x "-i ./id_azure" "/bin/bash /tmp/update_brokers.sh flux $lead_broker"
+```
+
+Note that if it fails, you need to wait a bit - I usually step away for a second or two to give the VM time to finish setting up.
+
+### 4. Install LAMMPS and OSU
+
+Before we shell in, let's install lammps and the osu benchmarks on "bare metal":
+
+```console
+for script in $(echo lammps osu)
+  do
+  for address in $(az vmss list-instance-public-ips -g terraform-testing -n flux | jq -r .[].ipAddress)
+    do
+     echo "Installing ${script} to $address"
+     scp -i ./id_azure ./install/install_${script}.sh azureuser@${address}:/tmp/install_${script}.sh
+     # This is the serial command if you need to test
+     # ssh -i ./id_azure azureuser@${address} /bin/bash /tmp/install_${script}.sh
+    done
+    pssh -h hosts.txt -x "-i ./id_azure" "/bin/bash /tmp/install_${script}.sh"
+done
+```
+
+This installs to `/usr/local/libexec/osu-micro-benchmarks/mpi`. And lammps installs to `/usr/bin/lmp`
+
+### 5. SSH in and Check Flux
+
+Then get the instance ip addresses from the command line (or portal), and ssh in!
+
+```bash
+ip_address=$(az vmss list-instance-public-ips -g terraform-testing -n flux | jq -r .[0].ipAddress)
+ssh -i ./id_azure azureuser@${ip_address}
+```
+
+To get a difference instance, just change the index (e.g., index 1 is the second instance)
+Check the cluster status and try running a job. Give it at least a minute to finish the cloud init script, bootstrap, etc.
+
+```bash
+flux resource list
+```
+```bash
+flux run -N 2 hostname
+```
+
+Note that a huge number of brokers will be listed as offline. We do this because Flux can see nodes that don't exist as offline, and if we increase the size of the cluster they can join easily. How to sanity check Infiniband:
 
 ```bash
 ip link
@@ -77,133 +140,185 @@ ibv_devinfo
 If you need to check memory that is seen by flux:
 
 ```bash
-$ flux run sh -c 'ulimit -l' --rlimit=memlock
-64
+flux run sh -c 'ulimit -l' --rlimit=memlock
+unlimited
 ```
 
-### 3. Start Usernetes
+### 6. OSU Benchmarks
 
-Kubernetes autocomplete:
+Singularity is installed in the VM. Let's use flux exec to issue a command to the other broker and pull singularity containers. These two containers have the same stuff as the host! This is why you typically want to create nodes with a large disk - these containers are chonky.
 
 ```bash
-source <(kubectl completion bash) 
+flux exec --rank 0-1 singularity pull docker://ghcr.io/converged-computing/flux-tutorials:azurehpc-2204-osu
 ```
 
-This is currently manual, and we need a better approach to automate it.  The first issue is the docker-compose.yaml needs
-an added volume - kernel build (headers) are linked to from here:
-
-```yaml
-    volumes:
-      - .:/usernetes:ro
-      - /boot:/boot:ro
-      - /lib/modules:/lib/modules:ro
-      # This line is added
-      - /usr/src:/usr/src
-```
-
-You need to first build a custom kind image base with the [Dockerfile.kind](Dockerfile.kind) to replace the Dockerfile in the "images/base" directory that you can clone from:
+Let's run each with Flux. Note that you likely need to adjust the `UCX_TLS` parameter.
 
 ```bash
-git clone https://github.com/kubernetes-sigs/kind
-cd kind
+# OSU all reduce
+binds=/opt/hpcx-v2.15-gcc-MLNX_OFED_LINUX-5-ubuntu22.04-cuda12-gdrcopy2-nccl2.17-x86_64/:/opt/hpcx-v2.19-gcc-mlnx_ofed-ubuntu22.04-cuda12-x86_64
+flux run -N2 -n 192 -o cpu-affinity=per-task singularity exec --bind ${binds} --env UCX_TLS=ib --env UCX_NET_DEVICES=mlx5_ib0:1 ./flux-tutorials_azurehpc-2204-osu.sif /bin/bash -c ". /source-hpcx.sh && hpcx_load && /opt/osu-benchmark/build.openmpi/mpi/collective/osu_allreduce"
 ```
 
-Then you need to change the default base image in the kind source code:
-
-```go
-// DefaultBaseImage is the default base image used
-// TODO: come up with a reasonable solution to digest pinning
-// https://github.com/moby/moby/issues/43188
-const DefaultBaseImage = "ghcr.io/converged-computing/kind-ubuntu:latest"
-```
-
-Build kind first:
+Test against the bare metal.
 
 ```bash
-make
+flux run -N2 -n 192 -o cpu-affinity=per-task --env UCX_TLS=ib --env UCX_NET_DEVICES=mlx5_ib0:1 /usr/local/libexec/osu-micro-benchmarks/mpi/collective/osu_allreduce
 ```
 
-Then clone kubernetes and use your build of kind to add the binaries to it.
+Spoiler - with the binds to the host, the Singularity container is faster.
 
-```bash
-git clone https://github.com/kubernetes/kubernetes
-cd kubernetes
-git checkout 20b216738a5e9671ddf4081ed97b5565e0b1ee01
-../bin/kind build node-image
-```
+<details>
 
-When that is done, tag and push to where you can control it.
-
-```bash
-docker tag kindest/node:latest ghcr.io/converged-computing/kind-ubuntu:node
-docker push ghcr.io/converged-computing/kind-ubuntu:node
-```
-
-Then you need to change the FROM of the usernetes Dockerfile to use:
-
-```dockerfile
-ARG BASE_IMAGE=ghcr.io/converged-computing/kind-ubuntu:node
-```
-Note that I also added seccomp - I'm not sure why it was removed:
-
-```dockerfile
-RUN apt-get install -y seccomp libseccomp-dev
-```
-
-And that image build is included here with [Dockerfile.kind](Dockerfile.kind).
-
-#### Control Plane
-
-Let's first bring up the control plane, and we will copy the `join-command` to each node.
-In the index 0 broker (the first in the broker.toml that you shelled into):
-
-```bash
-cd ~/usernetes
-./start-control-plane.sh
-```
-
-Then with flux running, send to the other nodes.
-
-```bash
-flux archive create --mmap -C /home/azureuser/usernetes join-command
-flux exec -x 0 -r all flux archive extract -C /home/azureuser/usernetes
-```
-
-#### Worker Nodes
-
-**Important** your nodes need to be on the same subnet to see one another. The VPC and load balancer will require you
-to create 2+, but you don't have to use them all.
-
-```bash
-cd ~/usernetes
-./start-worker.sh
-```
-
-Check (from the first node) that usernetes is running:
-
-```bash
-kubectl get nodes
-```
-
-You should have a full set of usernetes node and flux alongside.
+<summary>OSU All Reduce on Bare Metal vs. Singularity</summary>
 
 ```console
-ubuntu@i-059c0b325f91e5503:~$ kubectl  get nodes
-NAME                  STATUS   ROLES           AGE     VERSION
-u7s-flux-user000000   Ready    control-plane   2m50s   v1.30.0
-u7s-flux-user000001   Ready    <none>          35s     v1.30.0
+# Singularity container
+
+# OSU MPI Allreduce Latency Test v5.8
+# Size       Avg Latency(us)
+4                       4.74
+8                       4.63
+16                      4.68
+32                      5.03
+64                      5.13
+128                     5.27
+256                     6.41
+512                     5.78
+1024                    6.31
+2048                    7.86
+4096                   11.02
+8192                   15.53
+16384                  25.67
+32768                 277.20
+65536                 772.32
+131072               1453.79
+262144               3777.81
+524288               7159.46
+1048576             10860.68
+
+# Bare metal VM
+
+# OSU MPI Allreduce Latency Test v5.8
+# Size       Avg Latency(us)
+4                       5.26
+8                       5.14
+16                      5.34
+32                      5.07
+64                      5.54
+128                     5.62
+256                     7.04
+512                     6.17
+1024                    6.40
+2048                    8.24
+4096                   10.99
+8192                   15.61
+16384                  25.49
+32768                 278.69
+65536                 738.60
+131072               1459.13
+262144               3751.97
+524288               7145.94
+1048576             10727.27
 ```
+
+</details>
+
+Let's run point to point latency now. Use the same `$binds`.
+
+```bash
+# Singularity Container
+flux run -N2 -n 2 -o cpu-affinity=per-task singularity exec --bind ${binds} --env UCX_TLS=ib --env UCX_NET_DEVICES=mlx5_ib0:1 ./flux-tutorials_azurehpc-2204-osu.sif /bin/bash -c ". /source-hpcx.sh && hpcx_load && /opt/osu-benchmark/build.openmpi/mpi/pt2pt/osu_latency"
+
+# Bare Metal
+flux run -N2 -n 2 -o cpu-affinity=per-task --env UCX_TLS=ib --env UCX_NET_DEVICES=mlx5_ib0:1 /usr/local/libexec/osu-micro-benchmarks/mpi/pt2pt/osu_latency
+```
+
+<details>
+
+<summary>OSU Latency on Bare Metal vs. Singularity</summary>
+
 ```console
-ubuntu@i-059c0b325f91e5503:~$ flux resource list
-     STATE NNODES   NCORES    NGPUS NODELIST
-      free      2      192        0 flux-user[000000-000001]
- allocated      0        0        0 
-      down      0        0        0 
+# Singularity container
+# OSU MPI Latency Test v5.8
+# Size          Latency (us)
+0                       1.63
+1                       1.62
+2                       1.62
+4                       1.63
+8                       1.63
+16                      1.63
+32                      1.77
+64                      1.83
+128                     1.87
+256                     2.37
+512                     2.45
+1024                    2.59
+2048                    2.77
+4096                    3.52
+8192                    4.02
+16384                   5.31
+32768                   7.07
+65536                   9.51
+131072                 13.79
+262144                 17.52
+524288                 28.61
+1048576                49.71
+2097152                92.27
+4194304               177.59
+
+# Bare Metal VM
 ```
 
-At this point you can try running an experiment example.
+</details>
 
-### 4. Install Infiniband
+### 7. LAMMPS-REAX
+
+Now pull lammps
+
+```bash
+flux exec --rank 0-1 singularity pull docker://ghcr.io/converged-computing/flux-tutorials:azurehpc-2204-lammps-reax
+```
+
+And run, with the same binds, again using the container and bare metal.
+
+```bash
+binds=/opt/hpcx-v2.15-gcc-MLNX_OFED_LINUX-5-ubuntu22.04-cuda12-gdrcopy2-nccl2.17-x86_64/:/opt/hpcx-v2.19-gcc-mlnx_ofed-ubuntu22.04-cuda12-x86_64
+
+# Singularity Container
+# 99.9% CPU use with 192 MPI tasks x 1 OpenMP threads
+# Total wall time: 0:01:07
+flux run -o cpu-affinity=per-task -N2 -n 192 singularity exec --bind ${binds} --env UCX_TLS=all --env UCX_NET_DEVICES=mlx5_ib0:1 --pwd /code ./flux-tutorials_azurehpc-2204-lammps-reax.sif /bin/bash -c ". /source-hpcx.sh && hpcx_load && /usr/bin/lmp -v x 16 -v y 16 -v z 16 -in in.reaxff.hns -nocite"
+
+# Bare Metal VM
+# 100.0% CPU use with 192 MPI tasks x 1 OpenMP threads
+# Total wall time: 0:01:07
+cd /tmp/lammps/examples/reaxff/HNS/
+flux run -o cpu-affinity=per-task -N2 -n 192 --env UCX_TLS=all --env UCX_NET_DEVICES=mlx5_ib0:1 /usr/bin/lmp -v x 16 -v y 16 -v z 16 -in in.reaxff.hns -nocite
+```
+
+They are exactly the same, and `UCX_TLS` doesn't seem to matter, but likely you want to adjust/tweak to your liking.
+
+### 8. Install Usernetes
+
+This is a work in progress - I'm still manually testing with [these scripts](https://github.com/converged-computing/flux-tutorials/tree/add-azure-base/tutorial/azure/install) but it isn't working yet. The container cannot ping hosts outside it, and I don't see vxlan as a loaded module.
+
+
+#### TBA Install Infiniband
 
 At this point we need to expose infiniband on the host to the pods. This took a few steps,
 and what I learned (and the instructions are in [the repository here](https://github.com/converged-computing/aks-infiniband-install).
+### 9. Cleanup
+
+When you are done:
+
+```bash
+make destroy
+```
+
+But if not, you can either delete the resource group from the console, or the command line:
+
+```bash
+az group delete --name terraform-testing
+```
+

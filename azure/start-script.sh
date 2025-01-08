@@ -133,3 +133,16 @@ sudo systemctl status flux.service
 
 # Just sanity check we own everything still
 sudo chown -R ${template_username} /home/${template_username}
+
+# sanity check everything is loaded
+# This I think only persists until VM restart
+echo "START modprobe"
+sudo modprobe vxlan
+sudo modprobe ip_tables
+sudo modprobe ip6_tables
+sudo modprobe ip6table_nat
+sudo modprobe iptable_nat
+sudo systemctl daemon-reload
+sudo sysctl -p
+sudo systemctl daemon-reload
+sudo sysctl --system || true

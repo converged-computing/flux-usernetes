@@ -1,0 +1,29 @@
+apiVersion: flux-framework.org/v1alpha2
+kind: MiniCluster
+metadata:
+  name: flux-sample
+spec:
+  size: 2
+  tasks: 192
+#  logging:
+#    quiet: true
+  flux:
+    container:
+      disable: true
+  containers:
+    - image: ghcr.io/converged-computing/flux-tutorials:azurehpc-2204-lammps-reax
+      workingDir: /opt/lammps/examples/reaxff/HNS
+      command: lmp -v x 2 -v y 2 -v z 2 -in ./in.reaxff.hns -nocite
+      #commands:
+      #  pre: echo "ulimit -l unlimited" >> /root/.bashrc
+      environment:
+        OMPI_MCA_btl: "^openib"
+        UCX_TLS: "ib"
+        UCX_UNIFIED_MODE: "y"
+      securityContext:
+        privileged: true
+      resources:
+        limits:
+          mellanox.com/shared_hca_rdma: 1
+        requests:
+          mellanox.com/shared_hca_rdma: 1

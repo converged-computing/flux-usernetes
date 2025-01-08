@@ -36,7 +36,9 @@ terraform output -json private_key | jq -r > id_azure
 chmod 600 id_azure*
 ```
 
-### 3. Check Lead Broker
+### 3. Check Cluster
+
+#### Check Lead Broker
 
 Azure VM Scale sets unfortunately don't give you reliable instance ids. So we need to check if we got a lead broker with all zeros. Run this:
 
@@ -84,6 +86,16 @@ pssh -h hosts.txt -x "-i ./id_azure" "/bin/bash /tmp/update_brokers.sh flux $lea
 
 Note that if it fails, you need to wait a bit - I usually step away for a second or two to give the VM time to finish setting up.
 
+#### Check Storage
+
+I've seen the same deployment recipe bring up nodes that don't have storage updated. We need to check if we expect installs and container pulls to work.
+
+```
+for address in $(az vmss list-instance-public-ips -g terraform-testing -n flux | jq -r .[].ipAddress)
+ do
+   ssh -i ./id_azure azureuser@$address "df -h" | grep /dev/root
+done
+```
 
 ### 4. Install LAMMPS and OSU
 
@@ -124,7 +136,11 @@ flux resource list
 flux run -N 2 hostname
 ```
 
-Note that a huge number of brokers will be listed as offline. We do this because Flux can see nodes that don't exist as offline, and if we increase the size of the cluster they can join easily. How to sanity check Infiniband:
+Note that a huge number of brokers will be listed as offline. We do this because Flux can see nodes that don't exist as offline, and if we increase the size of the cluster they can join easily. 
+
+### 6. Check Infiniband
+
+How to sanity check Infiniband:
 
 ```bash
 ip link
@@ -145,7 +161,7 @@ flux run sh -c 'ulimit -l' --rlimit=memlock
 unlimited
 ```
 
-### 6. OSU Benchmarks
+### 7. OSU Benchmarks
 
 Singularity is installed in the VM. Let's use flux exec to issue a command to the other broker and pull singularity containers. These two containers have the same stuff as the host! This is why you typically want to create nodes with a large disk - these containers are chonky.
 
@@ -302,22 +318,73 @@ They are exactly the same, and `UCX_TLS` doesn't seem to matter, but likely you 
 
 ### 8. Install Usernetes
 
-This is a work in progress - I'm still manually testing with [these scripts](https://github.com/converged-computing/flux-tutorials/tree/add-azure-base/tutorial/azure/install) but it isn't working yet. The container cannot ping hosts outside it, and I don't see vxlan as a loaded module.
+Since we can't get the private address space to work, we use the instance public IPs here. This is not ideal, but will work for the time being.
+
+#### Bring up the control plane
+
+For the first argument, this is the ranks list to go to flux archive -> flux exec. For example, if broker 2 is up you'd provide "2." If a range between 2 and 10 is up, you'd provide "2-10"
 
 ```console
-script=usernetes
-for address in $(az vmss list-instance-public-ips -g terraform-testing -n flux | jq -r .[].ipAddress)
-    do
-     echo "Installing ${script} to $address"
-     scp -i ./id_azure ./install/install_${script}.sh azureuser@${address}:/tmp/install_${script}.sh
-done
-pssh -h hosts.txt -t 100000000 -x "-i ./id_azure" "/bin/bash /tmp/install_${script}.sh"
+ip_address=$(az vmss list-instance-public-ips -g terraform-testing -n flux | jq -r .[0].ipAddress)
+scp -i ./id_azure ./install/start_control_plane.sh azureuser@${ip_address}:/tmp/start_control_plane.sh
+ssh -i ./id_azure azureuser@${ip_address} "/bin/bash /tmp/start_control_plane.sh 2"
 ```
 
-#### TBA Install Infiniband
+#### Bring up workers
 
-At this point we need to expose infiniband on the host to the pods. This took a few steps,
-and what I learned (and the instructions are in [the repository here](https://github.com/converged-computing/aks-infiniband-install).
+```console
+counter=0
+echo $counter
+for address in $(az vmss list-instance-public-ips -g terraform-testing -n flux | jq -r .[].ipAddress)
+    do
+     if [[ $counter -eq 0 ]]
+       then
+          echo "Skipping lead broker"
+          ((counter++))
+          continue
+       fi
+     ((counter++))
+     scp -i ./id_azure ./install/start_worker.sh azureuser@${address}:/tmp/start_worker.sh
+     # This is the serial command if you need to test
+     # ssh -i ./id_azure azureuser@${address} /bin/bash /tmp/start_worker.sh
+done
+pssh -h hosts.txt -x "-i ./id_azure" "/bin/bash /tmp/start_worker.sh"
+```
+
+#### Finish control plane
+
+This last command runs the sync-external-ip command. The `ip_address` variable should still be defined to have the lead broker address.
+
+```console
+scp -i ./id_azure ./install/finish_control_plane.sh azureuser@${ip_address}:/tmp/finish_control_plane.sh
+ssh -i ./id_azure azureuser@${ip_address} "/bin/bash /tmp/finish_control_plane.sh"
+```
+
+#### 9. Install the Flux Operator
+
+From the lead broker, install the flux operator:
+
+```bash
+# enable auto-completion
+source <(kubectl completion bash)
+
+kubectl apply -f https://raw.githubusercontent.com/flux-framework/flux-operator/refs/heads/main/examples/dist/flux-operator.yaml
+
+# Check that it's running OK
+kubectl logs -n operator-system operator-controller-manager-69cdcdb9ff-cmrmd 
+```
+
+#### 10. Expose infiniband 
+
+Note that while we don't see `ib0` in the usernetes nodes, infiniband is present (look at `/dev/infiniband`). This means we can skip the driver install and just install the daemonset that will expose the labels. It also means we need to update the configmap.yaml we use for the daemonset. Here is how to do that.
+
+```bash
+# On the lead broker
+git clone https://github.com/converged-computing/aks-infiniband-install
+cd aks-infiniband-install
+kubectl apply -k ./daemonset/
+
+```
 
 ### 9. Cleanup
 

@@ -306,7 +306,7 @@ echo "DONE updating kernel modules"
 echo "START 99-usernetes.conf"
 echo "net.ipv4.conf.default.rp_filter = 2" > /tmp/99-usernetes.conf
 sudo mv /tmp/99-usernetes.conf /etc/sysctl.d/99-usernetes.conf
-sudo sysctl --system
+sudo sysctl --system || true
 echo "DONE 99-usernetes.conf"
 
 echo "START modprobe"
@@ -337,7 +337,8 @@ echo "DONE kubectl"
 echo "Installing docker"
 curl -o install.sh -fsSL https://get.docker.com
 chmod +x install.sh
-sudo ./install.sh
+sudo rm -rf /etc/containerd/config.toml
+sudo ./install.sh || true
 echo "done installing docker"
 
 echo "Setting up usernetes"
@@ -355,7 +356,7 @@ mkdir -p /home/azureuser/.docker/run
 # Install rootless docker
 sudo apt-get install -y uidmap
 
-# curl -fsSL https://get.docker.com/rootless | sh
+curl -fsSL https://get.docker.com/rootless | sh
 dockerd-rootless-setuptool.sh install
 sleep 10
 systemctl --user enable docker.service

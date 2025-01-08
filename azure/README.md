@@ -4,7 +4,7 @@
 
 ### 1. Build Images
 
-You can find the instructions for building your bases [here](https://github.com/converged-computing/flux-tutorials/tree/main/tutorial/azure/build) in the flux-tutorials repository. You'll need to create a resource group with your packer image (e.g., packer-testing) and an image (e.g., flux-framework) before continuing here. 
+You'll need to do the [build](build), first, and before that creating a resource group with your packer image (e.g., packer-testing) and an image (e.g., flux-usernetes) before continuing here. 
 
 ### 2. Deploy Terraform
 
@@ -83,6 +83,7 @@ pssh -h hosts.txt -x "-i ./id_azure" "/bin/bash /tmp/update_brokers.sh flux $lea
 ```
 
 Note that if it fails, you need to wait a bit - I usually step away for a second or two to give the VM time to finish setting up.
+
 
 ### 4. Install LAMMPS and OSU
 
@@ -303,11 +304,21 @@ They are exactly the same, and `UCX_TLS` doesn't seem to matter, but likely you 
 
 This is a work in progress - I'm still manually testing with [these scripts](https://github.com/converged-computing/flux-tutorials/tree/add-azure-base/tutorial/azure/install) but it isn't working yet. The container cannot ping hosts outside it, and I don't see vxlan as a loaded module.
 
+```console
+script=usernetes
+for address in $(az vmss list-instance-public-ips -g terraform-testing -n flux | jq -r .[].ipAddress)
+    do
+     echo "Installing ${script} to $address"
+     scp -i ./id_azure ./install/install_${script}.sh azureuser@${address}:/tmp/install_${script}.sh
+done
+pssh -h hosts.txt -t 100000000 -x "-i ./id_azure" "/bin/bash /tmp/install_${script}.sh"
+```
 
 #### TBA Install Infiniband
 
 At this point we need to expose infiniband on the host to the pods. This took a few steps,
 and what I learned (and the instructions are in [the repository here](https://github.com/converged-computing/aks-infiniband-install).
+
 ### 9. Cleanup
 
 When you are done:

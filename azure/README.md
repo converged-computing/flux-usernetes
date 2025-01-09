@@ -443,6 +443,10 @@ Now let's run lammps!
 # This should work (one node with ib and shared memory)
 flux run -o cpu-affinity=per-task -N1 -n 96 --env UCX_TLS=ib,sm --env UCX_NET_DEVICES=mlx5_ib0:1 lmp -v x 1 -v y 1 -v z 1 -in in.reaxff.hns -nocite
 
+/opt/hpcx-v2.19-gcc-mlnx_ofed-ubuntu22.04-cuda12-x86_64/hpcx-rebuild/lib:/opt/hpcx-v2.19-gcc-mlnx_ofed-ubuntu22.04-cuda12-x86_64/hcoll/lib
+flux run -o cpu-affinity=per-task -N2 -n 192 --env OMPI_MPI_mca_coll_hcoll_enable=0 --env OMPI_MPI_mca_coll_ucc_enable=0 --env UCX_TLS=ib --env UCX_NET_DEVICES=mlx5_ib0:1 lmp -v x 1 -v y 1 -v z 1 -in in.reaxff.hns -nocite
+
+
 # -x UCC_LOG_LEVEL=debug -x UCC_TLS=ucp
 flux run -o cpu-affinity=per-task -N2 -n 192 --env UCC_LOG_LEVEL=info --env UCC_TLS=ucp --env UCC_CONFIG_FILE= -OMPI_MPI_mca_coll_ucc_enable=0  --env UCX_TLS=dc_x --env UCX_NET_DEVICES=mlx5_ib0:1 lmp -v x 1 -v y 1 -v z 1 -in in.reaxff.hns -nocite
 ```

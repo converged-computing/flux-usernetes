@@ -5,8 +5,7 @@ metadata:
 spec:
   size: 2
   tasks: 192
-#  logging:
-#    quiet: true
+  interactive: true
   flux:
     container:
       disable: true
@@ -14,16 +13,29 @@ spec:
     - image: ghcr.io/converged-computing/flux-tutorials:azurehpc-2204-lammps-reax
       workingDir: /opt/lammps/examples/reaxff/HNS
       command: lmp -v x 2 -v y 2 -v z 2 -in ./in.reaxff.hns -nocite
-      #commands:
-      #  pre: echo "ulimit -l unlimited" >> /root/.bashrc
+      volumes:
+        # must be lowercase!
+        my-empty-dir:
+          emptyDir: true
+          emptyDirMedium: "memory"
+      commands:
+        # TODO check ulimit for flux
+        # pre: echo "ulimit -l unlimited" >> /root/.bashrc
+        pre: |
+          . /opt/hpcx-v2.19-gcc-mlnx_ofed-ubuntu22.04-cuda12-x86_64/hpcx-mt-init.sh 
+          hpcx_load          
       environment:
+        # export UCX_LOG_LEVEL=info
+        # export OMPI_MCA_opal_common_ucx_opal_mem_hooks=1
+        # export OMPI_MCA_pml_ucx_verbose=100
         OMPI_MCA_btl: "^openib"
         UCX_TLS: "ib"
         UCX_UNIFIED_MODE: "y"
       securityContext:
         privileged: true
-      resources:
-        limits:
-          mellanox.com/shared_hca_rdma: 1
-        requests:
-          mellanox.com/shared_hca_rdma: 1
+      # This won't work (so far) in usernetes
+      # resources:
+      #  limits:
+      #    mellanox.com/shared_hca_rdma: 1
+      #  requests:
+      #    mellanox.com/shared_hca_rdma: 1

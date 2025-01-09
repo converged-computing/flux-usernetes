@@ -12,14 +12,14 @@ The repository has these instructions in more detail, and we can repeat them her
 Export your image build identifier to the environment:
 
 ```bash
-export TF_VAR_vm_image_storage_reference=/subscriptions/xxxxxxx/resourceGroups/xxxxx/providers/Microsoft.Compute/images/flux-framework
+export TF_VAR_vm_image_storage_reference="/subscriptions/3e173a37-8f81-492f-a234-ca727b72e6f8/resourceGroups/packer-testing/providers/Microsoft.Compute/images/flux-usernetes"
 ```
 
 Note that I needed to clone this and do from the cloud shell in the Azure portal.
 
 ```bash
-git clone https://github.com/converged-computing/flux-tutorials
-cd flux-tutorials/tutorial/azure
+git clone https://github.com/converged-computing/flux-usernetes
+cd flux-usernetes/azure
 ```
 
 After tweaking the main.tf and startup-script.sh scripts to your liking:
@@ -68,6 +68,10 @@ git clone https://github.com/lilydjwg/pssh /tmp/pssh
 export PATH=/tmp/pssh/bin:$PATH
 ```
 
+#### Fixing Lead Broker
+
+> Only required if the lead broker is not `flux000000`
+
 And here is how you can fix all your brokers (if you need to, if you have all zeros you are good).
 Note that you need to accept the ssh - we might need to add `ssh -o StrictHostKeyChecking=no` or the same to `/etc/ssh/ssh_config` (I can't do this from the cloud shell):
 
@@ -90,7 +94,7 @@ Note that if it fails, you need to wait a bit - I usually step away for a second
 
 I've seen the same deployment recipe bring up nodes that don't have storage updated. We need to check if we expect installs and container pulls to work.
 
-```
+```bash
 for address in $(az vmss list-instance-public-ips -g terraform-testing -n flux | jq -r .[].ipAddress)
  do
    ssh -i ./id_azure azureuser@$address "df -h" | grep /dev/root
@@ -327,28 +331,19 @@ For the first argument, this is the ranks list to go to flux archive -> flux exe
 ```console
 ip_address=$(az vmss list-instance-public-ips -g terraform-testing -n flux | jq -r .[0].ipAddress)
 scp -i ./id_azure ./install/start_control_plane.sh azureuser@${ip_address}:/tmp/start_control_plane.sh
-ssh -i ./id_azure azureuser@${ip_address} "/bin/bash /tmp/start_control_plane.sh 2"
+ssh -i ./id_azure azureuser@${ip_address} "/bin/bash /tmp/start_control_plane.sh 1"
 ```
 
 #### Bring up workers
 
 ```console
-counter=0
-echo $counter
-for address in $(az vmss list-instance-public-ips -g terraform-testing -n flux | jq -r .[].ipAddress)
-    do
-     if [[ $counter -eq 0 ]]
-       then
-          echo "Skipping lead broker"
-          ((counter++))
-          continue
-       fi
-     ((counter++))
-     scp -i ./id_azure ./install/start_worker.sh azureuser@${address}:/tmp/start_worker.sh
-     # This is the serial command if you need to test
-     # ssh -i ./id_azure azureuser@${address} /bin/bash /tmp/start_worker.sh
+# This goes through all addresses except for the first
+sed '1d' hosts.txt > workers.txt
+for address in $(cat workers.txt)
+  do
+     scp -i ./id_azure ./install/start_worker.sh ${address}:/tmp/start_worker.sh
 done
-pssh -h hosts.txt -x "-i ./id_azure" "/bin/bash /tmp/start_worker.sh"
+pssh -h workers.txt -x "-i ./id_azure" "/bin/bash /tmp/start_worker.sh"
 ```
 
 #### Finish control plane
@@ -360,10 +355,13 @@ scp -i ./id_azure ./install/finish_control_plane.sh azureuser@${ip_address}:/tmp
 ssh -i ./id_azure azureuser@${ip_address} "/bin/bash /tmp/finish_control_plane.sh"
 ```
 
-#### 9. Install the Flux Operator
+### 9. Install the Flux Operator
 
 From the lead broker, install the flux operator:
 
+```bash
+ssh -i ./id_azure azureuser@${ip_address}
+```
 ```bash
 # enable auto-completion
 source <(kubectl completion bash)
@@ -374,7 +372,7 @@ kubectl apply -f https://raw.githubusercontent.com/flux-framework/flux-operator/
 kubectl logs -n operator-system operator-controller-manager-69cdcdb9ff-cmrmd 
 ```
 
-#### 10. Expose infiniband 
+### 10. Expose infiniband 
 
 Note that while we don't see `ib0` in the usernetes nodes, infiniband is present (look at `/dev/infiniband`). This means we can skip the driver install and just install the daemonset that will expose the labels. It also means we need to update the configmap.yaml we use for the daemonset. Here is how to do that.
 
@@ -382,11 +380,76 @@ Note that while we don't see `ib0` in the usernetes nodes, infiniband is present
 # On the lead broker
 git clone https://github.com/converged-computing/aks-infiniband-install
 cd aks-infiniband-install
-kubectl apply -k ./daemonset/
-
+kubectl apply -k ./daemonset-usernetes/
 ```
 
-### 9. Cleanup
+Check that the node(s) are now annotated.
+
+```bash
+$ kubectl  get nodes -o json | jq -r .items[].status.capacity
+```
+```console
+...
+{
+  "cpu": "96",
+  "ephemeral-storage": "101430960Ki",
+  "hugepages-1Gi": "0",
+  "hugepages-2Mi": "0",
+  "mellanox.com/shared_hca_rdma": "1",
+  "memory": "470536548Ki",
+  "pods": "110"
+}
+```
+
+### 11. Run Applications
+
+From the cloud shell (or your local machine), let's copy  over the yaml configs (we can eventually change this to wget).
+
+```bash
+ip_address=$(az vmss list-instance-public-ips -g terraform-testing -n flux | jq -r .[0].ipAddress)
+scp -i ./id_azure ./examples/minicluster-lammps.yaml azureuser@${ip_address}:/home/azureuser/lammps.yaml
+```
+
+Then on the lead broker virtual machine:
+
+```bash
+kubectl apply -f lammps.yaml
+kubectl exec -it flux-sample-0-xxx -- bash
+```
+
+This will create an interactive cluster to shell into - you can ignore the bash errors (there is a path in the source that will work for the Singularity container when a slightly different path is bound from the host). First, connect to the flux broker, and once you are connected to the instance, test with `flux resource list`.
+
+```bash
+flux proxy local:///mnt/flux/view/run/flux/local bash
+```
+
+Now source the MPI environment - this is for multi-threaded init:
+
+```bash
+. /opt/hpcx-v2.19-gcc-mlnx_ofed-ubuntu22.04-cuda12-x86_64/hpcx-mt-init.sh 
+hpcx_load
+```
+
+This is helpful for debugging, if needed.
+
+```bash
+apt-get install -y ibverbs-utils
+```
+
+Now let's run lammps!
+
+```bash
+# We are already in /opt/lammps/examples/reaxff/HNS 
+# This should work (one node with ib and shared memory)
+flux run -o cpu-affinity=per-task -N1 -n 96 --env UCX_TLS=ib,sm --env UCX_NET_DEVICES=mlx5_ib0:1 lmp -v x 1 -v y 1 -v z 1 -in in.reaxff.hns -nocite
+
+# -x UCC_LOG_LEVEL=debug -x UCC_TLS=ucp
+flux run -o cpu-affinity=per-task -N2 -n 192 --env UCC_LOG_LEVEL=info --env UCC_TLS=ucp --env UCC_CONFIG_FILE= -OMPI_MPI_mca_coll_ucc_enable=0  --env UCX_TLS=dc_x --env UCX_NET_DEVICES=mlx5_ib0:1 lmp -v x 1 -v y 1 -v z 1 -in in.reaxff.hns -nocite
+```
+
+The time above is
+
+### 12. Cleanup
 
 When you are done:
 

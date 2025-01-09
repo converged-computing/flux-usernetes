@@ -27,6 +27,8 @@ flux exec -x 0 -r ${ranks} flux archive extract --name join-command --directory 
 
 echo "export KUBECONFIG=/home/azureuser/usernetes/kubeconfig" >> /home/azureuser/.bashrc
 export KUBECONFIG=/home/azureuser/usernetes/kubeconfig
+echo "Waiting 5 seconds for control plane to be ready..."
+sleep 5
 kubectl get nodes
 
 # 

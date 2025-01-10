@@ -4,22 +4,31 @@
 
 ### 1. Build Images
 
-You'll need to do the [build](build), first, and before that creating a resource group with your packer image (e.g., packer-testing) and an image (e.g., flux-usernetes) before continuing here. 
+Note that you should build the images first. There are two variations here:
+
+ - [build-ubuntu-24.04](build-ubuntu-24.04): includes a simple, reproducible build for ubuntu 24.04 (developed by us)
+ - [build](build) uses the azure-hpc base image, which is dated to 2022 with ubuntu 22.04 and has a lot of software bloat.
+
+Follow the instructions in the READMEs there. Note that containers (for the ubuntu 24.04 environment) are provided from the [flux-tutorials](https://github.com/converged-computing/flux-tutorials) repository.
 
 ### 2. Deploy Terraform
 
 The repository has these instructions in more detail, and we can repeat them here:
-Export your image build identifier to the environment:
-
-```bash
-export TF_VAR_vm_image_storage_reference="/subscriptions/3e173a37-8f81-492f-a234-ca727b72e6f8/resourceGroups/packer-testing/providers/Microsoft.Compute/images/flux-usernetes"
-```
-
-Note that I needed to clone this and do from the cloud shell in the Azure portal.
+Clone the repository (note that I did this in the Azure cloud shell):
 
 ```bash
 git clone https://github.com/converged-computing/flux-usernetes
 cd flux-usernetes/azure
+```
+
+Export your image build identifier to the environment:
+
+```bash
+# With Azure base from 2022
+export TF_VAR_vm_image_storage_reference="/subscriptions/3e173a37-8f81-492f-a234-ca727b72e6f8/resourceGroups/packer-testing/providers/Microsoft.Compute/images/flux-usernetes"
+
+# With our base from ubuntu 24.04
+export TF_VAR_vm_image_storage_reference="/subscriptions/3e173a37-8f81-492f-a234-ca727b72e6f8/resourceGroups/packer-testing/providers/Microsoft.Compute/images/flux-usernetes-ubuntu-2404"
 ```
 
 After tweaking the main.tf and startup-script.sh scripts to your liking:
@@ -46,6 +55,7 @@ Azure VM Scale sets unfortunately don't give you reliable instance ids. So we ne
 lead_broker=$(az vmss list-instances -g terraform-testing -n flux | jq -r .[0].osProfile.computerName)
 echo "The lead broker is ${lead_broker}"
 ```
+
 If you get this, you are good!
 
 ```bash
@@ -95,9 +105,9 @@ Note that if it fails, you need to wait a bit - I usually step away for a second
 I've seen the same deployment recipe bring up nodes that don't have storage updated. We need to check if we expect installs and container pulls to work.
 
 ```bash
-for address in $(az vmss list-instance-public-ips -g terraform-testing -n flux | jq -r .[].ipAddress)
+for address in $(cat ./hosts.txt)
  do
-   ssh -i ./id_azure azureuser@$address "df -h" | grep /dev/root
+   ssh -i ./id_azure $address "df -h" | grep /dev/root
 done
 ```
 
@@ -112,10 +122,8 @@ for script in $(echo lammps osu)
     do
      echo "Installing ${script} to $address"
      scp -i ./id_azure ./install/install_${script}.sh azureuser@${address}:/tmp/install_${script}.sh
-     # This is the serial command if you need to test
-     # ssh -i ./id_azure azureuser@${address} /bin/bash /tmp/install_${script}.sh
     done
-    pssh -h hosts.txt -x "-i ./id_azure" "/bin/bash /tmp/install_${script}.sh"
+    pssh -t 1000000 -h hosts.txt -x "-i ./id_azure" "/bin/bash /tmp/install_${script}.sh"
 done
 ```
 
@@ -165,160 +173,61 @@ flux run sh -c 'ulimit -l' --rlimit=memlock
 unlimited
 ```
 
-### 7. OSU Benchmarks
+### 7. Environment
+
+Here is a reasonable environment to try. You can tweak this to your liking. You can also add it to the [startup_script.sh](startup_script.sh) (echo into the azureuser `.bashrc`) to have them persist.
+
+```bash
+export OMPI_MCA_btl_openib_warn_no_device_params_found=0
+export OMPI_MCA_btl_vader_single_copy_mechanism=none
+export OMPI_MCA_btl_openib_allow_ib=1
+# Choose one - I found lammps does better with "all"
+export UCX_TLS=all
+export UCX_TLS=ib,shm
+export UCX_NET_DEVICES=mlx5_0:1
+```
+
+### 8. OSU Benchmarks
 
 Singularity is installed in the VM. Let's use flux exec to issue a command to the other broker and pull singularity containers. These two containers have the same stuff as the host! This is why you typically want to create nodes with a large disk - these containers are chonky.
 
 ```bash
-flux exec --rank 0-1 singularity pull docker://ghcr.io/converged-computing/flux-tutorials:azurehpc-2204-osu
+# Note that you may need to change the rank identifier depending on what you got!
+flux exec --rank 0-1 singularity pull docker://ghcr.io/converged-computing/flux-tutorials:azure-2404-osu
 ```
 
 Let's run each with Flux. Note that you likely need to adjust the `UCX_TLS` parameter.
 
 ```bash
-# OSU all reduce
-binds=/opt/hpcx-v2.15-gcc-MLNX_OFED_LINUX-5-ubuntu22.04-cuda12-gdrcopy2-nccl2.17-x86_64/:/opt/hpcx-v2.19-gcc-mlnx_ofed-ubuntu22.04-cuda12-x86_64
-flux run -N2 -n 192 -o cpu-affinity=per-task singularity exec --bind ${binds} --env UCX_TLS=ib --env UCX_NET_DEVICES=mlx5_ib0:1 ./flux-tutorials_azurehpc-2204-osu.sif /bin/bash -c ". /source-hpcx.sh && hpcx_load && /opt/osu-benchmark/build.openmpi/mpi/collective/osu_allreduce"
+# Container runs
+flux run -N2 -n 192 -o cpu-affinity=per-task singularity exec --bind /opt/run/flux ./flux-tutorials_azure-2404-osu.sif /opt/osu-benchmark/build.openmpi/mpi/collective/osu_allreduce
+
+flux run -N2 -n 2 -o cpu-affinity=per-task singularity exec --bind /opt/run/flux ./flux-tutorials_azure-2404-osu.sif /opt/osu-benchmark/build.openmpi/mpi/pt2pt/osu_latency
 ```
-
-Test against the bare metal.
-
 ```bash
-flux run -N2 -n 192 -o cpu-affinity=per-task --env UCX_TLS=ib --env UCX_NET_DEVICES=mlx5_ib0:1 /usr/local/libexec/osu-micro-benchmarks/mpi/collective/osu_allreduce
+# Bare metal
+flux run -N2 -n 192 -o cpu-affinity=per-task /tmp/osu-micro-benchmarks-5.8/mpi/collective/osu_allreduce
+flux run -N2 -n 2 -o cpu-affinity=per-task /tmp/osu-micro-benchmarks-5.8/mpi/pt2pt/osu_latency
 ```
 
-Spoiler - with the binds to the host, the Singularity container is faster.
-
-<details>
-
-<summary>OSU All Reduce on Bare Metal vs. Singularity</summary>
-
-```console
-# Singularity container
-
-# OSU MPI Allreduce Latency Test v5.8
-# Size       Avg Latency(us)
-4                       4.74
-8                       4.63
-16                      4.68
-32                      5.03
-64                      5.13
-128                     5.27
-256                     6.41
-512                     5.78
-1024                    6.31
-2048                    7.86
-4096                   11.02
-8192                   15.53
-16384                  25.67
-32768                 277.20
-65536                 772.32
-131072               1453.79
-262144               3777.81
-524288               7159.46
-1048576             10860.68
-
-# Bare metal VM
-
-# OSU MPI Allreduce Latency Test v5.8
-# Size       Avg Latency(us)
-4                       5.26
-8                       5.14
-16                      5.34
-32                      5.07
-64                      5.54
-128                     5.62
-256                     7.04
-512                     6.17
-1024                    6.40
-2048                    8.24
-4096                   10.99
-8192                   15.61
-16384                  25.49
-32768                 278.69
-65536                 738.60
-131072               1459.13
-262144               3751.97
-524288               7145.94
-1048576             10727.27
-```
-
-</details>
-
-Let's run point to point latency now. Use the same `$binds`.
-
-```bash
-# Singularity Container
-flux run -N2 -n 2 -o cpu-affinity=per-task singularity exec --bind ${binds} --env UCX_TLS=ib --env UCX_NET_DEVICES=mlx5_ib0:1 ./flux-tutorials_azurehpc-2204-osu.sif /bin/bash -c ". /source-hpcx.sh && hpcx_load && /opt/osu-benchmark/build.openmpi/mpi/pt2pt/osu_latency"
-
-# Bare Metal
-flux run -N2 -n 2 -o cpu-affinity=per-task --env UCX_TLS=ib --env UCX_NET_DEVICES=mlx5_ib0:1 /usr/local/libexec/osu-micro-benchmarks/mpi/pt2pt/osu_latency
-```
-
-<details>
-
-<summary>OSU Latency on Bare Metal vs. Singularity</summary>
-
-```console
-# Singularity container
-# OSU MPI Latency Test v5.8
-# Size          Latency (us)
-0                       1.63
-1                       1.62
-2                       1.62
-4                       1.63
-8                       1.63
-16                      1.63
-32                      1.77
-64                      1.83
-128                     1.87
-256                     2.37
-512                     2.45
-1024                    2.59
-2048                    2.77
-4096                    3.52
-8192                    4.02
-16384                   5.31
-32768                   7.07
-65536                   9.51
-131072                 13.79
-262144                 17.52
-524288                 28.61
-1048576                49.71
-2097152                92.27
-4194304               177.59
-
-# Bare Metal VM
-```
-
-</details>
-
-### 7. LAMMPS-REAX
+### 9. LAMMPS-REAX
 
 Now pull lammps
 
 ```bash
-flux exec --rank 0-1 singularity pull docker://ghcr.io/converged-computing/flux-tutorials:azurehpc-2204-lammps-reax
+flux exec --rank 0-1 singularity pull docker://ghcr.io/converged-computing/flux-tutorials:azure-2404-lammps-reax
 ```
 
 And run, with the same binds, again using the container and bare metal.
 
 ```bash
-binds=/opt/hpcx-v2.15-gcc-MLNX_OFED_LINUX-5-ubuntu22.04-cuda12-gdrcopy2-nccl2.17-x86_64/:/opt/hpcx-v2.19-gcc-mlnx_ofed-ubuntu22.04-cuda12-x86_64
+# I've seen this range from 1:07 to almost 2 minutes.
+cd /tmp/lammps/examples/reaxff/HNS
+flux run -o cpu-affinity=per-task -N2 -n 192 singularity exec --bind /opt/run/flux ./flux-tutorials_azure-2404-lammps-reax.sif /usr/bin/lmp -v x 16 -v y 16 -v z 16 -in in.reaxff.hns -nocite
 
-# Singularity Container
-# 99.9% CPU use with 192 MPI tasks x 1 OpenMP threads
-# Total wall time: 0:01:07
-flux run -o cpu-affinity=per-task -N2 -n 192 singularity exec --bind ${binds} --env UCX_TLS=all --env UCX_NET_DEVICES=mlx5_ib0:1 --pwd /code ./flux-tutorials_azurehpc-2204-lammps-reax.sif /bin/bash -c ". /source-hpcx.sh && hpcx_load && /usr/bin/lmp -v x 16 -v y 16 -v z 16 -in in.reaxff.hns -nocite"
-
-# Bare Metal VM
-# 100.0% CPU use with 192 MPI tasks x 1 OpenMP threads
-# Total wall time: 0:01:07
-cd /tmp/lammps/examples/reaxff/HNS/
-flux run -o cpu-affinity=per-task -N2 -n 192 --env UCX_TLS=all --env UCX_NET_DEVICES=mlx5_ib0:1 /usr/bin/lmp -v x 16 -v y 16 -v z 16 -in in.reaxff.hns -nocite
+# Bare metal
+flux run -o cpu-affinity=per-task -N2 -n 192 /usr/bin/lmp -v x 16 -v y 16 -v z 16 -in in.reaxff.hns -nocite
 ```
-
-They are exactly the same, and `UCX_TLS` doesn't seem to matter, but likely you want to adjust/tweak to your liking.
 
 ### 8. Install Usernetes
 
@@ -343,7 +252,7 @@ for address in $(cat workers.txt)
   do
      scp -i ./id_azure ./install/start_worker.sh ${address}:/tmp/start_worker.sh
 done
-pssh -h workers.txt -x "-i ./id_azure" "/bin/bash /tmp/start_worker.sh"
+pssh -t 10000000 -h workers.txt -x "-i ./id_azure" "/bin/bash /tmp/start_worker.sh"
 ```
 
 #### Finish control plane

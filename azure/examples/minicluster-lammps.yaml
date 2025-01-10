@@ -10,32 +10,23 @@ spec:
     container:
       disable: true
   containers:
-    - image: ghcr.io/converged-computing/flux-tutorials:azurehpc-2204-lammps-reax
+    - image: ghcr.io/converged-computing/flux-tutorials:azure-2404-lammps-reax
       workingDir: /opt/lammps/examples/reaxff/HNS
       command: lmp -v x 2 -v y 2 -v z 2 -in ./in.reaxff.hns -nocite
       volumes:
-        # must be lowercase!
-        my-empty-dir:
+        memory-dir:
           emptyDir: true
           emptyDirMedium: "memory"
-      commands:
-        # TODO check ulimit for flux
-        # pre: echo "ulimit -l unlimited" >> /root/.bashrc
-        pre: |
-          . /opt/hpcx-v2.19-gcc-mlnx_ofed-ubuntu22.04-cuda12-x86_64/hpcx-mt-init.sh 
-          hpcx_load          
       environment:
         # export UCX_LOG_LEVEL=info
         # export OMPI_MCA_opal_common_ucx_opal_mem_hooks=1
         # export OMPI_MCA_pml_ucx_verbose=100
-        OMPI_MCA_btl: "^openib"
-        UCX_TLS: "ib"
-        UCX_UNIFIED_MODE: "y"
+        # Choose one - I found lammps does better with "all"
+        # UCX_TLS: ib,shm
+        UCX_TLS: all
+        OMPI_MCA_btl_openib_warn_no_device_params_found: "0"
+        OMPI_MCA_btl_vader_single_copy_mechanism: none
+        OMPI_MCA_btl_openib_allow_ib: "1"
+        UCX_NET_DEVICES: mlx5_0:1
       securityContext:
         privileged: true
-      # This won't work (so far) in usernetes
-      # resources:
-      #  limits:
-      #    mellanox.com/shared_hca_rdma: 1
-      #  requests:
-      #    mellanox.com/shared_hca_rdma: 1

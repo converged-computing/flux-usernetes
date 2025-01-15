@@ -28,5 +28,6 @@ spec:
         OMPI_MCA_btl_vader_single_copy_mechanism: none
         OMPI_MCA_btl_openib_allow_ib: "1"
         UCX_NET_DEVICES: mlx5_0:1
+        FLUX_URI: local:///mnt/flux/view/run/flux/local
       securityContext:
         privileged: true

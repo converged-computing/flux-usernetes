@@ -61,10 +61,6 @@ locals {
   # This will be newly created
   resource_group_name = "terraform-testing"
 
-  # Custom Build variables (the packer build)
-  vm_image_name           = "flux-framework"
-  vm_image_resource_group = "packer-testing"
-
   # This is also called the SKU
   vm_image_size = "Standard_HB120-96rs_v3"
   location      = "southcentralus"
@@ -79,6 +75,36 @@ resource "azurerm_resource_group" "vmss" {
   name     = coalesce(local.resource_group_name, "${local.name}-${random_pet.id.id}")
   location = local.location
   tags     = local.tags
+}
+
+resource "azurerm_network_security_group" "flux" {
+  name                = local.name
+  location            = azurerm_resource_group.vmss.location
+  resource_group_name = azurerm_resource_group.vmss.name
+
+#  security_rule {
+#    name                       = "YOLO"
+#    priority                   = 65000
+#    direction                  = "Inbound"
+#    access                     = "Allow"
+#    protocol                   = "Tcp"
+#    source_port_range          = "*"
+#    destination_port_range     = "*"
+#    source_address_prefix      = "*"
+#    destination_address_prefix = "*"
+#  }
+
+#  security_rule {
+#    name                       = "YOLO"
+#    priority                   = 65000
+#    direction                  = "Outp"
+#    access                     = "Allow"
+#    protocol                   = "Tcp"
+#    source_port_range          = "*"
+#    destination_port_range     = "*"
+#    source_address_prefix      = "*"
+#    destination_address_prefix = "*"
+#  }
 }
 
 resource "random_string" "fqdn" {
@@ -101,15 +127,6 @@ resource "azurerm_subnet" "vmss" {
   resource_group_name  = azurerm_resource_group.vmss.name
   virtual_network_name = azurerm_virtual_network.vmss.name
   address_prefixes     = ["10.0.2.0/24"]
-}
-
-data "azurerm_resource_group" "image" {
-  name = local.vm_image_resource_group
-}
-
-data "azurerm_image" "image" {
-  name                = local.vm_image_name
-  resource_group_name = data.azurerm_resource_group.image.name
 }
 
 resource "azapi_resource" "ssh_public_key" {

@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # In case the user wants to play with this.
-sudo pip install azure-cli
+template_name="flux-user"
+template_ethernet_device="eth0"
+template_username="azureuser"
 
 # Assume a huge number. This will error with Azure because they 
 # eventually dive into alpha numeric, but this works for a small demo

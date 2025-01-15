@@ -11,17 +11,13 @@ export CONTAINER_ENGINE=docker
 usernetes_root=/home/azureuser/usernetes
 cd $usernetes_root
 
-# Start the control plane and generate the join-command
-# This is how to get the external address, since internal addresses don't work
-export HOST_IP=$(curl -s https://api.ipify.org)
-echo "Host external ip is ${HOST_IP}"
-HOST_IP=$HOST_IP make up
+make up
 sleep 5
-HOST_IP=$HOST_IP make kubeadm-init
+make kubeadm-init
 sleep 5
-HOST_IP=$HOST_IP make install-flannel
-HOST_IP=$HOST_IP make kubeconfig
-HOST_IP=$HOST_IP make join-command
+make install-flannel
+make kubeconfig
+make join-command
 
 # Share the join-command with the workers
 flux archive create --name join-command --directory $usernetes_root join-command

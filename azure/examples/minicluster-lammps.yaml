@@ -1,0 +1,33 @@
+apiVersion: flux-framework.org/v1alpha2
+kind: MiniCluster
+metadata:
+  name: flux-sample
+spec:
+  size: 2
+  tasks: 192
+  interactive: true
+  flux:
+    container:
+      disable: true
+  containers:
+    - image: ghcr.io/converged-computing/flux-tutorials:azure-2404-lammps-reax
+      workingDir: /opt/lammps/examples/reaxff/HNS
+      command: lmp -v x 2 -v y 2 -v z 2 -in ./in.reaxff.hns -nocite
+      volumes:
+        memory-dir:
+          emptyDir: true
+          emptyDirMedium: "memory"
+      environment:
+        # export UCX_LOG_LEVEL=info
+        # export OMPI_MCA_opal_common_ucx_opal_mem_hooks=1
+        # export OMPI_MCA_pml_ucx_verbose=100
+        # Choose one - I found lammps does better with "all"
+        # UCX_TLS: ib,shm
+        UCX_TLS: all
+        OMPI_MCA_btl_openib_warn_no_device_params_found: "0"
+        OMPI_MCA_btl_vader_single_copy_mechanism: none
+        OMPI_MCA_btl_openib_allow_ib: "1"
+        UCX_NET_DEVICES: mlx5_0:1
+        FLUX_URI: local:///mnt/flux/view/run/flux/local
+      securityContext:
+        privileged: true

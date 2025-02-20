@@ -1,0 +1,1809 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "Node",
+            "metadata": {
+                "annotations": {
+                    "container.googleapis.com/instance_id": "7159557773680377941",
+                    "csi.volume.kubernetes.io/nodeid": "{\"pd.csi.storage.gke.io\":\"projects/llnl-flux/zones/us-central1-a/instances/gke-gpu-cluster-4-default-pool-f4c0ba61-50sg\"}",
+                    "node.alpha.kubernetes.io/ttl": "0",
+                    "node.gke.io/last-applied-node-labels": "cloud.google.com/gke-accelerator=nvidia-tesla-v100,cloud.google.com/gke-boot-disk=pd-balanced,cloud.google.com/gke-container-runtime=containerd,cloud.google.com/gke-cpu-scaling-level=16,cloud.google.com/gke-gpu-driver-version=latest,cloud.google.com/gke-logging-variant=DEFAULT,cloud.google.com/gke-max-pods-per-node=110,cloud.google.com/gke-memory-gb-scaling-level=61,cloud.google.com/gke-nodepool=default-pool,cloud.google.com/gke-os-distribution=cos,cloud.google.com/gke-provisioning=standard,cloud.google.com/gke-stack-type=IPV4,cloud.google.com/machine-family=n1,cloud.google.com/private-node=false",
+                    "node.gke.io/last-applied-node-taints": "",
+                    "volumes.kubernetes.io/controller-managed-attach-detach": "true"
+                },
+                "creationTimestamp": "2025-02-20T05:37:10Z",
+                "labels": {
+                    "beta.kubernetes.io/arch": "amd64",
+                    "beta.kubernetes.io/instance-type": "n1-standard-16",
+                    "beta.kubernetes.io/os": "linux",
+                    "cloud.google.com/gke-accelerator": "nvidia-tesla-v100",
+                    "cloud.google.com/gke-boot-disk": "pd-balanced",
+                    "cloud.google.com/gke-container-runtime": "containerd",
+                    "cloud.google.com/gke-cpu-scaling-level": "16",
+                    "cloud.google.com/gke-gpu-driver-version": "latest",
+                    "cloud.google.com/gke-logging-variant": "DEFAULT",
+                    "cloud.google.com/gke-max-pods-per-node": "110",
+                    "cloud.google.com/gke-memory-gb-scaling-level": "61",
+                    "cloud.google.com/gke-nodepool": "default-pool",
+                    "cloud.google.com/gke-os-distribution": "cos",
+                    "cloud.google.com/gke-provisioning": "standard",
+                    "cloud.google.com/gke-stack-type": "IPV4",
+                    "cloud.google.com/machine-family": "n1",
+                    "cloud.google.com/private-node": "false",
+                    "failure-domain.beta.kubernetes.io/region": "us-central1",
+                    "failure-domain.beta.kubernetes.io/zone": "us-central1-a",
+                    "kubernetes.io/arch": "amd64",
+                    "kubernetes.io/hostname": "gke-gpu-cluster-4-default-pool-f4c0ba61-50sg",
+                    "kubernetes.io/os": "linux",
+                    "node.kubernetes.io/instance-type": "n1-standard-16",
+                    "topology.gke.io/zone": "us-central1-a",
+                    "topology.kubernetes.io/region": "us-central1",
+                    "topology.kubernetes.io/zone": "us-central1-a"
+                },
+                "name": "gke-gpu-cluster-4-default-pool-f4c0ba61-50sg",
+                "resourceVersion": "2576",
+                "uid": "7ba74b85-bf30-4912-bc7e-f00e016faf8f"
+            },
+            "spec": {
+                "podCIDR": "10.20.0.0/24",
+                "podCIDRs": [
+                    "10.20.0.0/24"
+                ],
+                "providerID": "gce://llnl-flux/us-central1-a/gke-gpu-cluster-4-default-pool-f4c0ba61-50sg"
+            },
+            "status": {
+                "addresses": [
+                    {
+                        "address": "10.128.0.31",
+                        "type": "InternalIP"
+                    },
+                    {
+                        "address": "35.224.212.161",
+                        "type": "ExternalIP"
+                    },
+                    {
+                        "address": "gke-gpu-cluster-4-default-pool-f4c0ba61-50sg",
+                        "type": "Hostname"
+                    }
+                ],
+                "allocatable": {
+                    "cpu": "7910m",
+                    "ephemeral-storage": "47060071478",
+                    "hugepages-1Gi": "0",
+                    "hugepages-2Mi": "0",
+                    "memory": "56168364Ki",
+                    "nvidia.com/gpu": "4",
+                    "pods": "110"
+                },
+                "capacity": {
+                    "cpu": "8",
+                    "ephemeral-storage": "98831908Ki",
+                    "hugepages-1Gi": "0",
+                    "hugepages-2Mi": "0",
+                    "memory": "61724588Ki",
+                    "nvidia.com/gpu": "4",
+                    "pods": "110"
+                },
+                "conditions": [
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:37:12Z",
+                        "lastTransitionTime": "2025-02-20T05:37:11Z",
+                        "message": "NodeController create implicit route",
+                        "reason": "RouteCreated",
+                        "status": "False",
+                        "type": "NetworkUnavailable"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:52Z",
+                        "lastTransitionTime": "2025-02-20T05:35:51Z",
+                        "message": "containerd is functioning properly",
+                        "reason": "NoFrequentContainerdRestart",
+                        "status": "False",
+                        "type": "FrequentContainerdRestart"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:52Z",
+                        "lastTransitionTime": "2025-02-20T05:35:51Z",
+                        "message": "kubelet is functioning properly",
+                        "reason": "NoFrequentKubeletRestart",
+                        "status": "False",
+                        "type": "FrequentKubeletRestart"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:52Z",
+                        "lastTransitionTime": "2025-02-20T05:35:51Z",
+                        "message": "No deprecation risk: did not find any deprecated 'auths' field in containerd's config",
+                        "reason": "DeprecatedAuthsFieldInContainerdConfigurationNotDetected",
+                        "status": "False",
+                        "type": "DeprecatedAuthsFieldInContainerdConfiguration"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:52Z",
+                        "lastTransitionTime": "2025-02-20T05:35:51Z",
+                        "message": "No deprecation risk: did not find any deprecated 'mirrors' field in containerd's config",
+                        "reason": "DeprecatedMirrorsFieldInContainerdConfigurationNotDetected",
+                        "status": "False",
+                        "type": "DeprecatedMirrorsFieldInContainerdConfiguration"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:52Z",
+                        "lastTransitionTime": "2025-02-20T05:35:51Z",
+                        "message": "docker is functioning properly",
+                        "reason": "NoFrequentDockerRestart",
+                        "status": "False",
+                        "type": "FrequentDockerRestart"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:52Z",
+                        "lastTransitionTime": "2025-02-20T05:35:51Z",
+                        "message": "Filesystem is not read-only",
+                        "reason": "FilesystemIsNotReadOnly",
+                        "status": "False",
+                        "type": "ReadonlyFilesystem"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:52Z",
+                        "lastTransitionTime": "2025-02-20T05:35:51Z",
+                        "message": "kernel has no deadlock",
+                        "reason": "KernelHasNoDeadlock",
+                        "status": "False",
+                        "type": "KernelDeadlock"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:52Z",
+                        "lastTransitionTime": "2025-02-20T05:35:51Z",
+                        "message": "{\"managed\": {\"net.core.somaxconn\": \"2048\", \"net.ipv4.tcp_rmem\": \"4096 87380 16777216\", \"net.ipv4.tcp_wmem\": \"4096 16384 16777216\"}}",
+                        "reason": "NodeSysctlChange",
+                        "status": "True",
+                        "type": "SysctlChanged"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:52Z",
+                        "lastTransitionTime": "2025-02-20T05:35:51Z",
+                        "message": "docker overlay2 is functioning properly",
+                        "reason": "NoCorruptDockerOverlay2",
+                        "status": "False",
+                        "type": "CorruptDockerOverlay2"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:52Z",
+                        "lastTransitionTime": "2025-02-20T05:35:51Z",
+                        "message": "No deprecation risk: did not use v1alpha2 CRI",
+                        "reason": "DeprecatedUsingV1Alpha2CriNotDetected",
+                        "status": "False",
+                        "type": "DeprecatedUsingV1Alpha2Cri"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:52Z",
+                        "lastTransitionTime": "2025-02-20T05:35:51Z",
+                        "message": "No deprecation risk: did not find any deprecations other than 3 configs fields (auths/configs/mirrors), pulling schema v1 images and using v1alpha2 CRI.",
+                        "reason": "DeprecatedOtherContainerdFeaturesNotDetected",
+                        "status": "False",
+                        "type": "DeprecatedOtherContainerdFeatures"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:52Z",
+                        "lastTransitionTime": "2025-02-20T05:35:51Z",
+                        "message": "No deprecation risk: did not find any deprecated 'configs' field in containerd's config",
+                        "reason": "DeprecatedConfigsFieldInContainerdConfigurationNotDetected",
+                        "status": "False",
+                        "type": "DeprecatedConfigsFieldInContainerdConfiguration"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:52Z",
+                        "lastTransitionTime": "2025-02-20T05:35:51Z",
+                        "message": "No deprecation risk: did not pull any schema v1 images",
+                        "reason": "DeprecatedPullingSchemaV1ImageDetected",
+                        "status": "False",
+                        "type": "DeprecatedPullingSchemaV1Image"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:52Z",
+                        "lastTransitionTime": "2025-02-20T05:35:51Z",
+                        "message": "node is functioning properly",
+                        "reason": "NoFrequentUnregisterNetDevice",
+                        "status": "False",
+                        "type": "FrequentUnregisterNetDevice"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:38:11Z",
+                        "lastTransitionTime": "2025-02-20T05:34:50Z",
+                        "message": "kubelet has sufficient memory available",
+                        "reason": "KubeletHasSufficientMemory",
+                        "status": "False",
+                        "type": "MemoryPressure"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:38:11Z",
+                        "lastTransitionTime": "2025-02-20T05:34:50Z",
+                        "message": "kubelet has no disk pressure",
+                        "reason": "KubeletHasNoDiskPressure",
+                        "status": "False",
+                        "type": "DiskPressure"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:38:11Z",
+                        "lastTransitionTime": "2025-02-20T05:34:50Z",
+                        "message": "kubelet has sufficient PID available",
+                        "reason": "KubeletHasSufficientPID",
+                        "status": "False",
+                        "type": "PIDPressure"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:38:11Z",
+                        "lastTransitionTime": "2025-02-20T05:37:30Z",
+                        "message": "kubelet is posting ready status",
+                        "reason": "KubeletReady",
+                        "status": "True",
+                        "type": "Ready"
+                    }
+                ],
+                "daemonEndpoints": {
+                    "kubeletEndpoint": {
+                        "Port": 10250
+                    }
+                },
+                "images": [
+                    {
+                        "names": [
+                            "docker.io/library/cos-nvidia-installer:fixed",
+                            "gcr.io/cos-cloud/cos-gpu-installer:fixed",
+                            "us.gcr.io/cos-cloud/cos-gpu-installer:v2.4.6"
+                        ],
+                        "sizeBytes": 259811185
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/cilium/cilium:v1.15.6-gke1.31-gke.6@sha256:c0183d4ac380a84f28d7ccce3b4c00f6f1141fd95fa8b3239ecfa0e01a0d4eb4",
+                            "eu.gcr.io/gke-release-staging/cilium/cilium:v1.15.6-gke1.31-gke.6@sha256:c0183d4ac380a84f28d7ccce3b4c00f6f1141fd95fa8b3239ecfa0e01a0d4eb4",
+                            "gcr.io/gke-release-staging/cilium/cilium:v1.15.6-gke1.31-gke.6@sha256:c0183d4ac380a84f28d7ccce3b4c00f6f1141fd95fa8b3239ecfa0e01a0d4eb4",
+                            "asia.gcr.io/gke-release-staging/cilium/cilium@sha256:c0183d4ac380a84f28d7ccce3b4c00f6f1141fd95fa8b3239ecfa0e01a0d4eb4",
+                            "eu.gcr.io/gke-release-staging/cilium/cilium@sha256:c0183d4ac380a84f28d7ccce3b4c00f6f1141fd95fa8b3239ecfa0e01a0d4eb4"
+                        ],
+                        "sizeBytes": 172861670
+                    },
+                    {
+                        "names": [
+                            "gke.gcr.io/kube-proxy-amd64:v1.31.5-gke.100",
+                            "gke.gcr.io/kube-proxy-amd64:v1.31.5-gke.1023000",
+                            "k8s.gcr.io/kube-proxy-amd64:v1.31.5-gke.100",
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/kube-proxy-amd64:v1.31.5-gke.1023000"
+                        ],
+                        "sizeBytes": 95048888
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/fluent-bit@sha256:bd48755377a723a91bc3fd96f67796ba3a3023808fd69b37d97cb1aa5985d9ae"
+                        ],
+                        "sizeBytes": 93330926
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/gcp-compute-persistent-disk-csi-driver@sha256:bbbf275b1482cf3fc658f0bde28b1fbd24054451b5a97e23812821c82374a2b2"
+                        ],
+                        "sizeBytes": 60814920
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/gpu-maintenance-handler@sha256:1dae09acd592f5c02c55a1dff0bc383e00f5ce4412f35b636bf3589093e4ea40"
+                        ],
+                        "sizeBytes": 48975922
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/cilium/certgen:v0.1.13-gke.13@sha256:7988f0b61437528566934d7ecc6e9a7a7d1b379e315023b03172a2bf9a7147cd",
+                            "eu.gcr.io/gke-release-staging/cilium/certgen:v0.1.13-gke.13@sha256:7988f0b61437528566934d7ecc6e9a7a7d1b379e315023b03172a2bf9a7147cd",
+                            "gcr.io/gke-release-staging/cilium/certgen:v0.1.13-gke.13@sha256:7988f0b61437528566934d7ecc6e9a7a7d1b379e315023b03172a2bf9a7147cd",
+                            "asia.gcr.io/gke-release-staging/cilium/certgen@sha256:7988f0b61437528566934d7ecc6e9a7a7d1b379e315023b03172a2bf9a7147cd",
+                            "eu.gcr.io/gke-release-staging/cilium/certgen@sha256:7988f0b61437528566934d7ecc6e9a7a7d1b379e315023b03172a2bf9a7147cd"
+                        ],
+                        "sizeBytes": 40742056
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/cilium/slim-daemon/anet-agent:v1.15.6-gke1.31-gke.6@sha256:26a20f914f9935a3f477070dd8b40edf9c19900fe24288edb161d1423d242cc3",
+                            "eu.gcr.io/gke-release-staging/cilium/slim-daemon/anet-agent:v1.15.6-gke1.31-gke.6@sha256:26a20f914f9935a3f477070dd8b40edf9c19900fe24288edb161d1423d242cc3",
+                            "gcr.io/gke-release-staging/cilium/slim-daemon/anet-agent:v1.15.6-gke1.31-gke.6@sha256:26a20f914f9935a3f477070dd8b40edf9c19900fe24288edb161d1423d242cc3",
+                            "asia.gcr.io/gke-release-staging/cilium/slim-daemon/anet-agent@sha256:26a20f914f9935a3f477070dd8b40edf9c19900fe24288edb161d1423d242cc3",
+                            "eu.gcr.io/gke-release-staging/cilium/slim-daemon/anet-agent@sha256:26a20f914f9935a3f477070dd8b40edf9c19900fe24288edb161d1423d242cc3"
+                        ],
+                        "sizeBytes": 34910411
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/fluent-bit-gke-exporter@sha256:c85045c80354c2ac7931a103cc3f9d16dd08682e87383be254b37543dfcf0279"
+                        ],
+                        "sizeBytes": 32900579
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/proxy-agent@sha256:abf95907d2fdbc47cf1629de14b4d44675e8fac76a8b52e2613b92cee231791e"
+                        ],
+                        "sizeBytes": 28969868
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/gke-metrics-agent@sha256:beee3854b18a29aa9c7a9efaee91dd58e7ae3b0c8794395ca41f03e876bb7302"
+                        ],
+                        "sizeBytes": 27443414
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/gke-metrics-collector@sha256:3d76420863be0cdbdf5f9a512e032d9b20ae8fd7be4b5eca22ecdb1e867f23bf"
+                        ],
+                        "sizeBytes": 25809971
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/gke-metrics-collector:20241015_2300_RC0@sha256:1c838e782e8825f4c635ffa212833558976f16af700fbf4fcd9cf6103350d016",
+                            "eu.gcr.io/gke-release-staging/gke-metrics-collector:20241015_2300_RC0@sha256:1c838e782e8825f4c635ffa212833558976f16af700fbf4fcd9cf6103350d016",
+                            "gcr.io/gke-release-staging/gke-metrics-collector:20241015_2300_RC0@sha256:1c838e782e8825f4c635ffa212833558976f16af700fbf4fcd9cf6103350d016",
+                            "asia.gcr.io/gke-release-staging/gke-metrics-collector@sha256:1c838e782e8825f4c635ffa212833558976f16af700fbf4fcd9cf6103350d016",
+                            "eu.gcr.io/gke-release-staging/gke-metrics-collector@sha256:1c838e782e8825f4c635ffa212833558976f16af700fbf4fcd9cf6103350d016"
+                        ],
+                        "sizeBytes": 24863034
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/gke-metrics-collector@sha256:52df59dabb65d3d315ee03768ca1e9d84da2821a799c54cab7539f5f5b19849e"
+                        ],
+                        "sizeBytes": 24781314
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/gke-metrics-collector@sha256:d460e6b5088332f62b990f8a1f7bf6d9eca7c3f41cb974e3db493d6b0fc4ad70"
+                        ],
+                        "sizeBytes": 24425624
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/netd:v0.9.3-gke.6@sha256:42eabe7305d0e842f39bc3ab19de150d36c2464e218368e775308c306c11478c",
+                            "eu.gcr.io/gke-release-staging/netd:v0.9.3-gke.6@sha256:42eabe7305d0e842f39bc3ab19de150d36c2464e218368e775308c306c11478c",
+                            "gcr.io/gke-release-staging/netd:v0.9.3-gke.6@sha256:42eabe7305d0e842f39bc3ab19de150d36c2464e218368e775308c306c11478c",
+                            "asia.gcr.io/gke-release-staging/netd@sha256:42eabe7305d0e842f39bc3ab19de150d36c2464e218368e775308c306c11478c",
+                            "eu.gcr.io/gke-release-staging/netd@sha256:42eabe7305d0e842f39bc3ab19de150d36c2464e218368e775308c306c11478c"
+                        ],
+                        "sizeBytes": 24314779
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/cilium/hubble-cli:v0.13.5-gke.13@sha256:e4989d2f313be6f3fb0d9b79cf008e5443a0ee2c7a07342cc857108282369659",
+                            "eu.gcr.io/gke-release-staging/cilium/hubble-cli:v0.13.5-gke.13@sha256:e4989d2f313be6f3fb0d9b79cf008e5443a0ee2c7a07342cc857108282369659",
+                            "gcr.io/gke-release-staging/cilium/hubble-cli:v0.13.5-gke.13@sha256:e4989d2f313be6f3fb0d9b79cf008e5443a0ee2c7a07342cc857108282369659",
+                            "asia.gcr.io/gke-release-staging/cilium/hubble-cli@sha256:e4989d2f313be6f3fb0d9b79cf008e5443a0ee2c7a07342cc857108282369659",
+                            "eu.gcr.io/gke-release-staging/cilium/hubble-cli@sha256:e4989d2f313be6f3fb0d9b79cf008e5443a0ee2c7a07342cc857108282369659"
+                        ],
+                        "sizeBytes": 24122999
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/anthos-networking/anetd-sidecar:v2.9.77@sha256:2a788f8b3fc1112f706a7b22f13fb0e430d76c5743e6f8a6c2c350345f3a006d",
+                            "eu.gcr.io/gke-release-staging/anthos-networking/anetd-sidecar:v2.9.77@sha256:2a788f8b3fc1112f706a7b22f13fb0e430d76c5743e6f8a6c2c350345f3a006d",
+                            "gcr.io/gke-release-staging/anthos-networking/anetd-sidecar:v2.9.77@sha256:2a788f8b3fc1112f706a7b22f13fb0e430d76c5743e6f8a6c2c350345f3a006d",
+                            "asia.gcr.io/gke-release-staging/anthos-networking/anetd-sidecar@sha256:2a788f8b3fc1112f706a7b22f13fb0e430d76c5743e6f8a6c2c350345f3a006d",
+                            "eu.gcr.io/gke-release-staging/anthos-networking/anetd-sidecar@sha256:2a788f8b3fc1112f706a7b22f13fb0e430d76c5743e6f8a6c2c350345f3a006d"
+                        ],
+                        "sizeBytes": 23879640
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/cilium/hubble-relay:v1.15.6-gke1.31-gke.6@sha256:dc91b7d29630302dae8a3efd43798145a0186ad72101df85140f2a7389e4deff",
+                            "eu.gcr.io/gke-release-staging/cilium/hubble-relay:v1.15.6-gke1.31-gke.6@sha256:dc91b7d29630302dae8a3efd43798145a0186ad72101df85140f2a7389e4deff",
+                            "gcr.io/gke-release-staging/cilium/hubble-relay:v1.15.6-gke1.31-gke.6@sha256:dc91b7d29630302dae8a3efd43798145a0186ad72101df85140f2a7389e4deff",
+                            "asia.gcr.io/gke-release-staging/cilium/hubble-relay@sha256:dc91b7d29630302dae8a3efd43798145a0186ad72101df85140f2a7389e4deff",
+                            "eu.gcr.io/gke-release-staging/cilium/hubble-relay@sha256:dc91b7d29630302dae8a3efd43798145a0186ad72101df85140f2a7389e4deff"
+                        ],
+                        "sizeBytes": 22295404
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/gke-distroless/bash@sha256:12d99a6a72f4fecd689ead5d93001c1f3acea08ec72a55bbdfc070e0edc30fa4"
+                        ],
+                        "sizeBytes": 18654784
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/gke-distroless/bash@sha256:ff5d5abcc0cdd74d3ba43b0959b246c4432c14356b1414ce35d8feff820eb664"
+                        ],
+                        "sizeBytes": 18373482
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/ip-masq-agent:v2.11.0-gke.30@sha256:4035e9a6996d792ded07e94aab4e0a54bd3a3d58dddbbd0fb4edc8898a4c4d71",
+                            "eu.gcr.io/gke-release-staging/ip-masq-agent:v2.11.0-gke.30@sha256:4035e9a6996d792ded07e94aab4e0a54bd3a3d58dddbbd0fb4edc8898a4c4d71",
+                            "gcr.io/gke-release-staging/ip-masq-agent:v2.11.0-gke.30@sha256:4035e9a6996d792ded07e94aab4e0a54bd3a3d58dddbbd0fb4edc8898a4c4d71",
+                            "asia.gcr.io/gke-release-staging/ip-masq-agent@sha256:4035e9a6996d792ded07e94aab4e0a54bd3a3d58dddbbd0fb4edc8898a4c4d71",
+                            "eu.gcr.io/gke-release-staging/ip-masq-agent@sha256:4035e9a6996d792ded07e94aab4e0a54bd3a3d58dddbbd0fb4edc8898a4c4d71"
+                        ],
+                        "sizeBytes": 16420466
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/netd-init:v0.9.3-gke.6@sha256:9a3a71449bf45a9f3ce62d81f18ae3f610dd4f61add240953107426bb9df2ee8",
+                            "eu.gcr.io/gke-release-staging/netd-init:v0.9.3-gke.6@sha256:9a3a71449bf45a9f3ce62d81f18ae3f610dd4f61add240953107426bb9df2ee8",
+                            "gcr.io/gke-release-staging/netd-init:v0.9.3-gke.6@sha256:9a3a71449bf45a9f3ce62d81f18ae3f610dd4f61add240953107426bb9df2ee8",
+                            "asia.gcr.io/gke-release-staging/netd-init@sha256:9a3a71449bf45a9f3ce62d81f18ae3f610dd4f61add240953107426bb9df2ee8",
+                            "eu.gcr.io/gke-release-staging/netd-init@sha256:9a3a71449bf45a9f3ce62d81f18ae3f610dd4f61add240953107426bb9df2ee8"
+                        ],
+                        "sizeBytes": 15416166
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/egress-nat-controller:v0.2.13-gke.4@sha256:c093c35191f15dc16eef8a88395422660c0cd705994a9f22863ef53509f576d8",
+                            "eu.gcr.io/gke-release-staging/egress-nat-controller:v0.2.13-gke.4@sha256:c093c35191f15dc16eef8a88395422660c0cd705994a9f22863ef53509f576d8",
+                            "gcr.io/gke-release-staging/egress-nat-controller:v0.2.13-gke.4@sha256:c093c35191f15dc16eef8a88395422660c0cd705994a9f22863ef53509f576d8",
+                            "asia.gcr.io/gke-release-staging/egress-nat-controller@sha256:c093c35191f15dc16eef8a88395422660c0cd705994a9f22863ef53509f576d8",
+                            "eu.gcr.io/gke-release-staging/egress-nat-controller@sha256:c093c35191f15dc16eef8a88395422660c0cd705994a9f22863ef53509f576d8"
+                        ],
+                        "sizeBytes": 14387074
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/csi-node-driver-registrar@sha256:b2a29bd6d7e869cf0efd0011af2026a254ef1cf25e32ada7776db84b4a309935"
+                        ],
+                        "sizeBytes": 10821172
+                    }
+                ],
+                "nodeInfo": {
+                    "architecture": "amd64",
+                    "bootID": "b888febc-82a9-4f1f-a80c-27adbf178ee7",
+                    "containerRuntimeVersion": "containerd://1.7.24",
+                    "kernelVersion": "6.6.56+",
+                    "kubeProxyVersion": "v1.31.5-gke.1023000",
+                    "kubeletVersion": "v1.31.5-gke.1023000",
+                    "machineID": "1e6ff9f075e01e7cff1d6ce52c86b62f",
+                    "operatingSystem": "linux",
+                    "osImage": "Container-Optimized OS from Google",
+                    "systemUUID": "1e6ff9f0-75e0-1e7c-ff1d-6ce52c86b62f"
+                }
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Node",
+            "metadata": {
+                "annotations": {
+                    "container.googleapis.com/instance_id": "8159845413421776981",
+                    "csi.volume.kubernetes.io/nodeid": "{\"pd.csi.storage.gke.io\":\"projects/llnl-flux/zones/us-central1-a/instances/gke-gpu-cluster-4-default-pool-f4c0ba61-gldm\"}",
+                    "node.alpha.kubernetes.io/ttl": "0",
+                    "node.gke.io/last-applied-node-labels": "cloud.google.com/gke-accelerator=nvidia-tesla-v100,cloud.google.com/gke-boot-disk=pd-balanced,cloud.google.com/gke-container-runtime=containerd,cloud.google.com/gke-cpu-scaling-level=16,cloud.google.com/gke-gpu-driver-version=latest,cloud.google.com/gke-logging-variant=DEFAULT,cloud.google.com/gke-max-pods-per-node=110,cloud.google.com/gke-memory-gb-scaling-level=61,cloud.google.com/gke-nodepool=default-pool,cloud.google.com/gke-os-distribution=cos,cloud.google.com/gke-provisioning=standard,cloud.google.com/gke-stack-type=IPV4,cloud.google.com/machine-family=n1,cloud.google.com/private-node=false",
+                    "node.gke.io/last-applied-node-taints": "",
+                    "volumes.kubernetes.io/controller-managed-attach-detach": "true"
+                },
+                "creationTimestamp": "2025-02-20T05:37:10Z",
+                "labels": {
+                    "beta.kubernetes.io/arch": "amd64",
+                    "beta.kubernetes.io/instance-type": "n1-standard-16",
+                    "beta.kubernetes.io/os": "linux",
+                    "cloud.google.com/gke-accelerator": "nvidia-tesla-v100",
+                    "cloud.google.com/gke-boot-disk": "pd-balanced",
+                    "cloud.google.com/gke-container-runtime": "containerd",
+                    "cloud.google.com/gke-cpu-scaling-level": "16",
+                    "cloud.google.com/gke-gpu-driver-version": "latest",
+                    "cloud.google.com/gke-logging-variant": "DEFAULT",
+                    "cloud.google.com/gke-max-pods-per-node": "110",
+                    "cloud.google.com/gke-memory-gb-scaling-level": "61",
+                    "cloud.google.com/gke-nodepool": "default-pool",
+                    "cloud.google.com/gke-os-distribution": "cos",
+                    "cloud.google.com/gke-provisioning": "standard",
+                    "cloud.google.com/gke-stack-type": "IPV4",
+                    "cloud.google.com/machine-family": "n1",
+                    "cloud.google.com/private-node": "false",
+                    "failure-domain.beta.kubernetes.io/region": "us-central1",
+                    "failure-domain.beta.kubernetes.io/zone": "us-central1-a",
+                    "kubernetes.io/arch": "amd64",
+                    "kubernetes.io/hostname": "gke-gpu-cluster-4-default-pool-f4c0ba61-gldm",
+                    "kubernetes.io/os": "linux",
+                    "node.kubernetes.io/instance-type": "n1-standard-16",
+                    "topology.gke.io/zone": "us-central1-a",
+                    "topology.kubernetes.io/region": "us-central1",
+                    "topology.kubernetes.io/zone": "us-central1-a"
+                },
+                "name": "gke-gpu-cluster-4-default-pool-f4c0ba61-gldm",
+                "resourceVersion": "2578",
+                "uid": "54dbffd8-05b5-4e2f-85b0-02e1fb0f3a92"
+            },
+            "spec": {
+                "podCIDR": "10.20.3.0/24",
+                "podCIDRs": [
+                    "10.20.3.0/24"
+                ],
+                "providerID": "gce://llnl-flux/us-central1-a/gke-gpu-cluster-4-default-pool-f4c0ba61-gldm"
+            },
+            "status": {
+                "addresses": [
+                    {
+                        "address": "10.128.0.53",
+                        "type": "InternalIP"
+                    },
+                    {
+                        "address": "34.173.2.38",
+                        "type": "ExternalIP"
+                    },
+                    {
+                        "address": "gke-gpu-cluster-4-default-pool-f4c0ba61-gldm",
+                        "type": "Hostname"
+                    }
+                ],
+                "allocatable": {
+                    "cpu": "7910m",
+                    "ephemeral-storage": "47060071478",
+                    "hugepages-1Gi": "0",
+                    "hugepages-2Mi": "0",
+                    "memory": "56168372Ki",
+                    "nvidia.com/gpu": "4",
+                    "pods": "110"
+                },
+                "capacity": {
+                    "cpu": "8",
+                    "ephemeral-storage": "98831908Ki",
+                    "hugepages-1Gi": "0",
+                    "hugepages-2Mi": "0",
+                    "memory": "61724596Ki",
+                    "nvidia.com/gpu": "4",
+                    "pods": "110"
+                },
+                "conditions": [
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:37:14Z",
+                        "lastTransitionTime": "2025-02-20T05:37:12Z",
+                        "message": "NodeController create implicit route",
+                        "reason": "RouteCreated",
+                        "status": "False",
+                        "type": "NetworkUnavailable"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:52Z",
+                        "lastTransitionTime": "2025-02-20T05:35:51Z",
+                        "message": "kernel has no deadlock",
+                        "reason": "KernelHasNoDeadlock",
+                        "status": "False",
+                        "type": "KernelDeadlock"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:52Z",
+                        "lastTransitionTime": "2025-02-20T05:35:51Z",
+                        "message": "No deprecation risk: did not find any deprecated 'auths' field in containerd's config",
+                        "reason": "DeprecatedAuthsFieldInContainerdConfigurationNotDetected",
+                        "status": "False",
+                        "type": "DeprecatedAuthsFieldInContainerdConfiguration"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:52Z",
+                        "lastTransitionTime": "2025-02-20T05:35:51Z",
+                        "message": "No deprecation risk: did not find any deprecations other than 3 configs fields (auths/configs/mirrors), pulling schema v1 images and using v1alpha2 CRI.",
+                        "reason": "DeprecatedOtherContainerdFeaturesNotDetected",
+                        "status": "False",
+                        "type": "DeprecatedOtherContainerdFeatures"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:52Z",
+                        "lastTransitionTime": "2025-02-20T05:35:51Z",
+                        "message": "kubelet is functioning properly",
+                        "reason": "NoFrequentKubeletRestart",
+                        "status": "False",
+                        "type": "FrequentKubeletRestart"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:52Z",
+                        "lastTransitionTime": "2025-02-20T05:35:51Z",
+                        "message": "containerd is functioning properly",
+                        "reason": "NoFrequentContainerdRestart",
+                        "status": "False",
+                        "type": "FrequentContainerdRestart"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:52Z",
+                        "lastTransitionTime": "2025-02-20T05:35:51Z",
+                        "message": "No deprecation risk: did not use v1alpha2 CRI",
+                        "reason": "DeprecatedUsingV1Alpha2CriNotDetected",
+                        "status": "False",
+                        "type": "DeprecatedUsingV1Alpha2Cri"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:52Z",
+                        "lastTransitionTime": "2025-02-20T05:35:51Z",
+                        "message": "No deprecation risk: did not pull any schema v1 images",
+                        "reason": "DeprecatedPullingSchemaV1ImageDetected",
+                        "status": "False",
+                        "type": "DeprecatedPullingSchemaV1Image"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:52Z",
+                        "lastTransitionTime": "2025-02-20T05:35:51Z",
+                        "message": "docker overlay2 is functioning properly",
+                        "reason": "NoCorruptDockerOverlay2",
+                        "status": "False",
+                        "type": "CorruptDockerOverlay2"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:52Z",
+                        "lastTransitionTime": "2025-02-20T05:35:51Z",
+                        "message": "node is functioning properly",
+                        "reason": "NoFrequentUnregisterNetDevice",
+                        "status": "False",
+                        "type": "FrequentUnregisterNetDevice"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:52Z",
+                        "lastTransitionTime": "2025-02-20T05:35:51Z",
+                        "message": "Filesystem is not read-only",
+                        "reason": "FilesystemIsNotReadOnly",
+                        "status": "False",
+                        "type": "ReadonlyFilesystem"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:52Z",
+                        "lastTransitionTime": "2025-02-20T05:35:51Z",
+                        "message": "No deprecation risk: did not find any deprecated 'mirrors' field in containerd's config",
+                        "reason": "DeprecatedMirrorsFieldInContainerdConfigurationNotDetected",
+                        "status": "False",
+                        "type": "DeprecatedMirrorsFieldInContainerdConfiguration"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:52Z",
+                        "lastTransitionTime": "2025-02-20T05:35:51Z",
+                        "message": "{\"managed\": {\"net.core.somaxconn\": \"2048\", \"net.ipv4.tcp_rmem\": \"4096 87380 16777216\", \"net.ipv4.tcp_wmem\": \"4096 16384 16777216\"}}",
+                        "reason": "NodeSysctlChange",
+                        "status": "True",
+                        "type": "SysctlChanged"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:52Z",
+                        "lastTransitionTime": "2025-02-20T05:35:51Z",
+                        "message": "No deprecation risk: did not find any deprecated 'configs' field in containerd's config",
+                        "reason": "DeprecatedConfigsFieldInContainerdConfigurationNotDetected",
+                        "status": "False",
+                        "type": "DeprecatedConfigsFieldInContainerdConfiguration"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:52Z",
+                        "lastTransitionTime": "2025-02-20T05:35:51Z",
+                        "message": "docker is functioning properly",
+                        "reason": "NoFrequentDockerRestart",
+                        "status": "False",
+                        "type": "FrequentDockerRestart"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:38:12Z",
+                        "lastTransitionTime": "2025-02-20T05:34:50Z",
+                        "message": "kubelet has sufficient memory available",
+                        "reason": "KubeletHasSufficientMemory",
+                        "status": "False",
+                        "type": "MemoryPressure"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:38:12Z",
+                        "lastTransitionTime": "2025-02-20T05:34:50Z",
+                        "message": "kubelet has no disk pressure",
+                        "reason": "KubeletHasNoDiskPressure",
+                        "status": "False",
+                        "type": "DiskPressure"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:38:12Z",
+                        "lastTransitionTime": "2025-02-20T05:34:50Z",
+                        "message": "kubelet has sufficient PID available",
+                        "reason": "KubeletHasSufficientPID",
+                        "status": "False",
+                        "type": "PIDPressure"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:38:12Z",
+                        "lastTransitionTime": "2025-02-20T05:37:31Z",
+                        "message": "kubelet is posting ready status",
+                        "reason": "KubeletReady",
+                        "status": "True",
+                        "type": "Ready"
+                    }
+                ],
+                "daemonEndpoints": {
+                    "kubeletEndpoint": {
+                        "Port": 10250
+                    }
+                },
+                "images": [
+                    {
+                        "names": [
+                            "docker.io/library/cos-nvidia-installer:fixed",
+                            "gcr.io/cos-cloud/cos-gpu-installer:fixed",
+                            "us.gcr.io/cos-cloud/cos-gpu-installer:v2.4.6"
+                        ],
+                        "sizeBytes": 259811185
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/cilium/cilium:v1.15.6-gke1.31-gke.6@sha256:c0183d4ac380a84f28d7ccce3b4c00f6f1141fd95fa8b3239ecfa0e01a0d4eb4",
+                            "eu.gcr.io/gke-release-staging/cilium/cilium:v1.15.6-gke1.31-gke.6@sha256:c0183d4ac380a84f28d7ccce3b4c00f6f1141fd95fa8b3239ecfa0e01a0d4eb4",
+                            "gcr.io/gke-release-staging/cilium/cilium:v1.15.6-gke1.31-gke.6@sha256:c0183d4ac380a84f28d7ccce3b4c00f6f1141fd95fa8b3239ecfa0e01a0d4eb4",
+                            "asia.gcr.io/gke-release-staging/cilium/cilium@sha256:c0183d4ac380a84f28d7ccce3b4c00f6f1141fd95fa8b3239ecfa0e01a0d4eb4",
+                            "eu.gcr.io/gke-release-staging/cilium/cilium@sha256:c0183d4ac380a84f28d7ccce3b4c00f6f1141fd95fa8b3239ecfa0e01a0d4eb4"
+                        ],
+                        "sizeBytes": 172861670
+                    },
+                    {
+                        "names": [
+                            "gke.gcr.io/kube-proxy-amd64:v1.31.5-gke.100",
+                            "gke.gcr.io/kube-proxy-amd64:v1.31.5-gke.1023000",
+                            "k8s.gcr.io/kube-proxy-amd64:v1.31.5-gke.100",
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/kube-proxy-amd64:v1.31.5-gke.1023000"
+                        ],
+                        "sizeBytes": 95048888
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/fluent-bit@sha256:bd48755377a723a91bc3fd96f67796ba3a3023808fd69b37d97cb1aa5985d9ae"
+                        ],
+                        "sizeBytes": 93330926
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/prometheus-engine/operator@sha256:5025cbef7f91274c585dd87c45a068f6cf06c37cdb2f8c317b2f2c77ac00aa02"
+                        ],
+                        "sizeBytes": 84747190
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/gcp-compute-persistent-disk-csi-driver@sha256:bbbf275b1482cf3fc658f0bde28b1fbd24054451b5a97e23812821c82374a2b2"
+                        ],
+                        "sizeBytes": 60814920
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/gpu-maintenance-handler@sha256:1dae09acd592f5c02c55a1dff0bc383e00f5ce4412f35b636bf3589093e4ea40"
+                        ],
+                        "sizeBytes": 48975922
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/cilium/certgen:v0.1.13-gke.13@sha256:7988f0b61437528566934d7ecc6e9a7a7d1b379e315023b03172a2bf9a7147cd",
+                            "eu.gcr.io/gke-release-staging/cilium/certgen:v0.1.13-gke.13@sha256:7988f0b61437528566934d7ecc6e9a7a7d1b379e315023b03172a2bf9a7147cd",
+                            "gcr.io/gke-release-staging/cilium/certgen:v0.1.13-gke.13@sha256:7988f0b61437528566934d7ecc6e9a7a7d1b379e315023b03172a2bf9a7147cd",
+                            "asia.gcr.io/gke-release-staging/cilium/certgen@sha256:7988f0b61437528566934d7ecc6e9a7a7d1b379e315023b03172a2bf9a7147cd",
+                            "eu.gcr.io/gke-release-staging/cilium/certgen@sha256:7988f0b61437528566934d7ecc6e9a7a7d1b379e315023b03172a2bf9a7147cd"
+                        ],
+                        "sizeBytes": 40742056
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/k8s-dns-dnsmasq-nanny@sha256:91e0e71fc0ef3d99d9a6f9f83ff3ff5e2ab972ab9a5d4516945d778fdc014849"
+                        ],
+                        "sizeBytes": 36991148
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/prometheus-to-sd@sha256:15e59ea94ecb15f00a001deea2e81537d5045e20bb76cc1b49608dcac32d7497"
+                        ],
+                        "sizeBytes": 35881550
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/cilium/slim-daemon/anet-agent:v1.15.6-gke1.31-gke.6@sha256:26a20f914f9935a3f477070dd8b40edf9c19900fe24288edb161d1423d242cc3",
+                            "eu.gcr.io/gke-release-staging/cilium/slim-daemon/anet-agent:v1.15.6-gke1.31-gke.6@sha256:26a20f914f9935a3f477070dd8b40edf9c19900fe24288edb161d1423d242cc3",
+                            "gcr.io/gke-release-staging/cilium/slim-daemon/anet-agent:v1.15.6-gke1.31-gke.6@sha256:26a20f914f9935a3f477070dd8b40edf9c19900fe24288edb161d1423d242cc3",
+                            "asia.gcr.io/gke-release-staging/cilium/slim-daemon/anet-agent@sha256:26a20f914f9935a3f477070dd8b40edf9c19900fe24288edb161d1423d242cc3",
+                            "eu.gcr.io/gke-release-staging/cilium/slim-daemon/anet-agent@sha256:26a20f914f9935a3f477070dd8b40edf9c19900fe24288edb161d1423d242cc3"
+                        ],
+                        "sizeBytes": 34910411
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/fluent-bit-gke-exporter@sha256:c85045c80354c2ac7931a103cc3f9d16dd08682e87383be254b37543dfcf0279"
+                        ],
+                        "sizeBytes": 32900579
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/k8s-dns-kube-dns@sha256:795f5c60e59e843f1027074d980ffb12b4421dee32b89e5029ad3a080e25d3c0"
+                        ],
+                        "sizeBytes": 32656706
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/k8s-dns-sidecar@sha256:495ae9ab1edbf467dcb5a5c21d8772279674eeb624ce656640156e7cde3639a4"
+                        ],
+                        "sizeBytes": 29101972
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/proxy-agent@sha256:abf95907d2fdbc47cf1629de14b4d44675e8fac76a8b52e2613b92cee231791e"
+                        ],
+                        "sizeBytes": 28969868
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/gke-metrics-agent@sha256:beee3854b18a29aa9c7a9efaee91dd58e7ae3b0c8794395ca41f03e876bb7302"
+                        ],
+                        "sizeBytes": 27443414
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/gke-metrics-collector@sha256:93c84f8538a39c07e4cfc8867a9ee143e65a5a6418a38574aa6a78e950dd3ee5"
+                        ],
+                        "sizeBytes": 25814446
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/gke-metrics-collector@sha256:3d76420863be0cdbdf5f9a512e032d9b20ae8fd7be4b5eca22ecdb1e867f23bf"
+                        ],
+                        "sizeBytes": 25809971
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/gke-metrics-collector:20241015_2300_RC0@sha256:1c838e782e8825f4c635ffa212833558976f16af700fbf4fcd9cf6103350d016",
+                            "eu.gcr.io/gke-release-staging/gke-metrics-collector:20241015_2300_RC0@sha256:1c838e782e8825f4c635ffa212833558976f16af700fbf4fcd9cf6103350d016",
+                            "gcr.io/gke-release-staging/gke-metrics-collector:20241015_2300_RC0@sha256:1c838e782e8825f4c635ffa212833558976f16af700fbf4fcd9cf6103350d016",
+                            "asia.gcr.io/gke-release-staging/gke-metrics-collector@sha256:1c838e782e8825f4c635ffa212833558976f16af700fbf4fcd9cf6103350d016",
+                            "eu.gcr.io/gke-release-staging/gke-metrics-collector@sha256:1c838e782e8825f4c635ffa212833558976f16af700fbf4fcd9cf6103350d016"
+                        ],
+                        "sizeBytes": 24951828
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/gke-metrics-collector@sha256:52df59dabb65d3d315ee03768ca1e9d84da2821a799c54cab7539f5f5b19849e"
+                        ],
+                        "sizeBytes": 24781314
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/gke-metrics-collector@sha256:d460e6b5088332f62b990f8a1f7bf6d9eca7c3f41cb974e3db493d6b0fc4ad70"
+                        ],
+                        "sizeBytes": 24425624
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/netd:v0.9.3-gke.6@sha256:42eabe7305d0e842f39bc3ab19de150d36c2464e218368e775308c306c11478c",
+                            "eu.gcr.io/gke-release-staging/netd:v0.9.3-gke.6@sha256:42eabe7305d0e842f39bc3ab19de150d36c2464e218368e775308c306c11478c",
+                            "gcr.io/gke-release-staging/netd:v0.9.3-gke.6@sha256:42eabe7305d0e842f39bc3ab19de150d36c2464e218368e775308c306c11478c",
+                            "asia.gcr.io/gke-release-staging/netd@sha256:42eabe7305d0e842f39bc3ab19de150d36c2464e218368e775308c306c11478c",
+                            "eu.gcr.io/gke-release-staging/netd@sha256:42eabe7305d0e842f39bc3ab19de150d36c2464e218368e775308c306c11478c"
+                        ],
+                        "sizeBytes": 24313759
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/cilium/hubble-cli:v0.13.5-gke.13@sha256:e4989d2f313be6f3fb0d9b79cf008e5443a0ee2c7a07342cc857108282369659",
+                            "eu.gcr.io/gke-release-staging/cilium/hubble-cli:v0.13.5-gke.13@sha256:e4989d2f313be6f3fb0d9b79cf008e5443a0ee2c7a07342cc857108282369659",
+                            "gcr.io/gke-release-staging/cilium/hubble-cli:v0.13.5-gke.13@sha256:e4989d2f313be6f3fb0d9b79cf008e5443a0ee2c7a07342cc857108282369659",
+                            "asia.gcr.io/gke-release-staging/cilium/hubble-cli@sha256:e4989d2f313be6f3fb0d9b79cf008e5443a0ee2c7a07342cc857108282369659",
+                            "eu.gcr.io/gke-release-staging/cilium/hubble-cli@sha256:e4989d2f313be6f3fb0d9b79cf008e5443a0ee2c7a07342cc857108282369659"
+                        ],
+                        "sizeBytes": 24124312
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/anthos-networking/anetd-sidecar:v2.9.77@sha256:2a788f8b3fc1112f706a7b22f13fb0e430d76c5743e6f8a6c2c350345f3a006d",
+                            "eu.gcr.io/gke-release-staging/anthos-networking/anetd-sidecar:v2.9.77@sha256:2a788f8b3fc1112f706a7b22f13fb0e430d76c5743e6f8a6c2c350345f3a006d",
+                            "gcr.io/gke-release-staging/anthos-networking/anetd-sidecar:v2.9.77@sha256:2a788f8b3fc1112f706a7b22f13fb0e430d76c5743e6f8a6c2c350345f3a006d",
+                            "asia.gcr.io/gke-release-staging/anthos-networking/anetd-sidecar@sha256:2a788f8b3fc1112f706a7b22f13fb0e430d76c5743e6f8a6c2c350345f3a006d",
+                            "eu.gcr.io/gke-release-staging/anthos-networking/anetd-sidecar@sha256:2a788f8b3fc1112f706a7b22f13fb0e430d76c5743e6f8a6c2c350345f3a006d"
+                        ],
+                        "sizeBytes": 23881188
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/cilium/hubble-relay:v1.15.6-gke1.31-gke.6@sha256:dc91b7d29630302dae8a3efd43798145a0186ad72101df85140f2a7389e4deff",
+                            "eu.gcr.io/gke-release-staging/cilium/hubble-relay:v1.15.6-gke1.31-gke.6@sha256:dc91b7d29630302dae8a3efd43798145a0186ad72101df85140f2a7389e4deff",
+                            "gcr.io/gke-release-staging/cilium/hubble-relay:v1.15.6-gke1.31-gke.6@sha256:dc91b7d29630302dae8a3efd43798145a0186ad72101df85140f2a7389e4deff",
+                            "asia.gcr.io/gke-release-staging/cilium/hubble-relay@sha256:dc91b7d29630302dae8a3efd43798145a0186ad72101df85140f2a7389e4deff",
+                            "eu.gcr.io/gke-release-staging/cilium/hubble-relay@sha256:dc91b7d29630302dae8a3efd43798145a0186ad72101df85140f2a7389e4deff"
+                        ],
+                        "sizeBytes": 22295404
+                    }
+                ],
+                "nodeInfo": {
+                    "architecture": "amd64",
+                    "bootID": "7017b360-6b19-4469-a389-80a04d44758b",
+                    "containerRuntimeVersion": "containerd://1.7.24",
+                    "kernelVersion": "6.6.56+",
+                    "kubeProxyVersion": "v1.31.5-gke.1023000",
+                    "kubeletVersion": "v1.31.5-gke.1023000",
+                    "machineID": "b68a6c28b0a6a9e33ec53cd77ee2d703",
+                    "operatingSystem": "linux",
+                    "osImage": "Container-Optimized OS from Google",
+                    "systemUUID": "b68a6c28-b0a6-a9e3-3ec5-3cd77ee2d703"
+                }
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Node",
+            "metadata": {
+                "annotations": {
+                    "container.googleapis.com/instance_id": "1595159459659448405",
+                    "csi.volume.kubernetes.io/nodeid": "{\"pd.csi.storage.gke.io\":\"projects/llnl-flux/zones/us-central1-a/instances/gke-gpu-cluster-4-default-pool-f4c0ba61-qkpb\"}",
+                    "node.alpha.kubernetes.io/ttl": "0",
+                    "node.gke.io/last-applied-node-labels": "cloud.google.com/gke-accelerator=nvidia-tesla-v100,cloud.google.com/gke-boot-disk=pd-balanced,cloud.google.com/gke-container-runtime=containerd,cloud.google.com/gke-cpu-scaling-level=16,cloud.google.com/gke-gpu-driver-version=latest,cloud.google.com/gke-logging-variant=DEFAULT,cloud.google.com/gke-max-pods-per-node=110,cloud.google.com/gke-memory-gb-scaling-level=61,cloud.google.com/gke-nodepool=default-pool,cloud.google.com/gke-os-distribution=cos,cloud.google.com/gke-provisioning=standard,cloud.google.com/gke-stack-type=IPV4,cloud.google.com/machine-family=n1,cloud.google.com/private-node=false",
+                    "node.gke.io/last-applied-node-taints": "",
+                    "volumes.kubernetes.io/controller-managed-attach-detach": "true"
+                },
+                "creationTimestamp": "2025-02-20T05:37:10Z",
+                "labels": {
+                    "beta.kubernetes.io/arch": "amd64",
+                    "beta.kubernetes.io/instance-type": "n1-standard-16",
+                    "beta.kubernetes.io/os": "linux",
+                    "cloud.google.com/gke-accelerator": "nvidia-tesla-v100",
+                    "cloud.google.com/gke-boot-disk": "pd-balanced",
+                    "cloud.google.com/gke-container-runtime": "containerd",
+                    "cloud.google.com/gke-cpu-scaling-level": "16",
+                    "cloud.google.com/gke-gpu-driver-version": "latest",
+                    "cloud.google.com/gke-logging-variant": "DEFAULT",
+                    "cloud.google.com/gke-max-pods-per-node": "110",
+                    "cloud.google.com/gke-memory-gb-scaling-level": "61",
+                    "cloud.google.com/gke-nodepool": "default-pool",
+                    "cloud.google.com/gke-os-distribution": "cos",
+                    "cloud.google.com/gke-provisioning": "standard",
+                    "cloud.google.com/gke-stack-type": "IPV4",
+                    "cloud.google.com/machine-family": "n1",
+                    "cloud.google.com/private-node": "false",
+                    "failure-domain.beta.kubernetes.io/region": "us-central1",
+                    "failure-domain.beta.kubernetes.io/zone": "us-central1-a",
+                    "kubernetes.io/arch": "amd64",
+                    "kubernetes.io/hostname": "gke-gpu-cluster-4-default-pool-f4c0ba61-qkpb",
+                    "kubernetes.io/os": "linux",
+                    "node.kubernetes.io/instance-type": "n1-standard-16",
+                    "topology.gke.io/zone": "us-central1-a",
+                    "topology.kubernetes.io/region": "us-central1",
+                    "topology.kubernetes.io/zone": "us-central1-a"
+                },
+                "name": "gke-gpu-cluster-4-default-pool-f4c0ba61-qkpb",
+                "resourceVersion": "2579",
+                "uid": "033161c6-1328-431a-a591-118d2703a9c5"
+            },
+            "spec": {
+                "podCIDR": "10.20.1.0/24",
+                "podCIDRs": [
+                    "10.20.1.0/24"
+                ],
+                "providerID": "gce://llnl-flux/us-central1-a/gke-gpu-cluster-4-default-pool-f4c0ba61-qkpb"
+            },
+            "status": {
+                "addresses": [
+                    {
+                        "address": "10.128.0.35",
+                        "type": "InternalIP"
+                    },
+                    {
+                        "address": "34.133.234.66",
+                        "type": "ExternalIP"
+                    },
+                    {
+                        "address": "gke-gpu-cluster-4-default-pool-f4c0ba61-qkpb",
+                        "type": "Hostname"
+                    }
+                ],
+                "allocatable": {
+                    "cpu": "7910m",
+                    "ephemeral-storage": "47060071478",
+                    "hugepages-1Gi": "0",
+                    "hugepages-2Mi": "0",
+                    "memory": "56168372Ki",
+                    "nvidia.com/gpu": "4",
+                    "pods": "110"
+                },
+                "capacity": {
+                    "cpu": "8",
+                    "ephemeral-storage": "98831908Ki",
+                    "hugepages-1Gi": "0",
+                    "hugepages-2Mi": "0",
+                    "memory": "61724596Ki",
+                    "nvidia.com/gpu": "4",
+                    "pods": "110"
+                },
+                "conditions": [
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:37:13Z",
+                        "lastTransitionTime": "2025-02-20T05:37:12Z",
+                        "message": "NodeController create implicit route",
+                        "reason": "RouteCreated",
+                        "status": "False",
+                        "type": "NetworkUnavailable"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:53Z",
+                        "lastTransitionTime": "2025-02-20T05:35:52Z",
+                        "message": "No deprecation risk: did not find any deprecated 'mirrors' field in containerd's config",
+                        "reason": "DeprecatedMirrorsFieldInContainerdConfigurationNotDetected",
+                        "status": "False",
+                        "type": "DeprecatedMirrorsFieldInContainerdConfiguration"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:53Z",
+                        "lastTransitionTime": "2025-02-20T05:35:52Z",
+                        "message": "No deprecation risk: did not find any deprecated 'auths' field in containerd's config",
+                        "reason": "DeprecatedAuthsFieldInContainerdConfigurationNotDetected",
+                        "status": "False",
+                        "type": "DeprecatedAuthsFieldInContainerdConfiguration"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:53Z",
+                        "lastTransitionTime": "2025-02-20T05:35:52Z",
+                        "message": "kubelet is functioning properly",
+                        "reason": "NoFrequentKubeletRestart",
+                        "status": "False",
+                        "type": "FrequentKubeletRestart"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:53Z",
+                        "lastTransitionTime": "2025-02-20T05:35:52Z",
+                        "message": "docker is functioning properly",
+                        "reason": "NoFrequentDockerRestart",
+                        "status": "False",
+                        "type": "FrequentDockerRestart"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:53Z",
+                        "lastTransitionTime": "2025-02-20T05:35:52Z",
+                        "message": "docker overlay2 is functioning properly",
+                        "reason": "NoCorruptDockerOverlay2",
+                        "status": "False",
+                        "type": "CorruptDockerOverlay2"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:53Z",
+                        "lastTransitionTime": "2025-02-20T05:35:52Z",
+                        "message": "No deprecation risk: did not use v1alpha2 CRI",
+                        "reason": "DeprecatedUsingV1Alpha2CriNotDetected",
+                        "status": "False",
+                        "type": "DeprecatedUsingV1Alpha2Cri"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:53Z",
+                        "lastTransitionTime": "2025-02-20T05:35:52Z",
+                        "message": "Filesystem is not read-only",
+                        "reason": "FilesystemIsNotReadOnly",
+                        "status": "False",
+                        "type": "ReadonlyFilesystem"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:53Z",
+                        "lastTransitionTime": "2025-02-20T05:35:52Z",
+                        "message": "containerd is functioning properly",
+                        "reason": "NoFrequentContainerdRestart",
+                        "status": "False",
+                        "type": "FrequentContainerdRestart"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:53Z",
+                        "lastTransitionTime": "2025-02-20T05:35:52Z",
+                        "message": "node is functioning properly",
+                        "reason": "NoFrequentUnregisterNetDevice",
+                        "status": "False",
+                        "type": "FrequentUnregisterNetDevice"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:53Z",
+                        "lastTransitionTime": "2025-02-20T05:35:52Z",
+                        "message": "No deprecation risk: did not find any deprecations other than 3 configs fields (auths/configs/mirrors), pulling schema v1 images and using v1alpha2 CRI.",
+                        "reason": "DeprecatedOtherContainerdFeaturesNotDetected",
+                        "status": "False",
+                        "type": "DeprecatedOtherContainerdFeatures"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:53Z",
+                        "lastTransitionTime": "2025-02-20T05:35:52Z",
+                        "message": "{\"managed\": {\"net.core.somaxconn\": \"2048\", \"net.ipv4.tcp_rmem\": \"4096 87380 16777216\", \"net.ipv4.tcp_wmem\": \"4096 16384 16777216\"}}",
+                        "reason": "NodeSysctlChange",
+                        "status": "True",
+                        "type": "SysctlChanged"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:53Z",
+                        "lastTransitionTime": "2025-02-20T05:35:52Z",
+                        "message": "kernel has no deadlock",
+                        "reason": "KernelHasNoDeadlock",
+                        "status": "False",
+                        "type": "KernelDeadlock"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:53Z",
+                        "lastTransitionTime": "2025-02-20T05:35:52Z",
+                        "message": "No deprecation risk: did not find any deprecated 'configs' field in containerd's config",
+                        "reason": "DeprecatedConfigsFieldInContainerdConfigurationNotDetected",
+                        "status": "False",
+                        "type": "DeprecatedConfigsFieldInContainerdConfiguration"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:53Z",
+                        "lastTransitionTime": "2025-02-20T05:35:52Z",
+                        "message": "No deprecation risk: did not pull any schema v1 images",
+                        "reason": "DeprecatedPullingSchemaV1ImageDetected",
+                        "status": "False",
+                        "type": "DeprecatedPullingSchemaV1Image"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:38:12Z",
+                        "lastTransitionTime": "2025-02-20T05:34:51Z",
+                        "message": "kubelet has sufficient memory available",
+                        "reason": "KubeletHasSufficientMemory",
+                        "status": "False",
+                        "type": "MemoryPressure"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:38:12Z",
+                        "lastTransitionTime": "2025-02-20T05:34:51Z",
+                        "message": "kubelet has no disk pressure",
+                        "reason": "KubeletHasNoDiskPressure",
+                        "status": "False",
+                        "type": "DiskPressure"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:38:12Z",
+                        "lastTransitionTime": "2025-02-20T05:34:51Z",
+                        "message": "kubelet has sufficient PID available",
+                        "reason": "KubeletHasSufficientPID",
+                        "status": "False",
+                        "type": "PIDPressure"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:38:12Z",
+                        "lastTransitionTime": "2025-02-20T05:37:31Z",
+                        "message": "kubelet is posting ready status",
+                        "reason": "KubeletReady",
+                        "status": "True",
+                        "type": "Ready"
+                    }
+                ],
+                "daemonEndpoints": {
+                    "kubeletEndpoint": {
+                        "Port": 10250
+                    }
+                },
+                "images": [
+                    {
+                        "names": [
+                            "docker.io/library/cos-nvidia-installer:fixed",
+                            "gcr.io/cos-cloud/cos-gpu-installer:fixed",
+                            "us.gcr.io/cos-cloud/cos-gpu-installer:v2.4.6"
+                        ],
+                        "sizeBytes": 259811185
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/cilium/cilium:v1.15.6-gke1.31-gke.6@sha256:c0183d4ac380a84f28d7ccce3b4c00f6f1141fd95fa8b3239ecfa0e01a0d4eb4",
+                            "eu.gcr.io/gke-release-staging/cilium/cilium:v1.15.6-gke1.31-gke.6@sha256:c0183d4ac380a84f28d7ccce3b4c00f6f1141fd95fa8b3239ecfa0e01a0d4eb4",
+                            "gcr.io/gke-release-staging/cilium/cilium:v1.15.6-gke1.31-gke.6@sha256:c0183d4ac380a84f28d7ccce3b4c00f6f1141fd95fa8b3239ecfa0e01a0d4eb4",
+                            "asia.gcr.io/gke-release-staging/cilium/cilium@sha256:c0183d4ac380a84f28d7ccce3b4c00f6f1141fd95fa8b3239ecfa0e01a0d4eb4",
+                            "eu.gcr.io/gke-release-staging/cilium/cilium@sha256:c0183d4ac380a84f28d7ccce3b4c00f6f1141fd95fa8b3239ecfa0e01a0d4eb4"
+                        ],
+                        "sizeBytes": 172861670
+                    },
+                    {
+                        "names": [
+                            "gke.gcr.io/kube-proxy-amd64:v1.31.5-gke.100",
+                            "gke.gcr.io/kube-proxy-amd64:v1.31.5-gke.1023000",
+                            "k8s.gcr.io/kube-proxy-amd64:v1.31.5-gke.100",
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/kube-proxy-amd64:v1.31.5-gke.1023000"
+                        ],
+                        "sizeBytes": 95048888
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/fluent-bit@sha256:bd48755377a723a91bc3fd96f67796ba3a3023808fd69b37d97cb1aa5985d9ae"
+                        ],
+                        "sizeBytes": 93330926
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/gcp-compute-persistent-disk-csi-driver@sha256:bbbf275b1482cf3fc658f0bde28b1fbd24054451b5a97e23812821c82374a2b2"
+                        ],
+                        "sizeBytes": 60814920
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/gpu-maintenance-handler@sha256:1dae09acd592f5c02c55a1dff0bc383e00f5ce4412f35b636bf3589093e4ea40"
+                        ],
+                        "sizeBytes": 48975922
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/cilium/certgen:v0.1.13-gke.13@sha256:7988f0b61437528566934d7ecc6e9a7a7d1b379e315023b03172a2bf9a7147cd",
+                            "eu.gcr.io/gke-release-staging/cilium/certgen:v0.1.13-gke.13@sha256:7988f0b61437528566934d7ecc6e9a7a7d1b379e315023b03172a2bf9a7147cd",
+                            "gcr.io/gke-release-staging/cilium/certgen:v0.1.13-gke.13@sha256:7988f0b61437528566934d7ecc6e9a7a7d1b379e315023b03172a2bf9a7147cd",
+                            "asia.gcr.io/gke-release-staging/cilium/certgen@sha256:7988f0b61437528566934d7ecc6e9a7a7d1b379e315023b03172a2bf9a7147cd",
+                            "eu.gcr.io/gke-release-staging/cilium/certgen@sha256:7988f0b61437528566934d7ecc6e9a7a7d1b379e315023b03172a2bf9a7147cd"
+                        ],
+                        "sizeBytes": 40740743
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/cilium/slim-daemon/anet-agent:v1.15.6-gke1.31-gke.6@sha256:26a20f914f9935a3f477070dd8b40edf9c19900fe24288edb161d1423d242cc3",
+                            "eu.gcr.io/gke-release-staging/cilium/slim-daemon/anet-agent:v1.15.6-gke1.31-gke.6@sha256:26a20f914f9935a3f477070dd8b40edf9c19900fe24288edb161d1423d242cc3",
+                            "gcr.io/gke-release-staging/cilium/slim-daemon/anet-agent:v1.15.6-gke1.31-gke.6@sha256:26a20f914f9935a3f477070dd8b40edf9c19900fe24288edb161d1423d242cc3",
+                            "asia.gcr.io/gke-release-staging/cilium/slim-daemon/anet-agent@sha256:26a20f914f9935a3f477070dd8b40edf9c19900fe24288edb161d1423d242cc3",
+                            "eu.gcr.io/gke-release-staging/cilium/slim-daemon/anet-agent@sha256:26a20f914f9935a3f477070dd8b40edf9c19900fe24288edb161d1423d242cc3"
+                        ],
+                        "sizeBytes": 34909192
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/fluent-bit-gke-exporter@sha256:c85045c80354c2ac7931a103cc3f9d16dd08682e87383be254b37543dfcf0279"
+                        ],
+                        "sizeBytes": 32900579
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/proxy-agent@sha256:abf95907d2fdbc47cf1629de14b4d44675e8fac76a8b52e2613b92cee231791e"
+                        ],
+                        "sizeBytes": 28969868
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/gke-metrics-agent@sha256:beee3854b18a29aa9c7a9efaee91dd58e7ae3b0c8794395ca41f03e876bb7302"
+                        ],
+                        "sizeBytes": 27443414
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/gke-metrics-collector@sha256:3d76420863be0cdbdf5f9a512e032d9b20ae8fd7be4b5eca22ecdb1e867f23bf"
+                        ],
+                        "sizeBytes": 25809971
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/gke-metrics-collector:20241015_2300_RC0@sha256:1c838e782e8825f4c635ffa212833558976f16af700fbf4fcd9cf6103350d016",
+                            "eu.gcr.io/gke-release-staging/gke-metrics-collector:20241015_2300_RC0@sha256:1c838e782e8825f4c635ffa212833558976f16af700fbf4fcd9cf6103350d016",
+                            "gcr.io/gke-release-staging/gke-metrics-collector:20241015_2300_RC0@sha256:1c838e782e8825f4c635ffa212833558976f16af700fbf4fcd9cf6103350d016",
+                            "asia.gcr.io/gke-release-staging/gke-metrics-collector@sha256:1c838e782e8825f4c635ffa212833558976f16af700fbf4fcd9cf6103350d016",
+                            "eu.gcr.io/gke-release-staging/gke-metrics-collector@sha256:1c838e782e8825f4c635ffa212833558976f16af700fbf4fcd9cf6103350d016"
+                        ],
+                        "sizeBytes": 24863034
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/gke-metrics-collector@sha256:52df59dabb65d3d315ee03768ca1e9d84da2821a799c54cab7539f5f5b19849e"
+                        ],
+                        "sizeBytes": 24781314
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/gke-metrics-collector@sha256:d460e6b5088332f62b990f8a1f7bf6d9eca7c3f41cb974e3db493d6b0fc4ad70"
+                        ],
+                        "sizeBytes": 24425624
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/netd:v0.9.3-gke.6@sha256:42eabe7305d0e842f39bc3ab19de150d36c2464e218368e775308c306c11478c",
+                            "eu.gcr.io/gke-release-staging/netd:v0.9.3-gke.6@sha256:42eabe7305d0e842f39bc3ab19de150d36c2464e218368e775308c306c11478c",
+                            "gcr.io/gke-release-staging/netd:v0.9.3-gke.6@sha256:42eabe7305d0e842f39bc3ab19de150d36c2464e218368e775308c306c11478c",
+                            "asia.gcr.io/gke-release-staging/netd@sha256:42eabe7305d0e842f39bc3ab19de150d36c2464e218368e775308c306c11478c",
+                            "eu.gcr.io/gke-release-staging/netd@sha256:42eabe7305d0e842f39bc3ab19de150d36c2464e218368e775308c306c11478c"
+                        ],
+                        "sizeBytes": 24313759
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/cilium/hubble-cli:v0.13.5-gke.13@sha256:e4989d2f313be6f3fb0d9b79cf008e5443a0ee2c7a07342cc857108282369659",
+                            "eu.gcr.io/gke-release-staging/cilium/hubble-cli:v0.13.5-gke.13@sha256:e4989d2f313be6f3fb0d9b79cf008e5443a0ee2c7a07342cc857108282369659",
+                            "gcr.io/gke-release-staging/cilium/hubble-cli:v0.13.5-gke.13@sha256:e4989d2f313be6f3fb0d9b79cf008e5443a0ee2c7a07342cc857108282369659",
+                            "asia.gcr.io/gke-release-staging/cilium/hubble-cli@sha256:e4989d2f313be6f3fb0d9b79cf008e5443a0ee2c7a07342cc857108282369659",
+                            "eu.gcr.io/gke-release-staging/cilium/hubble-cli@sha256:e4989d2f313be6f3fb0d9b79cf008e5443a0ee2c7a07342cc857108282369659"
+                        ],
+                        "sizeBytes": 24124312
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/anthos-networking/anetd-sidecar:v2.9.77@sha256:2a788f8b3fc1112f706a7b22f13fb0e430d76c5743e6f8a6c2c350345f3a006d",
+                            "eu.gcr.io/gke-release-staging/anthos-networking/anetd-sidecar:v2.9.77@sha256:2a788f8b3fc1112f706a7b22f13fb0e430d76c5743e6f8a6c2c350345f3a006d",
+                            "gcr.io/gke-release-staging/anthos-networking/anetd-sidecar:v2.9.77@sha256:2a788f8b3fc1112f706a7b22f13fb0e430d76c5743e6f8a6c2c350345f3a006d",
+                            "asia.gcr.io/gke-release-staging/anthos-networking/anetd-sidecar@sha256:2a788f8b3fc1112f706a7b22f13fb0e430d76c5743e6f8a6c2c350345f3a006d",
+                            "eu.gcr.io/gke-release-staging/anthos-networking/anetd-sidecar@sha256:2a788f8b3fc1112f706a7b22f13fb0e430d76c5743e6f8a6c2c350345f3a006d"
+                        ],
+                        "sizeBytes": 23881188
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/cilium/hubble-relay:v1.15.6-gke1.31-gke.6@sha256:dc91b7d29630302dae8a3efd43798145a0186ad72101df85140f2a7389e4deff",
+                            "eu.gcr.io/gke-release-staging/cilium/hubble-relay:v1.15.6-gke1.31-gke.6@sha256:dc91b7d29630302dae8a3efd43798145a0186ad72101df85140f2a7389e4deff",
+                            "gcr.io/gke-release-staging/cilium/hubble-relay:v1.15.6-gke1.31-gke.6@sha256:dc91b7d29630302dae8a3efd43798145a0186ad72101df85140f2a7389e4deff",
+                            "asia.gcr.io/gke-release-staging/cilium/hubble-relay@sha256:dc91b7d29630302dae8a3efd43798145a0186ad72101df85140f2a7389e4deff",
+                            "eu.gcr.io/gke-release-staging/cilium/hubble-relay@sha256:dc91b7d29630302dae8a3efd43798145a0186ad72101df85140f2a7389e4deff"
+                        ],
+                        "sizeBytes": 22295404
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/gke-distroless/bash@sha256:12d99a6a72f4fecd689ead5d93001c1f3acea08ec72a55bbdfc070e0edc30fa4"
+                        ],
+                        "sizeBytes": 18654784
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/gke-distroless/bash@sha256:ff5d5abcc0cdd74d3ba43b0959b246c4432c14356b1414ce35d8feff820eb664"
+                        ],
+                        "sizeBytes": 18373482
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/ip-masq-agent:v2.11.0-gke.30@sha256:4035e9a6996d792ded07e94aab4e0a54bd3a3d58dddbbd0fb4edc8898a4c4d71",
+                            "eu.gcr.io/gke-release-staging/ip-masq-agent:v2.11.0-gke.30@sha256:4035e9a6996d792ded07e94aab4e0a54bd3a3d58dddbbd0fb4edc8898a4c4d71",
+                            "gcr.io/gke-release-staging/ip-masq-agent:v2.11.0-gke.30@sha256:4035e9a6996d792ded07e94aab4e0a54bd3a3d58dddbbd0fb4edc8898a4c4d71",
+                            "asia.gcr.io/gke-release-staging/ip-masq-agent@sha256:4035e9a6996d792ded07e94aab4e0a54bd3a3d58dddbbd0fb4edc8898a4c4d71",
+                            "eu.gcr.io/gke-release-staging/ip-masq-agent@sha256:4035e9a6996d792ded07e94aab4e0a54bd3a3d58dddbbd0fb4edc8898a4c4d71"
+                        ],
+                        "sizeBytes": 16420466
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/netd-init:v0.9.3-gke.6@sha256:9a3a71449bf45a9f3ce62d81f18ae3f610dd4f61add240953107426bb9df2ee8",
+                            "eu.gcr.io/gke-release-staging/netd-init:v0.9.3-gke.6@sha256:9a3a71449bf45a9f3ce62d81f18ae3f610dd4f61add240953107426bb9df2ee8",
+                            "gcr.io/gke-release-staging/netd-init:v0.9.3-gke.6@sha256:9a3a71449bf45a9f3ce62d81f18ae3f610dd4f61add240953107426bb9df2ee8",
+                            "asia.gcr.io/gke-release-staging/netd-init@sha256:9a3a71449bf45a9f3ce62d81f18ae3f610dd4f61add240953107426bb9df2ee8",
+                            "eu.gcr.io/gke-release-staging/netd-init@sha256:9a3a71449bf45a9f3ce62d81f18ae3f610dd4f61add240953107426bb9df2ee8"
+                        ],
+                        "sizeBytes": 15416166
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/egress-nat-controller:v0.2.13-gke.4@sha256:c093c35191f15dc16eef8a88395422660c0cd705994a9f22863ef53509f576d8",
+                            "eu.gcr.io/gke-release-staging/egress-nat-controller:v0.2.13-gke.4@sha256:c093c35191f15dc16eef8a88395422660c0cd705994a9f22863ef53509f576d8",
+                            "gcr.io/gke-release-staging/egress-nat-controller:v0.2.13-gke.4@sha256:c093c35191f15dc16eef8a88395422660c0cd705994a9f22863ef53509f576d8",
+                            "asia.gcr.io/gke-release-staging/egress-nat-controller@sha256:c093c35191f15dc16eef8a88395422660c0cd705994a9f22863ef53509f576d8",
+                            "eu.gcr.io/gke-release-staging/egress-nat-controller@sha256:c093c35191f15dc16eef8a88395422660c0cd705994a9f22863ef53509f576d8"
+                        ],
+                        "sizeBytes": 14387074
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/csi-node-driver-registrar@sha256:b2a29bd6d7e869cf0efd0011af2026a254ef1cf25e32ada7776db84b4a309935"
+                        ],
+                        "sizeBytes": 10821172
+                    }
+                ],
+                "nodeInfo": {
+                    "architecture": "amd64",
+                    "bootID": "b5bd4e60-9172-4db7-9679-f2e6e1fd343e",
+                    "containerRuntimeVersion": "containerd://1.7.24",
+                    "kernelVersion": "6.6.56+",
+                    "kubeProxyVersion": "v1.31.5-gke.1023000",
+                    "kubeletVersion": "v1.31.5-gke.1023000",
+                    "machineID": "a70b3bce0a6bbd7c9ff3665acde9e464",
+                    "operatingSystem": "linux",
+                    "osImage": "Container-Optimized OS from Google",
+                    "systemUUID": "a70b3bce-0a6b-bd7c-9ff3-665acde9e464"
+                }
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Node",
+            "metadata": {
+                "annotations": {
+                    "container.googleapis.com/instance_id": "6264810670246264917",
+                    "csi.volume.kubernetes.io/nodeid": "{\"pd.csi.storage.gke.io\":\"projects/llnl-flux/zones/us-central1-a/instances/gke-gpu-cluster-4-default-pool-f4c0ba61-t1fv\"}",
+                    "node.alpha.kubernetes.io/ttl": "0",
+                    "node.gke.io/last-applied-node-labels": "cloud.google.com/gke-accelerator=nvidia-tesla-v100,cloud.google.com/gke-boot-disk=pd-balanced,cloud.google.com/gke-container-runtime=containerd,cloud.google.com/gke-cpu-scaling-level=16,cloud.google.com/gke-gpu-driver-version=latest,cloud.google.com/gke-logging-variant=DEFAULT,cloud.google.com/gke-max-pods-per-node=110,cloud.google.com/gke-memory-gb-scaling-level=61,cloud.google.com/gke-nodepool=default-pool,cloud.google.com/gke-os-distribution=cos,cloud.google.com/gke-provisioning=standard,cloud.google.com/gke-stack-type=IPV4,cloud.google.com/machine-family=n1,cloud.google.com/private-node=false",
+                    "node.gke.io/last-applied-node-taints": "",
+                    "volumes.kubernetes.io/controller-managed-attach-detach": "true"
+                },
+                "creationTimestamp": "2025-02-20T05:37:09Z",
+                "labels": {
+                    "beta.kubernetes.io/arch": "amd64",
+                    "beta.kubernetes.io/instance-type": "n1-standard-16",
+                    "beta.kubernetes.io/os": "linux",
+                    "cloud.google.com/gke-accelerator": "nvidia-tesla-v100",
+                    "cloud.google.com/gke-boot-disk": "pd-balanced",
+                    "cloud.google.com/gke-container-runtime": "containerd",
+                    "cloud.google.com/gke-cpu-scaling-level": "16",
+                    "cloud.google.com/gke-gpu-driver-version": "latest",
+                    "cloud.google.com/gke-logging-variant": "DEFAULT",
+                    "cloud.google.com/gke-max-pods-per-node": "110",
+                    "cloud.google.com/gke-memory-gb-scaling-level": "61",
+                    "cloud.google.com/gke-nodepool": "default-pool",
+                    "cloud.google.com/gke-os-distribution": "cos",
+                    "cloud.google.com/gke-provisioning": "standard",
+                    "cloud.google.com/gke-stack-type": "IPV4",
+                    "cloud.google.com/machine-family": "n1",
+                    "cloud.google.com/private-node": "false",
+                    "failure-domain.beta.kubernetes.io/region": "us-central1",
+                    "failure-domain.beta.kubernetes.io/zone": "us-central1-a",
+                    "kubernetes.io/arch": "amd64",
+                    "kubernetes.io/hostname": "gke-gpu-cluster-4-default-pool-f4c0ba61-t1fv",
+                    "kubernetes.io/os": "linux",
+                    "node.kubernetes.io/instance-type": "n1-standard-16",
+                    "topology.gke.io/zone": "us-central1-a",
+                    "topology.kubernetes.io/region": "us-central1",
+                    "topology.kubernetes.io/zone": "us-central1-a"
+                },
+                "name": "gke-gpu-cluster-4-default-pool-f4c0ba61-t1fv",
+                "resourceVersion": "2677",
+                "uid": "2b4c8011-5c0b-4710-8462-f0115179088d"
+            },
+            "spec": {
+                "podCIDR": "10.20.2.0/24",
+                "podCIDRs": [
+                    "10.20.2.0/24"
+                ],
+                "providerID": "gce://llnl-flux/us-central1-a/gke-gpu-cluster-4-default-pool-f4c0ba61-t1fv"
+            },
+            "status": {
+                "addresses": [
+                    {
+                        "address": "10.128.0.41",
+                        "type": "InternalIP"
+                    },
+                    {
+                        "address": "34.170.157.75",
+                        "type": "ExternalIP"
+                    },
+                    {
+                        "address": "gke-gpu-cluster-4-default-pool-f4c0ba61-t1fv",
+                        "type": "Hostname"
+                    }
+                ],
+                "allocatable": {
+                    "cpu": "7910m",
+                    "ephemeral-storage": "47060071478",
+                    "hugepages-1Gi": "0",
+                    "hugepages-2Mi": "0",
+                    "memory": "56168372Ki",
+                    "nvidia.com/gpu": "4",
+                    "pods": "110"
+                },
+                "capacity": {
+                    "cpu": "8",
+                    "ephemeral-storage": "98831908Ki",
+                    "hugepages-1Gi": "0",
+                    "hugepages-2Mi": "0",
+                    "memory": "61724596Ki",
+                    "nvidia.com/gpu": "4",
+                    "pods": "110"
+                },
+                "conditions": [
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:37:12Z",
+                        "lastTransitionTime": "2025-02-20T05:37:10Z",
+                        "message": "NodeController create implicit route",
+                        "reason": "RouteCreated",
+                        "status": "False",
+                        "type": "NetworkUnavailable"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:49Z",
+                        "lastTransitionTime": "2025-02-20T05:35:48Z",
+                        "message": "kubelet is functioning properly",
+                        "reason": "NoFrequentKubeletRestart",
+                        "status": "False",
+                        "type": "FrequentKubeletRestart"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:49Z",
+                        "lastTransitionTime": "2025-02-20T05:35:48Z",
+                        "message": "Filesystem is not read-only",
+                        "reason": "FilesystemIsNotReadOnly",
+                        "status": "False",
+                        "type": "ReadonlyFilesystem"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:49Z",
+                        "lastTransitionTime": "2025-02-20T05:35:48Z",
+                        "message": "kernel has no deadlock",
+                        "reason": "KernelHasNoDeadlock",
+                        "status": "False",
+                        "type": "KernelDeadlock"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:49Z",
+                        "lastTransitionTime": "2025-02-20T05:35:48Z",
+                        "message": "No deprecation risk: did not find any deprecated 'mirrors' field in containerd's config",
+                        "reason": "DeprecatedMirrorsFieldInContainerdConfigurationNotDetected",
+                        "status": "False",
+                        "type": "DeprecatedMirrorsFieldInContainerdConfiguration"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:49Z",
+                        "lastTransitionTime": "2025-02-20T05:35:48Z",
+                        "message": "No deprecation risk: did not find any deprecated 'configs' field in containerd's config",
+                        "reason": "DeprecatedConfigsFieldInContainerdConfigurationNotDetected",
+                        "status": "False",
+                        "type": "DeprecatedConfigsFieldInContainerdConfiguration"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:49Z",
+                        "lastTransitionTime": "2025-02-20T05:35:48Z",
+                        "message": "docker overlay2 is functioning properly",
+                        "reason": "NoCorruptDockerOverlay2",
+                        "status": "False",
+                        "type": "CorruptDockerOverlay2"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:49Z",
+                        "lastTransitionTime": "2025-02-20T05:35:48Z",
+                        "message": "docker is functioning properly",
+                        "reason": "NoFrequentDockerRestart",
+                        "status": "False",
+                        "type": "FrequentDockerRestart"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:49Z",
+                        "lastTransitionTime": "2025-02-20T05:35:48Z",
+                        "message": "No deprecation risk: did not use v1alpha2 CRI",
+                        "reason": "DeprecatedUsingV1Alpha2CriNotDetected",
+                        "status": "False",
+                        "type": "DeprecatedUsingV1Alpha2Cri"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:49Z",
+                        "lastTransitionTime": "2025-02-20T05:35:48Z",
+                        "message": "No deprecation risk: did not find any deprecations other than 3 configs fields (auths/configs/mirrors), pulling schema v1 images and using v1alpha2 CRI.",
+                        "reason": "DeprecatedOtherContainerdFeaturesNotDetected",
+                        "status": "False",
+                        "type": "DeprecatedOtherContainerdFeatures"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:49Z",
+                        "lastTransitionTime": "2025-02-20T05:35:49Z",
+                        "message": "{\"managed\": {\"net.core.somaxconn\": \"2048\", \"net.ipv4.tcp_rmem\": \"4096 87380 16777216\", \"net.ipv4.tcp_wmem\": \"4096 16384 16777216\"}}",
+                        "reason": "NodeSysctlChange",
+                        "status": "True",
+                        "type": "SysctlChanged"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:49Z",
+                        "lastTransitionTime": "2025-02-20T05:35:48Z",
+                        "message": "node is functioning properly",
+                        "reason": "NoFrequentUnregisterNetDevice",
+                        "status": "False",
+                        "type": "FrequentUnregisterNetDevice"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:49Z",
+                        "lastTransitionTime": "2025-02-20T05:35:48Z",
+                        "message": "No deprecation risk: did not find any deprecated 'auths' field in containerd's config",
+                        "reason": "DeprecatedAuthsFieldInContainerdConfigurationNotDetected",
+                        "status": "False",
+                        "type": "DeprecatedAuthsFieldInContainerdConfiguration"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:49Z",
+                        "lastTransitionTime": "2025-02-20T05:35:48Z",
+                        "message": "No deprecation risk: did not pull any schema v1 images",
+                        "reason": "DeprecatedPullingSchemaV1ImageDetected",
+                        "status": "False",
+                        "type": "DeprecatedPullingSchemaV1Image"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:35:49Z",
+                        "lastTransitionTime": "2025-02-20T05:35:48Z",
+                        "message": "containerd is functioning properly",
+                        "reason": "NoFrequentContainerdRestart",
+                        "status": "False",
+                        "type": "FrequentContainerdRestart"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:38:20Z",
+                        "lastTransitionTime": "2025-02-20T05:34:47Z",
+                        "message": "kubelet has sufficient memory available",
+                        "reason": "KubeletHasSufficientMemory",
+                        "status": "False",
+                        "type": "MemoryPressure"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:38:20Z",
+                        "lastTransitionTime": "2025-02-20T05:34:47Z",
+                        "message": "kubelet has no disk pressure",
+                        "reason": "KubeletHasNoDiskPressure",
+                        "status": "False",
+                        "type": "DiskPressure"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:38:20Z",
+                        "lastTransitionTime": "2025-02-20T05:34:47Z",
+                        "message": "kubelet has sufficient PID available",
+                        "reason": "KubeletHasSufficientPID",
+                        "status": "False",
+                        "type": "PIDPressure"
+                    },
+                    {
+                        "lastHeartbeatTime": "2025-02-20T05:38:20Z",
+                        "lastTransitionTime": "2025-02-20T05:37:29Z",
+                        "message": "kubelet is posting ready status",
+                        "reason": "KubeletReady",
+                        "status": "True",
+                        "type": "Ready"
+                    }
+                ],
+                "daemonEndpoints": {
+                    "kubeletEndpoint": {
+                        "Port": 10250
+                    }
+                },
+                "images": [
+                    {
+                        "names": [
+                            "docker.io/library/cos-nvidia-installer:fixed",
+                            "gcr.io/cos-cloud/cos-gpu-installer:fixed",
+                            "us.gcr.io/cos-cloud/cos-gpu-installer:v2.4.6"
+                        ],
+                        "sizeBytes": 259811185
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/cilium/cilium:v1.15.6-gke1.31-gke.6@sha256:c0183d4ac380a84f28d7ccce3b4c00f6f1141fd95fa8b3239ecfa0e01a0d4eb4",
+                            "eu.gcr.io/gke-release-staging/cilium/cilium:v1.15.6-gke1.31-gke.6@sha256:c0183d4ac380a84f28d7ccce3b4c00f6f1141fd95fa8b3239ecfa0e01a0d4eb4",
+                            "gcr.io/gke-release-staging/cilium/cilium:v1.15.6-gke1.31-gke.6@sha256:c0183d4ac380a84f28d7ccce3b4c00f6f1141fd95fa8b3239ecfa0e01a0d4eb4",
+                            "asia.gcr.io/gke-release-staging/cilium/cilium@sha256:c0183d4ac380a84f28d7ccce3b4c00f6f1141fd95fa8b3239ecfa0e01a0d4eb4",
+                            "eu.gcr.io/gke-release-staging/cilium/cilium@sha256:c0183d4ac380a84f28d7ccce3b4c00f6f1141fd95fa8b3239ecfa0e01a0d4eb4"
+                        ],
+                        "sizeBytes": 172861670
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/prometheus-engine/prometheus@sha256:12a1ea30e057e7793982cf3c6cbcc3a18f7aaffe060b0ba59fb2da5433a40fd2"
+                        ],
+                        "sizeBytes": 113373794
+                    },
+                    {
+                        "names": [
+                            "gke.gcr.io/kube-proxy-amd64:v1.31.5-gke.100",
+                            "gke.gcr.io/kube-proxy-amd64:v1.31.5-gke.1023000",
+                            "k8s.gcr.io/kube-proxy-amd64:v1.31.5-gke.100",
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/kube-proxy-amd64:v1.31.5-gke.1023000"
+                        ],
+                        "sizeBytes": 95048888
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/fluent-bit@sha256:bd48755377a723a91bc3fd96f67796ba3a3023808fd69b37d97cb1aa5985d9ae"
+                        ],
+                        "sizeBytes": 93330926
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/gcp-compute-persistent-disk-csi-driver@sha256:bbbf275b1482cf3fc658f0bde28b1fbd24054451b5a97e23812821c82374a2b2"
+                        ],
+                        "sizeBytes": 60814920
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/prometheus-engine/config-reloader@sha256:c4a8f16a9daed4d61420b55d3c6e5c3c68301c7fc33e2ebd0673ac9fb7c6191d"
+                        ],
+                        "sizeBytes": 59977054
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/gpu-maintenance-handler@sha256:1dae09acd592f5c02c55a1dff0bc383e00f5ce4412f35b636bf3589093e4ea40"
+                        ],
+                        "sizeBytes": 48975922
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/cilium/certgen:v0.1.13-gke.13@sha256:7988f0b61437528566934d7ecc6e9a7a7d1b379e315023b03172a2bf9a7147cd",
+                            "eu.gcr.io/gke-release-staging/cilium/certgen:v0.1.13-gke.13@sha256:7988f0b61437528566934d7ecc6e9a7a7d1b379e315023b03172a2bf9a7147cd",
+                            "gcr.io/gke-release-staging/cilium/certgen:v0.1.13-gke.13@sha256:7988f0b61437528566934d7ecc6e9a7a7d1b379e315023b03172a2bf9a7147cd",
+                            "asia.gcr.io/gke-release-staging/cilium/certgen@sha256:7988f0b61437528566934d7ecc6e9a7a7d1b379e315023b03172a2bf9a7147cd",
+                            "eu.gcr.io/gke-release-staging/cilium/certgen@sha256:7988f0b61437528566934d7ecc6e9a7a7d1b379e315023b03172a2bf9a7147cd"
+                        ],
+                        "sizeBytes": 40742056
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/k8s-dns-dnsmasq-nanny@sha256:91e0e71fc0ef3d99d9a6f9f83ff3ff5e2ab972ab9a5d4516945d778fdc014849"
+                        ],
+                        "sizeBytes": 36991148
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/prometheus-to-sd@sha256:15e59ea94ecb15f00a001deea2e81537d5045e20bb76cc1b49608dcac32d7497"
+                        ],
+                        "sizeBytes": 35881550
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/cilium/slim-daemon/anet-agent:v1.15.6-gke1.31-gke.6@sha256:26a20f914f9935a3f477070dd8b40edf9c19900fe24288edb161d1423d242cc3",
+                            "eu.gcr.io/gke-release-staging/cilium/slim-daemon/anet-agent:v1.15.6-gke1.31-gke.6@sha256:26a20f914f9935a3f477070dd8b40edf9c19900fe24288edb161d1423d242cc3",
+                            "gcr.io/gke-release-staging/cilium/slim-daemon/anet-agent:v1.15.6-gke1.31-gke.6@sha256:26a20f914f9935a3f477070dd8b40edf9c19900fe24288edb161d1423d242cc3",
+                            "asia.gcr.io/gke-release-staging/cilium/slim-daemon/anet-agent@sha256:26a20f914f9935a3f477070dd8b40edf9c19900fe24288edb161d1423d242cc3",
+                            "eu.gcr.io/gke-release-staging/cilium/slim-daemon/anet-agent@sha256:26a20f914f9935a3f477070dd8b40edf9c19900fe24288edb161d1423d242cc3"
+                        ],
+                        "sizeBytes": 34910411
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/fluent-bit-gke-exporter@sha256:c85045c80354c2ac7931a103cc3f9d16dd08682e87383be254b37543dfcf0279"
+                        ],
+                        "sizeBytes": 32900579
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/k8s-dns-kube-dns@sha256:795f5c60e59e843f1027074d980ffb12b4421dee32b89e5029ad3a080e25d3c0"
+                        ],
+                        "sizeBytes": 32656706
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/k8s-dns-sidecar@sha256:495ae9ab1edbf467dcb5a5c21d8772279674eeb624ce656640156e7cde3639a4"
+                        ],
+                        "sizeBytes": 29101972
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/proxy-agent@sha256:abf95907d2fdbc47cf1629de14b4d44675e8fac76a8b52e2613b92cee231791e"
+                        ],
+                        "sizeBytes": 28969868
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/gke-metrics-agent@sha256:beee3854b18a29aa9c7a9efaee91dd58e7ae3b0c8794395ca41f03e876bb7302"
+                        ],
+                        "sizeBytes": 27443414
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/gke-metrics-collector@sha256:f66e54c779fcc81264db96ad775f190c14d1c52234bb64370fd679fbfb47b267"
+                        ],
+                        "sizeBytes": 26051456
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/gke-metrics-collector@sha256:93c84f8538a39c07e4cfc8867a9ee143e65a5a6418a38574aa6a78e950dd3ee5"
+                        ],
+                        "sizeBytes": 25814446
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/gke-metrics-collector@sha256:3d76420863be0cdbdf5f9a512e032d9b20ae8fd7be4b5eca22ecdb1e867f23bf"
+                        ],
+                        "sizeBytes": 25809971
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/gke-metrics-collector:20241015_2300_RC0@sha256:1c838e782e8825f4c635ffa212833558976f16af700fbf4fcd9cf6103350d016",
+                            "eu.gcr.io/gke-release-staging/gke-metrics-collector:20241015_2300_RC0@sha256:1c838e782e8825f4c635ffa212833558976f16af700fbf4fcd9cf6103350d016",
+                            "gcr.io/gke-release-staging/gke-metrics-collector:20241015_2300_RC0@sha256:1c838e782e8825f4c635ffa212833558976f16af700fbf4fcd9cf6103350d016",
+                            "asia.gcr.io/gke-release-staging/gke-metrics-collector@sha256:1c838e782e8825f4c635ffa212833558976f16af700fbf4fcd9cf6103350d016",
+                            "eu.gcr.io/gke-release-staging/gke-metrics-collector@sha256:1c838e782e8825f4c635ffa212833558976f16af700fbf4fcd9cf6103350d016"
+                        ],
+                        "sizeBytes": 24863034
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/gke-metrics-collector@sha256:52df59dabb65d3d315ee03768ca1e9d84da2821a799c54cab7539f5f5b19849e"
+                        ],
+                        "sizeBytes": 24781314
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/gke-metrics-collector@sha256:d460e6b5088332f62b990f8a1f7bf6d9eca7c3f41cb974e3db493d6b0fc4ad70"
+                        ],
+                        "sizeBytes": 24425624
+                    },
+                    {
+                        "names": [
+                            "asia.gcr.io/gke-release-staging/netd:v0.9.3-gke.6@sha256:42eabe7305d0e842f39bc3ab19de150d36c2464e218368e775308c306c11478c",
+                            "eu.gcr.io/gke-release-staging/netd:v0.9.3-gke.6@sha256:42eabe7305d0e842f39bc3ab19de150d36c2464e218368e775308c306c11478c",
+                            "gcr.io/gke-release-staging/netd:v0.9.3-gke.6@sha256:42eabe7305d0e842f39bc3ab19de150d36c2464e218368e775308c306c11478c",
+                            "asia.gcr.io/gke-release-staging/netd@sha256:42eabe7305d0e842f39bc3ab19de150d36c2464e218368e775308c306c11478c",
+                            "eu.gcr.io/gke-release-staging/netd@sha256:42eabe7305d0e842f39bc3ab19de150d36c2464e218368e775308c306c11478c"
+                        ],
+                        "sizeBytes": 24314779
+                    },
+                    {
+                        "names": [
+                            "us-central1-artifactregistry.gcr.io/gke-release/gke-release/event-exporter@sha256:1a6b1b8791cb5d5772887aeacf93a5c56770b38fb96bf2c860ebd36b5bd24efe"
+                        ],
+                        "sizeBytes": 24294764
+                    }
+                ],
+                "nodeInfo": {
+                    "architecture": "amd64",
+                    "bootID": "cb8ff62b-ef27-474d-89a4-8d54d4f448a7",
+                    "containerRuntimeVersion": "containerd://1.7.24",
+                    "kernelVersion": "6.6.56+",
+                    "kubeProxyVersion": "v1.31.5-gke.1023000",
+                    "kubeletVersion": "v1.31.5-gke.1023000",
+                    "machineID": "68da58748f9167b660e92bd5f7e0de71",
+                    "operatingSystem": "linux",
+                    "osImage": "Container-Optimized OS from Google",
+                    "systemUUID": "68da5874-8f91-67b6-60e9-2bd5f7e0de71"
+                }
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+}

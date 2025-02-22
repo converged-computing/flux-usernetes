@@ -12,14 +12,13 @@ make
 cd ../
 ```
 
-Then you'll need to add an ephemeral IP address to flux-001, and ssh into it as jupyter. This should work given you have built the machine with an ssh authorized key added.
+Then you'll need to add an ephemeral IP address to flux-001, and ssh into it as ubuntu. This should work given you have built the machine with an ssh authorized key added.
 
 ```bash
-ssh -o IdentitiesOnly=yes jupyter@23.251.159.199
+ssh -o IdentitiesOnly=yes ubuntu@35.223.181.250
 ```
 
 ### Control Plane
-
 
 Determine that nvidia is a runtime option, and rootless is supported:
 
@@ -35,6 +34,7 @@ docker info | grep root
 cd /opt/usernetes
 make up
 sleep 5
+make nvidia
 make kubeadm-init
 make install-flannel
 make kubeconfig
@@ -57,6 +57,7 @@ Copy key to worker nodes (TODO, parallel ssh install) and key already on nodes.
 ```bash
 scp ./join-command flux-002:/opt/usernetes/join-command
 ssh flux-002 make -C /opt/usernetes up 
+ssh flux-002 make -C /opt/usernetes nvidia
 sleep 5
 ssh flux-002 make -C /opt/usernetes kubeadm-join
 ```
@@ -86,7 +87,7 @@ kubectl get nodes
 And deploy the driver installers:
 
 ```bash
-kubectl apply -f nvidia-device-plugin.yml
+kubectl apply -f nvidia-device-plugin.yaml
 ```
 
 See the nvidia device plugin pods, and check that GPU are found:
@@ -155,37 +156,6 @@ I0222 08:03:46.220361       1 server.go:146] Registered device plugin for 'nvidi
 ```
 </details>
 
-Then install the GPU operator
-
-```bash
-kubectl create ns gpu-operator
-source <(kubectl completion bash)
-kubectl get nodes
-```
-
-Install the GPU operator.
-
-```bash
-helm repo add nvidia https://helm.ngc.nvidia.com/nvidia && helm repo update
-helm install gpu-operator --wait -n gpu-operator --create-namespace nvidia/gpu-operator --version=v24.9.2
-```
-
-The docker daemon.json should look like this:
-
-```json
-{
-    "features": {
-        "cdi": true
-    },
-    "runtimes": {
-        "nvidia": {
-            "args": [],
-            "path": "nvidia-container-runtime"
-        }
-    }
-}
-```
-
 Wait for GPU to show up:
 
 ```bash
@@ -225,6 +195,8 @@ kubectl apply -f simple.yaml
 
 ### GPU
 
+Important! When you run these, the time wrapper is going to include pulling the containers (and waiting) for the first run, so it needs to be thrown away.
+
 #### 1 node, 2 GPU/worker, n1-standard-16
 
 This was run with rootful docker. The extended setup never worked (reproduced).
@@ -236,4 +208,17 @@ This was run with rootful docker. The extended setup never worked (reproduced).
 - 1 node, 2 GPU/node, batch 128, 2 epochs: 0m25.609s
 - 1 node, 2 GPU/node, batch 128, 1 epochs: 0m20.057s
 
+#### 2 node, 1 GPU/worker, n1-standard-8
 
+- 1 node, 1 GPU/node, batch 128, 4 epochs: 2m10.167s
+- 1 node, 1 GPU/node, batch 128, 2 epochs: 1m6.049s
+- 1 node, 1 GPU/node, batch 128, 1 epochs: 0m44.510s
+
+
+For the largest number of epochs:
+
+```
+{metricName: accuracy, metricValue: 0.8067};{metricName: loss, metricValue: 0.5305}
+```
+
+Not great, but what we care about is the comparison.

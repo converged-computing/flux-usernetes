@@ -39,18 +39,21 @@ spec:
       priorityClassName: "system-node-critical"
       containers:
       - image: nvcr.io/nvidia/k8s-device-plugin:v0.17.0
-        args:
-         # Defaulting to auto won't find devices
-         - "--device-discovery-strategy=tegra"
         name: nvidia-device-plugin-ctr
+        # This should not be needed with cdi
+        # args:
+        #   - "--device-discovery-strategy=tegra"
         env:
           - name: FAIL_ON_INIT_ERROR
             value: "false"
-# Note that it worked without these
-#        securityContext:
-#          privileged: true
-#          capabilities:
-#            add: ["ALL"]
+          - name: CUDA_VISIBLE_DEVICES
+            value: all
+        # testing / debugging
+        # command: ["sleep", "infinity"]
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
         volumeMounts:
         - name: device-plugin
           mountPath: /var/lib/kubelet/device-plugins

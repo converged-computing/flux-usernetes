@@ -29,6 +29,10 @@ chown nobody:nobody /var/nfs/home || true
 echo "flux ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 printf "flux user identifiers:\n$(id flux)\n"
 
+# Regenerate resources
+flux R encode --hosts=flux-[001-999] --local > R
+sudo mv R /usr/etc/flux/system/R
+
 printf "\n📦 Resources\n"
 cat /usr/etc/flux/system/R
 

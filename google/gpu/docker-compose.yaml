@@ -11,13 +11,15 @@ services:
     networks:
       default:
         ipv4_address: ${NODE_IP}
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all # or number of GPUs
-              capabilities: [gpu]
+    devices:
+      - nvidia.com/gpu
+    # deploy:
+    #  resources:
+    #    reservations:
+    #      devices:
+    #        - driver: nvidia
+    #          count: all # or number of GPUs
+    #          capabilities: [gpu]
     ports:
       # <host>:<container>
       # etcd (default: 2379)

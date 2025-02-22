@@ -33,7 +33,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   socat
 ADD Dockerfile.d/etc_udev_rules.d_90-flannel.rules /etc/udev/rules.d/90-flannel.rules
 ADD Dockerfile.d/u7s-entrypoint.sh /
-RUN apt-get install -y gnupg2 && apt-get update
+RUN apt-get install -y gnupg2 vim && apt-get update
 
 # If not set, is set to "void"
 ENV NVIDIA_VISIBLE_DEVICES=all
@@ -41,11 +41,9 @@ ENV NVIDIA_VISIBLE_DEVICES=all
 RUN /bin/bash -c "curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
   && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
     sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
-    tee /etc/apt/sources.list.d/nvidia-container-toolkit.list" && apt-get update && apt-get install -y nvidia-container-toolkit && nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml --device-name-strategy=uuid
+    tee /etc/apt/sources.list.d/nvidia-container-toolkit.list" && apt-get update && apt-get install -y nvidia-container-toolkit && nvidia-ctk runtime configure --runtime=containerd
 
-# In practice I didn't need this either.
-# This is run in entrypoint
-# nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml --device-name-strategy=uuid && nvidia-ctk cdi list && nvidia-ctk config --in-place --set nvidia-container-runtime.mode=cdi && nvidia-ctk runtime configure --runtime=containerd --cdi.enabled && systemctl restart containerd
+# note we need to run make nvidia
 
 ENTRYPOINT ["/u7s-entrypoint.sh", "/usr/local/bin/entrypoint", "/sbin/init"]
 

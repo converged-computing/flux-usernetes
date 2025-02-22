@@ -1,4 +1,4 @@
-compute_family = "usernetes-gpu"
+compute_family = "usernetes-gpu-ubuntu"
 compute_node_specs = [
   {
     name_prefix  = "flux"
@@ -18,7 +18,6 @@ sudo modprobe iptable_nat
 
 sudo rm -rf /etc/cdi/nvidia.yaml
 sudo nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml --device-name-strategy=uuid
-sudo systemctl restart docker.service docker.socket
 systemctl --user restart docker.service
 
 mkdir -p /var/nfs/home || true

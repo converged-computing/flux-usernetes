@@ -214,7 +214,6 @@ This was run with rootful docker. The extended setup never worked (reproduced).
 - 1 node, 1 GPU/node, batch 128, 2 epochs: 1m6.049s
 - 1 node, 1 GPU/node, batch 128, 1 epochs: 0m44.510s
 
-
 For the largest number of epochs:
 
 ```

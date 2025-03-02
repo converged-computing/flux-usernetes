@@ -1,8 +1,12 @@
 # Usernetes and Flux on "Bare Metal" on Google Cloud Compute Engine
 
 This is a setup akin to Cluster Toolkit (using Terraform) to run Flux on Google Cloud, and add Usernetes.
-Google Cloud does not support any kind of special networking, so we will rely on ethernet. This setup comes also with Singularity and a "bare metal" install of lammps.
-You'll need to build from [build-images](build-images).
+Google Cloud does not support any kind of special networking, so we will rely on ethernet. This setup comes also with Singularity and a "bare metal" install of lammps. You'll need to build from [build-images](build-images).
+
+## Included:
+
+ - [gpu](gpu): A GPU setup that also installs the nvidia device plugin, exposed with CDI and the nvidia container runtime.
+ - [experiment](https://github.com/converged-computing/google-performance-study/tree/main/experiments/usernetes/mnist-gpu): Small experiments with Usernetes and GPU (in another repository)
 
 ## Usage
 
@@ -30,6 +34,7 @@ everything setup already. Instead of the gcloud command, you'll want to do somet
 ```bash
 ssh ubuntu@<address>
 ```
+
 And that will work if your key is added.
 
 ### Control Plane

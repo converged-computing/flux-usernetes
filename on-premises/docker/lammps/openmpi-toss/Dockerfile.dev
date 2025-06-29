@@ -1,0 +1,5 @@
+FROM ghcr.io/converged-computing/lc-toss4-base:toss.4.8-2.x86_64
+
+COPY ./rpms /rpms
+
+

@@ -1,0 +1,29 @@
+[1751139362.980589] [flux-sample-14:107  :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+
+# OSU MPI Latency Test v7.5
+# Datatype: MPI_CHAR.
+# Size       Avg Latency(us)
+[1751139362.989292] [flux-sample-22:123  :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+1                       2.22
+2                       2.22
+4                       2.22
+8                       2.22
+16                      2.23
+32                      2.48
+64                      2.77
+128                     2.78
+256                     3.50
+512                     3.53
+1024                    4.11
+2048                    4.26
+4096                    5.29
+8192                    5.98
+16384                   6.85
+32768                   8.99
+65536                  12.29
+131072                 19.41
+262144                 30.13
+524288                 51.24
+1048576                93.89
+2097152               179.05
+4194304               348.86

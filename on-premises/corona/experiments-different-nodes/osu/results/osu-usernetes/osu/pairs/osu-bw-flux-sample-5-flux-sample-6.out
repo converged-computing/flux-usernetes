@@ -1,0 +1,29 @@
+[1751076846.692815] [flux-sample-5:119  :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+
+# OSU MPI Bandwidth Test v7.5
+# Datatype: MPI_CHAR.
+# Size      Bandwidth (MB/s)
+[1751076846.691138] [flux-sample-6:95   :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+1                       1.88
+2                       3.77
+4                       7.53
+8                      15.12
+16                     30.20
+32                     59.69
+64                    117.75
+128                   235.21
+256                   443.33
+512                   877.54
+1024                 1632.05
+2048                 3789.71
+4096                 5616.37
+8192                 8571.78
+16384                9221.23
+32768                9676.48
+65536               11656.08
+131072              12139.30
+262144              12241.64
+524288              12292.81
+1048576             12319.42
+2097152             12331.79
+4194304             12338.50

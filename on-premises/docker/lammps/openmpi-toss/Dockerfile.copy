@@ -1,0 +1,53 @@
+FROM ghcr.io/converged-computing/lc-toss4-base:toss.4.8-2.x86_64
+
+# podman build -t ghcr.io/converged-computing/usrnetes-python:lammps-shrink .
+
+COPY ./examples /opt/lammps/examples
+COPY ./build/install ./opt/lammps
+ENV PATH=$PATH:/opt/lammps/bin
+
+# This needs to come first if tries to upgrade stuffs
+# RUN dnf update -y && dnf install -y findutils
+
+COPY build-libs/usr/tce/packages/mvapich2/mvapich2-2.3.7-intel-classic-2021.6.0/lib/ \
+     /usr/tce/packages/mvapich2/mvapich2-2.3.7-intel-classic-2021.6.0/lib/
+
+COPY build-libs/usr/tce/backend/installations/linux-rhel8-x86_64/gcc-10.3.1/intel-oneapi-compilers-2022.1.0-43xp3r52jx2q2rkf3ctzvskqu572xbky/compiler/2022.1.0/linux/compiler/lib/intel64_lin/ \
+     /usr/tce/backend/installations/linux-rhel8-x86_64/gcc-10.3.1/intel-oneapi-compilers-2022.1.0-43xp3r52jx2q2rkf3ctzvskqu572xbky/compiler/2022.1.0/linux/compiler/lib/intel64_lin/
+
+# Now, copy individual files from the staged /lib64/
+COPY build-libs/lib64/libgomp.so.1 /lib64/libgomp.so.1
+COPY build-libs/lib64/libpthread.so.0 /lib64/libpthread.so.0
+COPY build-libs/lib64/libstdc++.so.6 /lib64/libstdc++.so.6
+COPY build-libs/lib64/libm.so.6 /lib64/libm.so.6
+COPY build-libs/lib64/libgcc_s.so.1 /lib64/libgcc_s.so.1
+COPY build-libs/lib64/libc.so.6 /lib64/libc.so.6
+COPY build-libs/lib64/libjpeg.so.62 /lib64/libjpeg.so.62
+COPY build-libs/lib64/libpng16.so.16 /lib64/libpng16.so.16
+COPY build-libs/lib64/libz.so.1 /lib64/libz.so.1
+COPY build-libs/lib64/libfftw3.so.3 /lib64/libfftw3.so.3
+COPY build-libs/lib64/libfftw3_omp.so.3 /lib64/libfftw3_omp.so.3
+COPY build-libs/lib64/libdl.so.2 /lib64/libdl.so.2
+COPY build-libs/lib64/libnuma.so.1 /lib64/libnuma.so.1
+COPY build-libs/lib64/libudev.so.1 /lib64/libudev.so.1
+COPY build-libs/lib64/libpciaccess.so.0 /lib64/libpciaccess.so.0
+COPY build-libs/lib64/libXNVCtrl.so.0 /lib64/libXNVCtrl.so.0
+COPY build-libs/lib64/libXext.so.6 /lib64/libXext.so.6
+COPY build-libs/lib64/libX11.so.6 /lib64/libX11.so.6
+COPY build-libs/lib64/libxml2.so.2 /lib64/libxml2.so.2
+COPY build-libs/lib64/librt.so.1 /lib64/librt.so.1
+COPY build-libs/lib64/ld-linux-x86-64.so.2 /lib64/ld-linux-x86-64.so.2
+COPY build-libs/lib64/libmount.so.1 /lib64/libmount.so.1
+COPY build-libs/lib64/libxcb.so.1 /lib64/libxcb.so.1
+COPY build-libs/lib64/liblzma.so.5 /lib64/liblzma.so.5
+COPY build-libs/lib64/libblkid.so.1 /lib64/libblkid.so.1
+COPY build-libs/lib64/libuuid.so.1 /lib64/libuuid.so.1
+COPY build-libs/lib64/libselinux.so.1 /lib64/libselinux.so.1
+COPY build-libs/lib64/libXau.so.6 /lib64/libXau.so.6
+COPY build-libs/lib64/libpcre2-8.so.0 /lib64/libpcre2-8.so.0
+
+# If these custom paths are not typically in the system's search path within the container,
+# you will likely still need to add them to LD_LIBRARY_PATH:
+ENV LD_LIBRARY_PATH="/usr/tce/packages/mvapich2/mvapich2-2.3.7-intel-classic-2021.6.0/lib/:/usr/tce/backend/installations/linux-rhel8-x86_64/gcc-10.3.1/intel-oneapi-compilers-2022.1.0-43xp3r52jx2q2rkf3ctzvskqu572xbky/compiler/2022.1.0/linux/compiler/lib/intel64_lin/:/opt/lammps/lib64:${LD_LIBRARY_PATH}"
+
+WORKDIR /opt/lammps/examples/reaxff/HNS

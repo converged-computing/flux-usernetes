@@ -1,0 +1,25 @@
+apiVersion: flux-framework.org/v1alpha2
+kind: MiniCluster
+metadata:
+  name: flux-sample
+spec:
+  size: 32
+  logging:
+    quiet: false
+  flux:
+    container:
+      image: ghcr.io/converged-computing/flux-view-rocky:tag-8
+      disable: true
+  interactive: true
+  containers:
+    - image: ghcr.io/converged-computing/lc-toss4-base:lammps
+      pullAlways: true
+      volumes:
+        my-empty-dir:
+          emptyDir: true
+          emptyDirMedium: "memory"
+      securityContext:
+        privileged: true
+      #  addCapabilities: ["SYS_RESOURCE", "IPC_LOCK"]
+      workingDir: /opt/lammps/examples/reaxff/HNS
+      command: lmp -v x 16 -v y 8 -v z 8 -in in.reaxc.hns -nocite

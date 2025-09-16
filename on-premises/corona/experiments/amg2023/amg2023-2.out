@@ -1,0 +1,62 @@
+Running with these driver parameters:
+  Problem ID    = 2
+
+=============================================
+Hypre init times:
+=============================================
+Hypre init:
+  wall clock time = 0.000065 seconds
+  Laplacian_7pt:
+    (Nx, Ny, Nz) = (1024, 1024, 768)
+    (Px, Py, Pz) = (4, 4, 6)
+
+=============================================
+Generate Matrix:
+=============================================
+Spatial Operator:
+  wall clock time = 7.266024 seconds
+  RHS vector has unit components
+  Initial guess is 0
+=============================================
+IJ Vector Setup:
+=============================================
+RHS and Initial Guess:
+  wall clock time = 0.506750 seconds
+=============================================
+Problem 2: AMG Setup Time:
+=============================================
+PCG Setup:
+  wall clock time = 49.820312 seconds
+
+FOM_Setup: nnz_AP / Setup Phase Time: 1.951164e+08
+
+=============================================
+Problem 2: AMG-PCG Solve Time:
+=============================================
+PCG Solve:
+  wall clock time = 49.969756 seconds
+
+Iterations = 26
+Final Relative Residual Norm = 8.128788e-09
+
+
+FOM_Solve: nnz_AP * iterations / Solve Phase Time: 1.945329e+08
+
+
+
+Figure of Merit (FOM): nnz_AP / (Setup Phase Time + 3 * Solve Phase Time) 4.866961e+07
+
+FLUX EVENTS
+{"timestamp":1758000439.872782,"name":"submit","context":{"userid":0,"urgency":16,"flags":0,"version":1}}
+{"timestamp":1758000439.8836522,"name":"validate"}
+{"timestamp":1758000439.8941936,"name":"depend"}
+{"timestamp":1758000439.8942239,"name":"priority","context":{"priority":16}}
+{"timestamp":1758000439.8951676,"name":"alloc","context":{"annotations":{"sched":{"resource_summary":"rank[0-1]/core[0-47]"}}}}
+{"timestamp":1758000439.8977618,"name":"start"}
+{"timestamp":1758000554.3005099,"name":"finish","context":{"status":0}}
+{"timestamp":1758000554.3018045,"name":"release","context":{"ranks":"all","final":true}}
+{"timestamp":1758000554.3018346,"name":"free"}
+{"timestamp":1758000554.3018477,"name":"clean"}
+
+FLUX RESOURCES
+{"version": 1, "execution": {"R_lite": [{"rank": "0-1", "children": {"core": "0-47"}}], "starttime": 1758000439.8943212, "expiration": 0.0, "nodelist": ["flux-sample-[0-1]"]}}

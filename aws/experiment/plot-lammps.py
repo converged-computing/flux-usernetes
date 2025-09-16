@@ -255,15 +255,10 @@ def plot_results(df, outdir):
         ext="png",
         plotname="lammps-by-nodes",
         hue="experiment",
-        plot_type="box",
+        plot_type="bar",
         xlabel="Nodes",
         ylabel="Time (seconds)",
     )
-
-    import IPython
-
-    IPython.embed()
-
 
 def parse_data(files):
     """
@@ -345,6 +340,15 @@ def make_plot(
         ax = plotfunc(
             x=xdimension, y=ydimension, hue=hue, data=df, linewidth=0.8, palette=palette
         )
+    elif plot_type == "bar":
+        ax = sns.barplot(
+            x=xdimension,
+            y=ydimension,
+            hue=hue,
+            data=df,
+            linewidth=0.8,
+            palette=palette,
+        )    
     else:
         ax = plotfunc(
             x=xdimension,

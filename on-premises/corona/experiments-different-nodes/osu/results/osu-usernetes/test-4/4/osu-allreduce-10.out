@@ -1,0 +1,215 @@
+[1751005262.870665] [flux-sample-1:1528 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.890824] [flux-sample-1:1526 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.870665] [flux-sample-1:1523 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005263.030207] [flux-sample-0:1685 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005263.028196] [flux-sample-0:1681 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005263.027812] [flux-sample-0:1679 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005263.028638] [flux-sample-0:1677 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.955236] [flux-sample-0:1675 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.946199] [flux-sample-0:1670 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.946200] [flux-sample-0:1668 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.869306] [flux-sample-0:1667 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.946200] [flux-sample-0:1665 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.944231] [flux-sample-0:1663 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.955417] [flux-sample-0:1660 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.947347] [flux-sample-0:1657 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.863169] [flux-sample-0:1655 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.890106] [flux-sample-0:1651 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.863169] [flux-sample-0:1649 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.941006] [flux-sample-0:1643 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.633444] [flux-sample-2:1428 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.990005] [flux-sample-0:1687 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005263.030207] [flux-sample-0:1683 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.955236] [flux-sample-0:1672 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.875788] [flux-sample-0:1646 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.941006] [flux-sample-0:1641 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.868974] [flux-sample-0:1639 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.803413] [flux-sample-0:1638 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.863171] [flux-sample-0:1635 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.646027] [flux-sample-2:1427 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.875010] [flux-sample-2:1515 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.857118] [flux-sample-2:1513 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.870818] [flux-sample-2:1511 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.885304] [flux-sample-2:1504 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.725018] [flux-sample-2:1430 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.714943] [flux-sample-2:1429 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.617510] [flux-sample-2:1425 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.631057] [flux-sample-2:1424 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.887048] [flux-sample-2:1508 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.847026] [flux-sample-2:1506 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.875350] [flux-sample-2:1502 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.877265] [flux-sample-2:1501 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.885306] [flux-sample-2:1499 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.870128] [flux-sample-2:1497 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.858577] [flux-sample-2:1495 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.904309] [flux-sample-1:1522 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.870128] [flux-sample-2:1493 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.903281] [flux-sample-1:1519 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.855708] [flux-sample-2:1491 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.898734] [flux-sample-1:1517 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.869472] [flux-sample-2:1489 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.884699] [flux-sample-1:1514 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.886149] [flux-sample-2:1486 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.884699] [flux-sample-1:1512 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.902392] [flux-sample-1:1510 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.870648] [flux-sample-1:1507 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.914068] [flux-sample-1:1506 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.903684] [flux-sample-1:1502 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.901886] [flux-sample-1:1498 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.907513] [flux-sample-1:1485 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.839359] [flux-sample-2:1484 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.906389] [flux-sample-3:1515 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.863749] [flux-sample-2:1482 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.810169] [flux-sample-3:1513 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.799330] [flux-sample-2:1480 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.864090] [flux-sample-3:1511 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.799420] [flux-sample-2:1477 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.870648] [flux-sample-1:1504 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.885277] [flux-sample-3:1510 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005263.070721] [flux-sample-0:1618 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005263.051896] [flux-sample-0:1616 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.843262] [flux-sample-2:1475 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005263.055602] [flux-sample-0:1624 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005263.058647] [flux-sample-0:1607 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.904863] [flux-sample-1:1501 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.971980] [flux-sample-0:1634 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005263.051906] [flux-sample-0:1631 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005263.056021] [flux-sample-0:1629 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005263.060247] [flux-sample-0:1621 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005263.056028] [flux-sample-0:1603 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005263.071967] [flux-sample-0:1602 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005263.061334] [flux-sample-0:1598 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.852645] [flux-sample-3:1507 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005263.067083] [flux-sample-0:1628 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005263.068381] [flux-sample-0:1622 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005263.074090] [flux-sample-0:1612 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005263.067080] [flux-sample-0:1605 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005263.068414] [flux-sample-0:1601 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005263.048929] [flux-sample-0:1597 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005263.071410] [flux-sample-0:1596 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005263.068395] [flux-sample-0:1595 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.883086] [flux-sample-2:1471 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005263.069443] [flux-sample-0:1614 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.971987] [flux-sample-0:1609 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005263.068385] [flux-sample-0:1604 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005263.064646] [flux-sample-0:1599 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+
+[1751005262.903676] [flux-sample-1:1495 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+# OSU MPI Allreduce Latency Test v7.5
+[1751005262.887114] [flux-sample-3:1505 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005263.061334] [flux-sample-0:1600 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+# Datatype: MPI_INT.
+[1751005262.802647] [flux-sample-2:1469 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+# Size       Avg Latency(us)
+[1751005262.896605] [flux-sample-1:1492 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.883624] [flux-sample-3:1504 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.799529] [flux-sample-2:1466 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.901179] [flux-sample-1:1490 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.877603] [flux-sample-3:1502 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.892944] [flux-sample-2:1464 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.895394] [flux-sample-1:1487 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.883996] [flux-sample-3:1499 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.890308] [flux-sample-1:1484 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.915380] [flux-sample-3:1497 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.884135] [flux-sample-1:1482 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.799536] [flux-sample-2:1462 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.894960] [flux-sample-3:1495 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.876342] [flux-sample-1:1480 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.861669] [flux-sample-2:1460 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.896950] [flux-sample-3:1493 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.872890] [flux-sample-1:1479 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.896793] [flux-sample-2:1457 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.891918] [flux-sample-3:1491 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.885442] [flux-sample-2:1456 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.877421] [flux-sample-3:1489 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.883862] [flux-sample-2:1454 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.885278] [flux-sample-3:1487 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.884543] [flux-sample-2:1451 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.787612] [flux-sample-1:1475 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.875086] [flux-sample-3:1485 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.884535] [flux-sample-2:1450 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.741032] [flux-sample-1:1473 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.896000] [flux-sample-3:1483 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.884535] [flux-sample-2:1447 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.787612] [flux-sample-1:1470 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.908882] [flux-sample-3:1480 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.859226] [flux-sample-2:1445 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.741030] [flux-sample-1:1468 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.871257] [flux-sample-3:1478 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.886699] [flux-sample-2:1444 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.898037] [flux-sample-1:1466 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.879508] [flux-sample-3:1475 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.870669] [flux-sample-2:1440 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.741030] [flux-sample-1:1463 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.871257] [flux-sample-3:1474 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.883861] [flux-sample-2:1439 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.742326] [flux-sample-1:1462 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.876132] [flux-sample-3:1472 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.718325] [flux-sample-2:1437 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.786552] [flux-sample-1:1460 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.874073] [flux-sample-3:1471 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.729489] [flux-sample-2:1435 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.744854] [flux-sample-1:1458 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.894482] [flux-sample-3:1468 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.718324] [flux-sample-2:1433 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.741029] [flux-sample-1:1456 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.910340] [flux-sample-3:1465 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.725018] [flux-sample-2:1432 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.741029] [flux-sample-1:1454 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.914603] [flux-sample-3:1462 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.792705] [flux-sample-2:1431 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.786547] [flux-sample-1:1451 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.912515] [flux-sample-3:1458 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.915841] [flux-sample-1:1450 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.919805] [flux-sample-3:1456 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.901876] [flux-sample-1:1447 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.905960] [flux-sample-3:1454 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.885404] [flux-sample-1:1445 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.908879] [flux-sample-3:1452 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.916170] [flux-sample-1:1444 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.897704] [flux-sample-3:1451 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.907222] [flux-sample-1:1443 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.895986] [flux-sample-3:1448 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.904868] [flux-sample-1:1442 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.942380] [flux-sample-3:1447 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.894070] [flux-sample-1:1441 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.895367] [flux-sample-3:1444 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.870662] [flux-sample-1:1440 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.808999] [flux-sample-3:1441 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.871546] [flux-sample-1:1439 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.902169] [flux-sample-3:1439 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.891319] [flux-sample-1:1438 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.810171] [flux-sample-3:1437 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.876750] [flux-sample-1:1437 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.896947] [flux-sample-3:1435 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.872887] [flux-sample-1:1436 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.810984] [flux-sample-3:1433 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.810169] [flux-sample-3:1432 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.809003] [flux-sample-3:1431 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.839000] [flux-sample-3:1430 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.810981] [flux-sample-3:1429 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.858023] [flux-sample-3:1428 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.620785] [flux-sample-3:1427 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.620785] [flux-sample-3:1425 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.913660] [flux-sample-3:1424 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.617510] [flux-sample-2:1426 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+[1751005262.620785] [flux-sample-3:1426 :0]            sock.c:513  UCX  WARN  unable to read somaxconn value from /proc/sys/net/core/somaxconn file
+4                      31.29
+8                      29.88
+16                     29.84
+32                     30.93
+64                     34.92
+128                    75.68
+256                    37.44
+512                    38.56
+1024                   44.29
+2048                   64.78
+4096                   72.60
+8192                 2249.36
+16384                 233.40
+32768                2193.47
+65536                 397.85
+131072               1512.00
+262144               1411.14
+524288               3422.20
+1048576              6564.21

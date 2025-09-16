@@ -1,0 +1,122 @@
+LAMMPS (2 Aug 2023)
+  using 1 OpenMP thread(s) per MPI task
+# Pure HNS crystal, ReaxFF tests for benchmarking LAMMPS
+# See README for more info
+
+variable x index 2
+variable y index 2
+variable z index 2
+variable t index 100
+
+
+units             real
+atom_style        charge
+atom_modify sort  100 0.0 # optional
+dimension         3
+boundary          p p p
+box               tilt large
+
+The 'box' command has been removed and will be ignored
+
+
+read_data         data.hns-equil
+Reading data file ...
+  triclinic box = (0 0 0) to (22.326 11.1412 13.778966) with tilt (0 -5.02603 0)
+  16 by 8 by 12 MPI processor grid
+  reading atoms ...
+  304 atoms
+  reading velocities ...
+  304 velocities
+  read_data CPU = 0.025 seconds
+replicate         $x $y $z bbox
+replicate         16 $y $z bbox
+replicate         16 16 $z bbox
+replicate         16 16 16 bbox
+Replication is creating a 16x16x16 = 4096 times larger system...
+  triclinic box = (0 0 0) to (357.216 178.2592 220.46346) with tilt (0 -80.41648 0)
+  16 by 8 by 12 MPI processor grid
+  bounding box image = (0 -1 -1) to (0 1 1)
+  bounding box extra memory = 0.03 MB
+  average # of replicas added to proc = 16.99 out of 4096 (0.41%)
+  1245184 atoms
+  replicate CPU = 0.015 seconds
+
+
+pair_style        reax/c NULL
+pair_coeff        * * ffield.reax.hns C H O N
+
+compute           reax all pair reax/c
+
+neighbor          1.0 bin
+neigh_modify      every 20 delay 0 check no
+
+timestep          0.1
+
+thermo_style      custom step temp pe press evdwl ecoul vol
+thermo_modify     norm yes
+thermo            10
+
+velocity          all create 300.0 41279 loop geom
+
+fix               1 all nve
+fix               2 all qeq/reax 1 0.0 10.0 1e-6 reax/c
+
+run               $t
+run               100
+Neighbor list info ...
+  update: every = 20 steps, delay = 0 steps, check = no
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 11
+  ghost atom cutoff = 11
+  binsize = 5.5, bins = 80 33 41
+  2 neighbor lists, perpetual/occasional/extra = 2 0 0
+  (1) pair reax/c, perpetual
+      attributes: half, newton off, ghost
+      pair build: half/bin/newtoff/ghost
+      stencil: full/ghost/bin/3d
+      bin: standard
+  (2) fix qeq/reax, perpetual, copy from (1)
+      attributes: half, newton off
+      pair build: copy
+      stencil: none
+      bin: none
+Per MPI rank memory allocation (min/avg/max) = 116.8 | 117.7 | 118.5 Mbytes
+   Step          Temp          PotEng         Press          E_vdwl         E_coul         Volume    
+         0   300           -113.27833      439.01757     -111.57687     -1.7014647      14038460     
+        10   300.73081     -113.28034      760.94143     -111.5789      -1.7014371      14038460     
+        20   302.40503     -113.28519      1608.9641     -111.58386     -1.701329       14038460     
+        30   302.60742     -113.28566      4236.8497     -111.58456     -1.7011047      14038460     
+        40   300.76868     -113.28011      6369.2712     -111.57933     -1.7007826      14038460     
+        50   297.70717     -113.27094      6473.2031     -111.57052     -1.7004207      14038460     
+        60   295.02413     -113.26289      6227.8762     -111.56283     -1.7000559      14038460     
+        70   294.78878     -113.26214      6852.2545     -111.56245     -1.6996881      14038460     
+        80   297.69902     -113.27081      8267.1779     -111.57148     -1.699321       14038460     
+        90   301.5567      -113.28231      9429.3296     -111.58331     -1.6989944      14038460     
+       100   302.58174     -113.28531      10386.725     -111.58655     -1.6987601      14038460     
+Loop time of 41.1778 on 1536 procs for 100 steps with 1245184 atoms
+
+Performance: 0.021 ns/day, 1143.828 hours/ns, 2.428 timesteps/s, 3.024 Matom-step/s
+99.5% CPU use with 1536 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 10.062     | 12.015     | 35.438     |  82.2 | 29.18
+Neigh   | 0.14491    | 0.14946    | 0.3518     |   6.4 |  0.36
+Comm    | 0.074457   | 7.978      | 25.039     | 333.5 | 19.37
+Output  | 0.0034559  | 2.0079     | 2.3924     |  56.6 |  4.88
+Modify  | 5.2723     | 19.026     | 26.088     | 208.0 | 46.20
+Other   |            | 0.001769   |            |       |  0.00
+
+Nlocal:        810.667 ave         825 max         799 min
+Histogram: 35 228 209 317 166 82 178 189 124 8
+Nghost:        6371.81 ave        6451 max        6279 min
+Histogram: 304 208 0 0 1 167 340 4 186 326
+Neighs:         298586 ave      302822 max      294690 min
+Histogram: 34 165 221 135 204 251 257 197 64 8
+
+Total # of neighbors = 4.586288e+08
+Ave neighs/atom = 368.32211
+Neighbor list builds = 5
+Dangerous builds not checked
+Total wall time: 0:00:42

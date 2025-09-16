@@ -1,0 +1,33 @@
+apiVersion: flux-framework.org/v1alpha2
+kind: MiniCluster
+metadata:
+  name: flux-sample
+spec:
+  size: 16
+  logging:
+    quiet: false
+
+  flux:
+    container:
+      image: ghcr.io/converged-computing/flux-view-ubuntu:tag-jammy
+      disable: false
+
+  interactive: true
+  containers:
+    - image: ghcr.io/converged-computing/usernetes-python:lammps-flux-infiniband-openmpi-ucx-ubuntu2404
+      pullAlways: true
+      volumes:
+        my-empty-dir:
+          emptyDir: true
+          emptyDirMedium: "memory"
+      resources:
+         limits:
+            cpu: 94
+         requests:
+            cpu: 94
+      securityContext:
+        privileged: true
+        #addCapabilities: ["SYS_RESOURCE", "IPC_LOCK"]
+      workingDir: /opt/lammps/examples/reaxff/HNS
+      command: lmp -v x 16 -v y 8 -v z 8 -in in.reaxc.hns -nocite
+

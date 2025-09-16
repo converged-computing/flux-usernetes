@@ -1,0 +1,28 @@
+apiVersion: flux-framework.org/v1alpha2
+kind: MiniCluster
+metadata:
+  name: flux-sample
+spec:
+  size: 32
+  tasks: 1536
+  logging:
+    quiet: false
+  flux:
+    container:
+      disable: false
+      image: ghcr.io/converged-computing/flux-view-ubuntu:tag-jammy
+  interactive: true
+  containers:
+    - image: ghcr.io/converged-computing/usernetes-python:osu-infiniband-openmpi
+      pullAlways: true
+      resources:
+         limits:
+            cpu: 94
+         requests:
+            cpu: 94
+      volumes:
+        my-empty-dir:
+          emptyDir: true
+          emptyDirMedium: "memory"
+      securityContext:
+        privileged: true

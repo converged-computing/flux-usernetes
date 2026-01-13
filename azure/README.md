@@ -1,209 +1,274 @@
 # Flux Usernetes on Azure
 
-We don't have Terraform yet, so this is a "GUI" experience at the moment.
-
 ## Usage
 
 ### 1. Build Images
 
-Since I'm new to Azure, I'm starting by creating a VM and then saving the image, which I did through the console (and saved the template) and all of the associated scripts are in [build-images](build-images). 
+Note that you should build the images first. There are two variations here:
 
-**CPU** 
+ - [build-ubuntu-24.04](build-ubuntu-24.04): includes a simple, reproducible build for ubuntu 24.04 (developed by us)
+ - [build](build) uses the azure-hpc base image, which is dated to 2022 with ubuntu 22.04 and has a lot of software bloat.
 
-I chose:
+Follow the instructions in the READMEs there. Note that containers (for the ubuntu 24.04 environment) are provided from the [flux-tutorials](https://github.com/converged-computing/flux-tutorials) repository.
 
-- ubuntu server 22.04
-- South Central US
-- Zone (allow auto select)
-- HB120-16rs_v3 (about $4/hour)
-- username: azureuser
-- select your ssh key
-- defaults to 30GB disk, but you should make it bigger - I skipped installing Singularity the first time because I ran out of room.
+### 2. Deploy on Azure
 
-**GPU** 
+The deployment is done through the web interface. After you have created the image, you can navigate to the [Virtual Machine Scale Set](https://portal.azure.com/#browse/Microsoft.Compute%2FvirtualMachineScaleSets) page in the interface. Click on "+ Create" in the top left.
 
- - US West 2
- - Zone (No infrastructure redundancy required)
- - ND40rs (~$22/hour)
+![img/1-create.png](img/1-create.png)
 
-And interactively I ran each of:
+#### Configuration
 
-- install-deps.sh
-- install-flux.sh
-- install-usernetes.sh
-- install-singularity.sh (skipped)
-- install-lammps.sh 
+Choose a name for a new resource group, and the VM set. I usually choose `flux-usernetes` and then the computer prefix will be `flux-user`. I usually choose the following:
 
-And then you can actually click to create the instance group in the user interface, and it's quite easy.
-You MUST call it `flux-usernetes` to derive the machine names as flux-userxxxxx OR change that prefix in the startup-script.sh. In addition, you will need to:
+![img/1-basics.png](img/1-basics.png)
 
-- Add the `startup-script.sh` to the user data section (ensure the hostname is going to be correct)
-- Ensure you click on the network setup and enable the public ip address so you can ssh in
-- use a pem key over a password
-- Open up ports 22 for ssh, and 8050 for the flux brokers
+Under image, select "See all images" and then "My images" on the left. You should see the image that you built (in the image below, we are selecting "flux-usernetes-ubuntu-2404."
 
-### 2. Check Flux
+![img/1-my-images.png](img/1-my-images.png)
 
-Check the cluster status, the overlay status, and try running a job:
+If you click it, it will return to the basics screen with the image selected. For the remainder of the page, it's recommended to use an HPC instance (e.g., HB120). I typically 
+also use an existing key in Azure, and the other options shown below.
+
+![img/2-basics.png](img/2-basics.png)
+
+The next tabs can be useful for tweaking volume sizes (I usually leave as is). Next, you will want to click on the pencil "edit" sign next to the "Create New Nic" entry in the table.
+
+![img/network-1.png](img/network-1.png)
+
+This will take you to where you can customize the NIC. You need to expose port 22 (for your ssh) and also set the public IP address to enabled.
+
+![img/network-2.png](img/network-2.png)
+
+Finally, in the advanced tab you will want to check "Enable user data" and copy the contents of [startup-script.sh](startup-script.sh) into the box that appears. This will ensure that the cluster comes up. If you change the name of the VM Scale Set from flux-usernetes to something else, you will want to capture the first 9 letters in the prefix at the top for `template_name`. The other variables will stay the same, unless you have reason to know the network device will be different. Finally, click "Validate and Create."
+
+### 3. Install Applications
+
+We can use parallel ssh to build specific applications across nodes. The scripts in [install](install) provide a few examples. I usually do this from the cloud shell where I have az, but you don't need to. First, install pssh:
 
 ```bash
+git clone https://github.com/lilydjwg/pssh /tmp/pssh
+export PATH=/tmp/pssh/bin:$PATH
+```
+
+If you need to, clone the repository here.
+
+```bash
+git clone https://github.com/converged-computing/flux-usernetes
+cd flux-usernetes/azure
+```
+
+You will likely need to upload your pem key and change permissions:
+
+```bash
+chmod 600 id_azure.pem
+```
+
+Let's say it's called `id_azure.pem`. Next, generate a list of hosts. Note that we have the name of both the resource group and the vm scale set (they happen to be the same thing here):
+
+```bash
+for address in $(az vmss list-instance-public-ips -g flux-usernetes -n flux-usernetes | jq -r .[].ipAddress)
+  do
+    echo "azureuser@$address" >> hosts.txt
+done
+```
+
+Now we can install scripts, for example OSU and LAMMPS.
+
+```bash
+for script in $(echo osu lammps)
+  do
+  for address in $(cat ./hosts.txt)
+   do
+     scp -i ./id_azure.pem ./install/install_${script}.sh ${address}:/tmp/install_${script}.sh
+  done
+  pssh -h hosts.txt -x "-i ./id_azure.pem" "/bin/bash /tmp/install_${script}.sh"
+done
+```
+
+### 4. Install Usernetes
+
+You could run these commands in the different instances, but it is easier to do programatically.
+
+#### Bring up the control plane
+
+For the first argument, this is the ranks list to go to flux archive -> flux exec. For example, if broker 2 is up you'd provide "2." If a range between 2 and 10 is up, you'd provide "2-10"
+
+```console
+ip_address=$(az vmss list-instance-public-ips -g flux-usernetes -n flux-usernetes | jq -r .[0].ipAddress)
+scp -i ./id_azure.pem ./install/start_control_plane.sh azureuser@${ip_address}:/tmp/start_control_plane.sh
+ssh -i ./id_azure.pem azureuser@${ip_address} "/bin/bash /tmp/start_control_plane.sh 1"
+```
+
+#### Bring up workers
+
+```console
+# This goes through all addresses except for the first
+sed '1d' hosts.txt > workers.txt
+for address in $(cat workers.txt)
+  do
+     scp -i ./id_azure.pem ./install/start_worker.sh ${address}:/tmp/start_worker.sh
+done
+pssh -t 10000000 -h workers.txt -x "-i ./id_azure.pem" "/bin/bash /tmp/start_worker.sh"
+```
+
+#### Finish control plane
+
+This last command runs the sync-external-ip command. The `ip_address` variable should still be defined to have the lead broker address.
+
+```console
+scp -i ./id_azure.pem ./install/finish_control_plane.sh azureuser@${ip_address}:/tmp/finish_control_plane.sh
+ssh -i ./id_azure.pem azureuser@${ip_address} "/bin/bash /tmp/finish_control_plane.sh"
+```
+
+### 5. Shell In
+
+You can get the address of the lead broker from the `ip_address` variable above. You can also get it from the web interface - there will be a button to connect via SSH you can click to see the public IP address.
+
+![img/instance-1.png](img/instance-1.png)
+
+On the command line, it might look like this:
+
+```bash
+ssh -o IdentitiesOnly=yes -i ~/.ssh/id_azure.pem azureuser@13.66.63.210
+```
+
+If everything worked OK, you should see that your flux instance is running (in our case, just one lead and one follower broker, a cluster size of 2 nodes):
+
+```console
 $ flux resource list
-```
-```bash
-$ flux run -N 2 hostname
+     STATE NNODES NCORES NGPUS NODELIST
+      free      2    192     0 flux-user[000000-000001]
+ allocated      0      0     0 
+      down    998  95808     0 flux-user[000002-000999]
 ```
 
-And lammps?
+Note that a huge number of brokers will be listed as offline. We do this because Flux can see nodes that don't exist as offline, and if we increase the size of the cluster they can join easily. 
+And rootless docker should work:
 
 ```bash
-cd /home/azureuser/lammps
-flux run -N 2 --ntasks 96 -c 1 -o cpu-affinity=per-task /usr/bin/lmp -v x 2 -v y 2 -v z 2 -in ./in.reaxff.hns -nocite
+docker run hello-world
 ```
+
+#### Check Infiniband
 
 How to sanity check Infiniband:
 
 ```bash
 ip link
-# should show ib0 UP
 
+ibv_devinfo
 ibv_devices 
 # (should show two)
-ibv_devinfo
-# for a device
-
 /etc/init.d/openibd status
 ```
 
 If you need to check memory that is seen by flux:
 
 ```bash
-$ flux run sh -c 'ulimit -l' --rlimit=memlock
-64
+flux run sh -c 'ulimit -l' --rlimit=memlock
+unlimited
 ```
 
-### 3. Start Usernetes
+#### Environment
 
-Kubernetes autocomplete:
+Here is a reasonable environment to try. You can tweak this to your liking. You can also add it to the [startup_script.sh](startup_script.sh) (echo into the azureuser `.bashrc`) to have them persist.
 
 ```bash
-source <(kubectl completion bash) 
+export OMPI_MCA_btl_openib_warn_no_device_params_found=0
+export OMPI_MCA_btl_vader_single_copy_mechanism=none
+export OMPI_MCA_btl_openib_allow_ib=1
+# Choose one - I found lammps does better with "all"
+export UCX_TLS=all
+export UCX_TLS=ib,shm
+export UCX_NET_DEVICES=mlx5_0:1
 ```
 
-This is currently manual, and we need a better approach to automate it.  The first issue is the docker-compose.yaml needs
-an added volume - kernel build (headers) are linked to from here:
+### 6. Run "Bare Metal" vs Container Applications
 
-```yaml
-    volumes:
-      - .:/usernetes:ro
-      - /boot:/boot:ro
-      - /lib/modules:/lib/modules:ro
-      # This line is added
-      - /usr/src:/usr/src
-```
+#### OSU Benchmarks
 
-You need to first build a custom kind image base with the [Dockerfile.kind](Dockerfile.kind) to replace the Dockerfile in the "images/base" directory that you can clone from:
+Singularity is installed in the VM. Let's use flux exec to issue a command to the other broker and pull singularity containers. These two containers have the same stuff as the host! This is why you typically want to create nodes with a large disk - these containers are chonky.
 
 ```bash
-git clone https://github.com/kubernetes-sigs/kind
-cd kind
+# Note that you may need to change the rank identifier depending on what you got!
+flux exec --rank 0-1 singularity pull docker://ghcr.io/converged-computing/flux-tutorials:azure-2404-osu
 ```
 
-Then you need to change the default base image in the kind source code:
-
-```go
-// DefaultBaseImage is the default base image used
-// TODO: come up with a reasonable solution to digest pinning
-// https://github.com/moby/moby/issues/43188
-const DefaultBaseImage = "ghcr.io/converged-computing/kind-ubuntu:latest"
-```
-
-Build kind first:
+Let's run each with Flux. Note that you likely need to adjust the `UCX_TLS` parameter.
 
 ```bash
-make
+# Container runs
+flux run -N2 -n 192 -o cpu-affinity=per-task singularity exec --bind /opt/run/flux ./flux-tutorials_azure-2404-osu.sif /opt/osu-benchmark/build.openmpi/mpi/collective/osu_allreduce
+flux run -N2 -n 2 -o cpu-affinity=per-task singularity exec --bind /opt/run/flux ./flux-tutorials_azure-2404-osu.sif /opt/osu-benchmark/build.openmpi/mpi/pt2pt/osu_latency
+```
+```bash
+# Bare metal
+flux run -N2 -n 192 -o cpu-affinity=per-task /tmp/osu-micro-benchmarks-5.8/mpi/collective/osu_allreduce
+flux run -N2 -n 2 -o cpu-affinity=per-task /tmp/osu-micro-benchmarks-5.8/mpi/pt2pt/osu_latency
 ```
 
-Then clone kubernetes and use your build of kind to add the binaries to it.
+#### LAMMPS-REAX
+
+Now pull lammps:
 
 ```bash
-git clone https://github.com/kubernetes/kubernetes
-cd kubernetes
-git checkout 20b216738a5e9671ddf4081ed97b5565e0b1ee01
-../bin/kind build node-image
+cd /tmp/lammps/examples/reaxff/HNS
+flux exec --rank 0-1 singularity pull docker://ghcr.io/converged-computing/flux-tutorials:azure-2404-lammps-reax
 ```
 
-When that is done, tag and push to where you can control it.
+And run, with the same binds, again using the container and bare metal.
 
 ```bash
-docker tag kindest/node:latest ghcr.io/converged-computing/kind-ubuntu:node
-docker push ghcr.io/converged-computing/kind-ubuntu:node
+# I've seen this range from 1:07 to almost 2 minutes.
+flux run -o cpu-affinity=per-task -N2 -n 192 singularity exec --bind /opt/run/flux ./flux-tutorials_azure-2404-lammps-reax.sif /usr/bin/lmp -v x 16 -v y 16 -v z 16 -in in.reaxff.hns -nocite
+
+# Bare metal
+flux run -o cpu-affinity=per-task -N2 -n 192 /usr/bin/lmp -v x 16 -v y 16 -v z 16 -in in.reaxff.hns -nocite
 ```
 
-Then you need to change the FROM of the usernetes Dockerfile to use:
+### 7. Install the Flux Operator
 
-```dockerfile
-ARG BASE_IMAGE=ghcr.io/converged-computing/kind-ubuntu:node
-```
-Note that I also added seccomp - I'm not sure why it was removed:
-
-```dockerfile
-RUN apt-get install -y seccomp libseccomp-dev
-```
-
-And that image build is included here with [Dockerfile.kind](Dockerfile.kind).
-
-#### Control Plane
-
-Let's first bring up the control plane, and we will copy the `join-command` to each node.
-In the index 0 broker (the first in the broker.toml that you shelled into):
+Finally, let's install the Flux Operator and run an application there. You should have `KUBECONFIG` already exported on the path.
 
 ```bash
-cd ~/usernetes
-./start-control-plane.sh
+# enable auto-completion
+source <(kubectl completion bash)
+
+kubectl apply -f https://raw.githubusercontent.com/flux-framework/flux-operator/refs/heads/main/examples/dist/flux-operator.yaml
+
+# Check that it's running OK
+kubectl logs -n operator-system operator-controller-manager-69cdcdb9ff-cmrmd 
 ```
 
-Then with flux running, send to the other nodes.
+### 8. Run Applications
+
+You'll also have a few YAML files in the [examples](examples) directory. After you install the operator, try adding one to the VM and creating an interactive MiniCluster:
 
 ```bash
-flux archive create --mmap -C /home/azureuser/usernetes join-command
-flux exec -x 0 -r all flux archive extract -C /home/azureuser/usernetes
+kubectl apply -f ./osu.yaml
+kubectl get pods --watch
+kubectl exec -it flux-sample-0-xxx -- bash
 ```
 
-#### Worker Nodes
-
-**Important** your nodes need to be on the same subnet to see one another. The VPC and load balancer will require you
-to create 2+, but you don't have to use them all.
+This will create an interactive cluster to shell into - you can ignore the bash errors (there is a path in the source that will work for the Singularity container when a slightly different path is bound from the host). First, connect to the flux broker, and once you are connected to the instance, test with `flux resource list`.
 
 ```bash
-cd ~/usernetes
-./start-worker.sh
+flux proxy local:///mnt/flux/view/run/flux/local bash
+export FLUX_URI=local:///mnt/flux/view/run/flux/local
 ```
 
-Check (from the first node) that usernetes is running:
+This is helpful for debugging, if needed.
 
 ```bash
-kubectl get nodes
+apt-get install -y ibverbs-utils
 ```
 
-You should have a full set of usernetes node and flux alongside.
+### 9. Cleanup
 
-```console
-ubuntu@i-059c0b325f91e5503:~$ kubectl  get nodes
-NAME                  STATUS   ROLES           AGE     VERSION
-u7s-flux-user000000   Ready    control-plane   2m50s   v1.30.0
-u7s-flux-user000001   Ready    <none>          35s     v1.30.0
-```
-```console
-ubuntu@i-059c0b325f91e5503:~$ flux resource list
-     STATE NNODES   NCORES    NGPUS NODELIST
-      free      2      192        0 flux-user[000000-000001]
- allocated      0        0        0 
-      down      0        0        0 
+When you are done, you can delete the entire resource group in Azure.
+
+```bash
+az group delete --name flux-usernetes
 ```
 
-At this point you can try running an experiment example.
-
-### 4. Install Infiniband
-
-At this point we need to expose infiniband on the host to the pods. This took a few steps,
-and what I learned (and the instructions are in [the repository here](https://github.com/converged-computing/aks-infiniband-install).

@@ -1,12 +1,20 @@
 #!/bin/bash
 
-# Write the hostlist size here:
-NODELIST=flux-user00000[0-1]
-lead_broker=flux-user000000
+# In case the user wants to play with this.
+template_name="flux-user"
+template_ethernet_device="eth0"
+template_username="azureuser"
+
+# Assume a huge number. This will error with Azure because they 
+# eventually dive into alpha numeric, but this works for a small demo
+NODELIST=${template_name}000[000-999]
+
+# The lead broker can be anything, azure is not predictable
+lead_broker=${template_name}000000
 
 flux R encode --hosts=$NODELIST --local > R
 sudo mv R /etc/flux/system/R
-sudo chown azureuser /etc/flux/system/R
+sudo chown ${template_username} /etc/flux/system/R
 
 # Figure out the lead broker, the first in the list
 echo "The lead broker is $lead_broker"
@@ -14,9 +22,9 @@ host=$(hostname)
 echo "The host is $host"
 
 # Make the run directories in case not made yet
-sudo mkdir -p /run/flux
-mkdir -p /home/azureuser/run/flux
-sudo chown -R azureuser /run/flux
+sudo mkdir -p /home/${template_username}/run/flux /run/flux /opt/run/flux
+mkdir -p /home/${template_username}/run/flux
+sudo chown -R ${template_username} /home/${template_username}/run/flux /run/flux /opt/run/flux
 
 # Write updated broker.toml
 cat <<EOF | tee /tmp/broker.toml
@@ -42,7 +50,7 @@ path = "/etc/flux/system/R"
 curve_cert = "/etc/flux/system/curve.cert"
 
 default_port = 8050
-default_bind = "tcp://eth0:%p"
+default_bind = "tcp://${template_ethernet_device}:%p"
 default_connect = "tcp://%h:%p"
 
 # Rank 0 is the TBON parent of all brokers unless explicitly set with
@@ -77,9 +85,9 @@ ExecStart=/bin/bash -c '\
   /usr/bin/flux broker \
   --config-path=/etc/flux/system/conf.d \
   -Scron.directory=/etc/flux/system/cron.d \
-  -Srundir=/home/azureuser/run/flux \
+  -Srundir=/opt/run/flux \
   -Sstatedir=/var/lib/flux \
-  -Slocal-uri=local:///home/azureuser/run/flux/local \
+  -Slocal-uri=local:///opt/run/flux/local \
   -Slog-stderr-level=6 \
   -Slog-stderr-mode=local \
   -Sbroker.rc2_none \
@@ -94,7 +102,7 @@ Restart=always
 RestartSec=5s
 RestartPreventExitStatus=42
 SuccessExitStatus=42
-User=azureuser
+User=${template_username}
 RuntimeDirectory=flux
 RuntimeDirectoryMode=0755
 StateDirectory=flux
@@ -107,7 +115,6 @@ TasksMax=infinity
 LimitNPROC=infinity
 # ExecStartPre=/usr/bin/loginctl enable-linger flux
 # ExecStartPre=bash -c 'systemctl start user@$(id -u flux).service'
-
 
 #
 # Delegate cgroup control to user flux, so that systemd doesn't reset
@@ -127,8 +134,17 @@ sudo systemctl restart flux.service
 sudo systemctl status flux.service
 
 # Just sanity check we own everything still
-sudo chown -R $USER /home/azureuser
+sudo chown -R ${template_username} /home/${template_username}
 
-export FLUX_URI=local:///home/azureuser/run/flux/local
-echo "export FLUX_URI=local:///home/azureuser/run/flux/local" >> /home/azureuser/.bashrc
-cd /home/azureuser/usernetes
+# sanity check everything is loaded
+# This I think only persists until VM restart
+echo "START modprobe"
+sudo modprobe vxlan
+sudo modprobe ip_tables
+sudo modprobe ip6_tables
+sudo modprobe ip6table_nat
+sudo modprobe iptable_nat
+sudo systemctl daemon-reload
+sudo sysctl -p
+sudo systemctl daemon-reload
+sudo sysctl --system || true
